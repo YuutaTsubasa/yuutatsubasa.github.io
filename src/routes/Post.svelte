@@ -1,0 +1,188 @@
+<script>
+  import { onMount } from 'svelte';
+  import { marked } from 'marked';
+  import yaml from 'js-yaml';
+  import ErrorMessage from '../components/ErrorMessage.svelte';
+  import Tag from '../components/Tag.svelte';
+    import { formatDate } from '../utils/formatDate';
+
+  export let params; // 接收路由參數
+
+  let post;
+  let loading = true;
+
+  onMount(async () => {
+    window.scrollTo(0, 0);
+
+    // 加載對應文件名的文章
+    const postFiles = import.meta.glob('/src/posts/*.md', { query: '?raw', import: 'default' });
+    const path = `/src/posts/${params.filename}.md`;
+
+    if (postFiles[path]) {
+      const postContent = await postFiles[path]();
+      const yamlMatch = postContent.match(/---[\r\n]+([\s\S]+?)[\r\n]+---/);
+
+      let frontMatter = {};
+      let markdownContent = postContent;
+
+      if (yamlMatch) {
+        frontMatter = yaml.load(yamlMatch[1]);
+        markdownContent = postContent.slice(yamlMatch[0].length);
+      }
+
+      const parsedContent = marked(markdownContent);
+
+      post = {
+        title: frontMatter.title,
+        date: new Date(frontMatter.date),
+        author: frontMatter.author,
+        tags: frontMatter.tags,
+        thumbnail: frontMatter.thumbnail, // 文章的縮圖
+        content: parsedContent,
+      };
+    }
+
+    loading = false;
+  });
+</script>
+
+<style>
+  .post-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    @apply shadow-lg bg-white/75 backdrop-blur-lg;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: white;
+  }
+
+  .post-thumbnail {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .post-date {
+    font-size: 0.9rem;
+    color: #ddd;
+    margin-bottom: 0.1rem;
+  }
+
+  .post-author {
+    font-size: 0.9rem;
+    color: #ddd;
+    margin-bottom: 0.35rem;
+  }
+
+  .post-date i, .post-author i {
+    margin-right: 0.5rem;
+    color: #ddd;
+  }
+
+  .post-tags {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.2rem;
+  }
+
+  .post-tags i {
+    margin-right: 0.5rem;
+    color: #ddd;
+  }
+  
+  .post-tags span {
+    background-color: #007bff;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    margin-right: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .post-header {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 50vh; /* 調整背景區域高度 */
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    color: white;
+    text-align: center;
+  }
+</style>
+
+{#if loading}
+  <ErrorMessage message="載入中..." />
+{:else if post}
+  <section class="fade-in-bg">
+  <!-- 使用文章的 thumbnail 作為背景圖 -->
+  <section class="post-header" style="background-image: url('{post.thumbnail}');">
+    <div class="max-w-[800px] w-[800px] mx-auto flex-row bg-black/50 backdrop-blur-lg p-4 relative">
+      <div class="w-full h-[20px] backdrop-blur-lg absolute top-[-20px] left-0 bg-repeat-x scroll-bg"
+           style="background-image: url('/images/title_background.webp');">
+      </div>
+      <div class="flex justify-start items-end">
+        <h1 class="text-2xl font-bold text-left leading-tight">{post.title}</h1>
+      </div>
+      <div class="flex justify-start items-end">
+        <p class="post-date"><i class="fas fa-calendar-alt"></i> 發佈日期：{formatDate(post.date)}</p>
+      </div>
+      <div class="flex justify-start items-end">
+        <p class="post-author"><i class="fas fa-user"></i> 作者：{post.author}</p>
+      </div>
+      <!-- 顯示標籤 -->
+      {#if post.tags && post.tags.length > 0}
+        <div class="post-tags">
+          <i class="fas fa-tags"></i>
+          {#each post.tags as tag}
+            <Tag isAll={false} {tag} selectedTag={null} />
+          {/each}
+        </div>
+      {/if}
+    </div>
+  </section>
+
+  <article class="post-container">
+    <!-- 顯示文章的縮圖 -->
+    <div class="flex justify-center items-center">
+      <img src={post.thumbnail} alt="{post.title} thumbnail" class="post-thumbnail" />
+    </div>
+
+    <!-- 渲染文章內容，使用 {@html} 來顯示已轉換的 HTML -->
+    <div class="post-content">{@html post.content}</div>
+
+    <hr class="my-8"/>
+
+    <div id="disqus_thread"></div>
+    <script>
+        /**
+        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+        /*
+        var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+        */
+        (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yuutatsubasawebsite.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </article>
+  </section>
+{:else}
+  <!-- 錯誤狀態使用 ErrorMessage 組件 -->
+  <ErrorMessage message="未找到文章" />
+{/if}
