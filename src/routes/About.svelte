@@ -110,14 +110,25 @@
 
     // 資源來源列表
     let resources = [
-        { name: "實況面板：布魯諾", source: "https://x.com/applebrunoliu" },
-        { name: "實況面板：Envato Elements", source: "https://elements.envato.com/cyberpunk-opener-RB4QDV9" },
-        { name: "開頭待機 Q 版動畫：泡芙", source: "https://x.com/noodle890812" },
-        { name: "結尾圖：鱷魚 Zavir Wani", source: "https://x.com/wanivtuber" },
+        { name: "1.0 實況面板：布魯諾", source: "https://x.com/applebrunoliu" },
+        { name: "2.0 實況面板：Envato Elements", source: "https://elements.envato.com/cyberpunk-opener-RB4QDV9" },
+        { name: "1.0 開頭待機 Q 版動畫：泡芙", source: "https://x.com/noodle890812" },
+        { name: "1.0 結尾圖：鱷魚 Zavir Wani", source: "https://x.com/wanivtuber" },
         { name: "綠界贊助音效：フリー効果音素材 くらげ工匠", source: "http://www.kurage-kosho.info/" },
         { name: "無限版 3D 模型素材提供：神崎", source: "https://x.com/kannzakivtuber" },
         { name: "無限版 3D 模型參考：Midjourney", source: "https://www.midjourney.com/home?callbackUrl=%2Fapp%2F" },
         { name: "配信者のためのコメントアプリ「わんコメ」", source: "https://onecomme.com" },
+    ];
+
+    let communities = [
+        { name: "X / Twitter", source: "https://yutaii.run/twitter" },
+        { name: "Youtube", source: "https://yutaii.run/youtube" },
+        { name: "Facebook", source: "https://yutaii.run/facebook" },
+        { name: "Plurk", source: "https://yutaii.run/plurk" },
+        { name: "Instagram", source: "https://yutaii.run/instagram" },
+        { name: "Threads", source: "https://yutaii.run/threads" },
+        { name: "Discord", source: "https://yutaii.run/discord" },
+        { name: "棉花糖", source: "https://yutaii.run/marshmallow" },
     ];
 
     // 添加這個函數來更新組件狀態
@@ -203,12 +214,24 @@
         {/each}
 
         <!-- 資源來源區塊 -->
-        <div class="mt-12 bg-black/50 p-10 rounded-lg shadow-lg backdrop-blur-sm text-white">
+        <div class="mt-12 mb-6 bg-black/50 p-10 rounded-lg shadow-lg backdrop-blur-sm text-white">
             <h2 class="text-3xl font-bold mb-2">實況資源來源</h2>
             <ul class="list-disc list-inside text-lg text-gray-200">
                 {#each resources as resource}
                     <li>
                         {resource.name}：<a href={resource.source} target="_blank" class="text-blue-200 hover:underline">{resource.source}</a>
+                    </li>
+                {/each}
+            </ul>
+        </div>
+
+        <!-- 社群連結區塊 -->
+        <div class="mt-6 mb-6 bg-black/50 p-10 rounded-lg shadow-lg backdrop-blur-sm text-white">
+            <h2 class="text-3xl font-bold mb-2">社群連結</h2>
+            <ul class="list-disc list-inside text-lg text-gray-200">
+                {#each communities as community}
+                    <li>
+                        {community.name}：<a href={community.source} target="_blank" class="text-blue-200 hover:underline">{community.source}</a>
                     </li>
                 {/each}
             </ul>
