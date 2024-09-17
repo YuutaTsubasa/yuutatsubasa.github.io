@@ -86,7 +86,7 @@
     </section>
 
     <div class="max-w-7xl mx-auto">
-      <div class="sm:flex flex-wrap mb-6 hidden px-4 gap-2">
+      <div class="flex flex-wrap mb-6 px-4 gap-2">
         <Tag isAll={true} tag={null} {selectedTag} on:filter={handleTagFilter} on:clear={handleTagClear} />
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
