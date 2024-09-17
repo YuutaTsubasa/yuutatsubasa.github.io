@@ -83,24 +83,24 @@
           {selectedTag ? `標籤篩選：${selectedTag}` : '內容總覽'}
         </h2>
       </div>
-      <div class="absolute bottom-0 sm:flex flex-wrap mb-6 hidden px-4 gap-2">
-        <Tag isAll={true} tag={null} {selectedTag} on:filter={handleTagFilter} on:clear={handleTagClear} />
-      </div>
     </section>
 
     <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {#each filteredPosts as post}
-            <PostCard {post} {selectedTag} {handleTagFilter} {handleTagClear} />
-          {/each}
-        </div>
+      <div class="sm:flex flex-wrap mb-6 hidden px-4 gap-2">
+        <Tag isAll={true} tag={null} {selectedTag} on:filter={handleTagFilter} on:clear={handleTagClear} />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        {#each filteredPosts as post}
+          <PostCard {post} {selectedTag} {handleTagFilter} {handleTagClear} />
+        {/each}
+      </div>
 
-        <!-- 分頁導航 -->
-        <div class="flex justify-center gap-16 mt-6">
-          <button on:click={() => changePage(currentPage - 1)} disabled={isFirstPage} class={isFirstPage ? 'text-gray-400' : 'text-blue-500 font-bold'}>上一頁</button>
-          <p class="font-bold">第 {currentPage} 頁 / 共 {totalPages} 頁</p>
-          <button on:click={() => changePage(currentPage + 1)} disabled={isLastPage} class={isLastPage ? 'text-gray-400' : 'text-blue-500 font-bold'}>下一頁</button>
-        </div>
+      <!-- 分頁導航 -->
+      <div class="flex justify-center gap-16 mt-6">
+        <button on:click={() => changePage(currentPage - 1)} disabled={isFirstPage} class={isFirstPage ? 'text-gray-400' : 'text-blue-500 font-bold'}>上一頁</button>
+        <p class="font-bold">第 {currentPage} 頁 / 共 {totalPages} 頁</p>
+        <button on:click={() => changePage(currentPage + 1)} disabled={isLastPage} class={isLastPage ? 'text-gray-400' : 'text-blue-500 font-bold'}>下一頁</button>
+      </div>
     </div>
   </section>
 {/if}

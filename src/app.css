@@ -44,11 +44,22 @@ body {
   color: #444;
 }
 
-.post-content h2,
+.post-content iframe {
+  @apply mx-auto;
+}
+
+.post-content h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+  @apply text-2xl font-bold;
+}
+
 .post-content h3 {
   margin-top: 2rem;
   margin-bottom: 1rem;
   color: #333;
+  @apply text-xl font-bold;
 }
 
 .post-content p {
