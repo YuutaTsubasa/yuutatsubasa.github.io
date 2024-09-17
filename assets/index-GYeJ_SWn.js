@@ -99,7 +99,7 @@ Please report this to https://github.com/markedjs/marked.`,t){const i="<p>An err
                 3D 模型師：<a href="https://x.com/Gairaku_tw" target="_blank">がいらく</a>
             </li>
         </ul>
-        `,["/images/about/1.0-01.webp","/images/about/1.0-02.webp","https://www.youtube.com/watch?v=wgEHJeHnTBU","https://www.youtube.com/watch?v=hDWDaYSErGU","/images/about/1.0-03.webp"]),s=new vt("2.0 版本",`
+        `,["/images/about/1.0-01.webp","/images/about/1.0-02.webp","https://www.youtube.com/watch?v=wgEHJeHnTBU","/images/about/1.5-01.webp","/images/about/1.5-02.webp","https://www.youtube.com/watch?v=hDWDaYSErGU","/images/about/1.0-03.webp"]),s=new vt("2.0 版本",`
         <ul class="list-disc list-inside">
             <li>
                 繪師：<a href="https://x.com/etcelebi" target="_blank">CC</a>
