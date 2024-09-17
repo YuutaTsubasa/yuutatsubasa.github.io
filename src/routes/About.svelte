@@ -2,6 +2,7 @@
     import { ItemGroup } from '../utils/itemGroup';
     import { fly } from 'svelte/transition';
     import { cubicInOut } from 'svelte/easing';
+    import { onMount } from 'svelte';
 
     let showModal = false;
     let currentModalImage = '';
@@ -132,6 +133,10 @@
         }
         updateState();
     }
+
+    onMount(() => {
+        window.scrollTo(0, 0);
+    });
 </script>
   
 <section class="py-12 fade-in-bg">   
