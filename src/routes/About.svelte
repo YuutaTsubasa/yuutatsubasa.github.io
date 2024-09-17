@@ -37,6 +37,8 @@
             "/images/about/1.0-01.webp",
             "/images/about/1.0-02.webp",
             "https://www.youtube.com/watch?v=wgEHJeHnTBU",
+            "/images/about/1.5-01.webp",
+            "/images/about/1.5-02.webp",
             "https://www.youtube.com/watch?v=hDWDaYSErGU",
             "/images/about/1.0-03.webp",
         ]);
