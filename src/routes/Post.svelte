@@ -110,8 +110,8 @@
     background-position: center;
     background-repeat: no-repeat;
     width: 100vw;
-    height: 50vh; /* 調整背景區域高度 */
     display: flex;
+    flex-direction: column;
     align-items: flex-end;
     justify-content: flex-start;
     color: white;
@@ -125,7 +125,8 @@
   <section class="fade-in-bg">
   <!-- 使用文章的 thumbnail 作為背景圖 -->
   <section class="post-header" style="background-image: url('{post.thumbnail}');">
-    <div class="max-w-[800px] w-[800px] mx-auto flex-row bg-black/50 backdrop-blur-lg p-4 relative">
+    <div class="h-[20vh]"></div>
+    <div class="max-w-full w-[800px] mx-auto flex-row bg-black/50 backdrop-blur-lg p-4 relative">
       <div class="w-full h-[20px] backdrop-blur-lg absolute top-[-20px] left-0 bg-repeat-x scroll-bg"
            style="background-image: url('/images/title_background.webp');">
       </div>

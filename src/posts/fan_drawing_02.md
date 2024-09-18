@@ -8,4 +8,6 @@ excerpt: "【Zavir Wani（鱷魚）】繪製的粉絲繪。"
 ---
 【Zavir Wani（鱷魚）】繪製的粉絲繪。
 
+鱷魚老師把我畫得好開朗呀！突然覺得好陽光！正向、積極、有活力！
+
 原推文：[https://x.com/WaniVtuber/status/1407118929156182018](https://x.com/WaniVtuber/status/1407118929156182018)

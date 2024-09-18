@@ -45,7 +45,8 @@ body {
 }
 
 .post-content iframe {
-  @apply mx-auto;
+  aspect-ratio: 16/9;
+  @apply mx-auto w-full h-auto max-w-full;
 }
 
 .post-content h2 {
