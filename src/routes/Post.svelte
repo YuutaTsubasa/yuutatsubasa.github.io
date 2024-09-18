@@ -4,12 +4,13 @@
   import yaml from 'js-yaml';
   import ErrorMessage from '../components/ErrorMessage.svelte';
   import Tag from '../components/Tag.svelte';
-    import { formatDate } from '../utils/formatDate';
+  import { formatDate } from '../utils/formatDate';
 
   export let params; // 接收路由參數
 
   let post;
   let loading = true;
+  let disqusConfig = {};
 
   onMount(async () => {
     window.scrollTo(0, 0);
@@ -40,6 +41,30 @@
         thumbnail: frontMatter.thumbnail, // 文章的縮圖
         content: parsedContent,
       };
+    }
+
+    disqusConfig = {
+      url: `https://yuuta-tsubasa.studio/#/posts/${post.filename}`, // 固定且唯一的 URL
+      identifier: post.filename, // 使用文章的 filename 作為唯一識別符
+      title: post.title, // 文章標題
+    };
+
+    // 加載 Disqus
+    if (window.DISQUS) {
+      window.DISQUS.reset({
+        reload: true,
+        config: function () {
+          this.page.identifier = disqusConfig.identifier;
+          this.page.url = disqusConfig.url;
+          this.page.title = disqusConfig.title;
+        },
+      });
+    } else {
+      // 如果 Disqus 還沒有加載，動態創建 Disqus 脚本
+      const d = document, s = d.createElement('script');
+      s.src = 'https://yuuta-tsubasa.disqus.com/embed.js'; // 替換為你的 Disqus 短域名
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
     }
 
     loading = false;
@@ -117,6 +142,8 @@
     color: white;
     text-align: center;
   }
+
+  
 </style>
 
 {#if loading}
@@ -163,24 +190,6 @@
     <hr class="my-8"/>
 
     <div id="disqus_thread"></div>
-    <script>
-        /**
-        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-        /*
-        var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-        };
-        */
-        (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://yuutatsubasawebsite.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-        })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </article>
   </section>
 {:else}
