@@ -1,7 +1,6 @@
 
 <script>
   import { onMount } from 'svelte';
-  import { link } from 'svelte-spa-router';
   import { loadPosts } from '../utils/loadPosts';
   import ErrorMessage from '../components/ErrorMessage.svelte';
   import PostCard from '../components/PostCard.svelte';
@@ -46,7 +45,7 @@
     <div class="relative max-w-7xl mx-auto flex justify-between w-full h-full items-center md:pl-12">
       <div class="absolute md:relative mt-48 md:m-0 text-white max-w-lg relative z-20 bg-black/30 backdrop-blur-lg p-4">
         <h2 class="text-6xl font-bold border-l-8 border-blue-500 pl-4 pb-2">悠太翼</h2>
-        <p class="mt-4 text-xl font-bold">程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。<a href="/about" class="text-blue-500" use:link>了解更多</a></p>
+        <p class="mt-4 text-xl font-bold">程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。<a href="/about" class="text-blue-500">了解更多</a></p>
       </div>
 
       <div class="absolute md:relative z-10 w-full md:w-3/4 h-full flex items-end pr-12">
@@ -64,7 +63,7 @@
         {/each}
       </div>
       <div class="text-center mt-8">
-        <a href="/posts" class="text-blue-500" use:link>查看全部文章</a>
+        <a href="/posts" class="text-blue-500">查看全部文章</a>
       </div>
     </div>
   </section>

@@ -1,18 +1,8 @@
-<script>
-  import { wrap } from "svelte-spa-router/wrap";
-  import Router, { link } from "svelte-spa-router";
-  import Home from "./routes/Home.svelte";
-  import About from "./routes/About.svelte";
-  import Posts from "./routes/Posts.svelte";
-  import Post from "./routes/Post.svelte";
+<script context="module">
+  import { Router, createRouter } from '@roxi/routify'
+  import routes from '../.routify/routes.default.js'
 
-  const routes = {
-    "/": Home,
-    "/about": About,
-    "/posts": Posts,
-    "/posts/:filename": Post,
-    "*": Home,
-  };
+  export const router = createRouter({ routes })
 </script>
 
 <!-- 導覽列 -->
@@ -25,9 +15,9 @@
       <img src="/images/logo.webp" alt="My Blog Logo" class="h-10 sm:h-12">
     </a>
     <ul class="flex space-x-2 sm:space-x-4">
-      <li><a href="/" use:link>Home</a></li>
-      <li><a href="/about" use:link>About</a></li>
-      <li><a href="/posts" use:link>Posts</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/posts">Posts</a></li>
       <li><a href="https://yutaii.run/twitter" target="_blank" rel="noopener noreferrer">
         <i class="fab fa-x-twitter fa-lg"></i>
       </a></li>
@@ -38,8 +28,7 @@
   </div>
   </nav>
 
-<!-- 路由器 -->
-<Router {routes} />
+<Router {router} />
 
 <footer class="bg-gray-900 text-white py-6">
   <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
@@ -50,9 +39,9 @@
 
     <!-- 中間和右側：導航連結與社交媒體合併 -->
     <div class="flex space-x-4">
-      <a href="/" class="hover:underline" use:link>Home</a>
-      <a href="/about" class="hover:underline" use:link>About</a>
-      <a href="/posts" class="hover:underline" use:link>Posts</a>
+      <a href="/" class="hover:underline">Home</a>
+      <a href="/about" class="hover:underline">About</a>
+      <a href="/posts" class="hover:underline">Posts</a>
       <a href="https://yutaii.run/twitter" target="_blank" class="hover:text-blue-500">
         <i class="fab fa-x-twitter fa-lg"></i>
       </a>

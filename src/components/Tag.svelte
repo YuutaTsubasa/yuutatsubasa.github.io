@@ -1,6 +1,5 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { push } from 'svelte-spa-router'; // 使用 push 來更新 URL
     import Tag from './Tag.svelte';
 
     export let isAll = false;
@@ -38,16 +37,8 @@
         return "isSelected";
     }
 
-    function handleTagClick(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (selectedTag === tag) {
-            push(`/posts`);
-            dispatch('clear');
-        } else {
-            push(`/posts?tag=${encodeURIComponent(tag)}`);
-            dispatch('filter', { tag });
-        }
+    function isSeletedTag(tag) {
+        return selectedTag === tag;
     }
 </script>
   
@@ -76,11 +67,8 @@
         on:clear={() => dispatch('clear')}/>
     {/each}
 {:else}
-    <button
-    type="button"
-    class="tag {selectedTag === tag ? getSelectedTagColor(tag) : getTagColor(tag)}"
-    on:click={handleTagClick}
-    on:keydown={(e) => e.key === 'Enter' && handleTagClick(e)}>
+    <a href = {isSeletedTag(tag) ? '/posts' : `/posts?tag=${tag}`}
+    class = "tag {isSeletedTag(tag) ? getSelectedTagColor(tag) : getTagColor(tag)}">
     {tag}
-    </button>
+    </a>
 {/if}

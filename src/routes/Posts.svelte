@@ -1,16 +1,14 @@
 <script>
   import { onMount } from 'svelte';
-  import { push, querystring } from 'svelte-spa-router';
   import ErrorMessage from '../components/ErrorMessage.svelte';
   import PostCard from '../components/PostCard.svelte';
   import Tag from '../components/Tag.svelte';
   import { loadPosts } from '../utils/loadPosts';
 
-  $: queryParams = new URLSearchParams($querystring);
+  $: queryParams = new URLSearchParams(window.location.search);
 
   let posts = [];
   let filteredPosts = [];
-  let allTags = [];
   let loading = true;
   let selectedTag = null;
   let currentPage = 1;
@@ -23,10 +21,7 @@
     window.scrollTo(0, 0);
 
     posts = await loadPosts();
-    allTags = posts.flatMap(post => post.tags);
-
     selectedTag = queryParams.get('tag') || null;
-    console.log(selectedTag);
     currentPage = (queryParams.has('page') ? parseInt(queryParams.get('page')) : 1) ?? 1;
 
     // 過濾文章並設置分頁
@@ -42,29 +37,6 @@
     const start = (currentPage - 1) * postsPerPage;
     const end = start + postsPerPage;
     filteredPosts = filtered.slice(start, end);
-  }
-
-  // 接收 Tag.svelte 發送的篩選事件
-  function handleTagFilter(event) {
-    selectedTag = event.detail.tag;
-    currentPage = 1; // 每次篩選時回到第 1 頁
-    push(`/posts?tag=${encodeURIComponent(selectedTag)}`);
-    updateFilteredPosts();
-  }
-
-  // 接收 Tag.svelte 發送的清除篩選事件
-  function handleTagClear() {
-    selectedTag = null;
-    currentPage = 1; // 清除篩選時回到第 1 頁
-    push('/posts');  // 清除 URL 中的篩選參數
-    updateFilteredPosts();
-  }
-
-  // 改變頁碼並更新 URL
-  function changePage(newPage) {
-    currentPage = newPage;
-    push(`/posts?page=${newPage}${selectedTag ? `&tag=${encodeURIComponent(selectedTag)}` : ''}`); // 更新 URL
-    updateFilteredPosts();
   }
 </script>
 
@@ -87,19 +59,27 @@
 
     <div class="max-w-7xl mx-auto">
       <div class="flex flex-wrap mb-6 px-4 gap-2">
-        <Tag isAll={true} tag={null} {selectedTag} on:filter={handleTagFilter} on:clear={handleTagClear} />
+        <Tag isAll={true} tag={null} {selectedTag} />
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {#each filteredPosts as post}
-          <PostCard {post} {selectedTag} {handleTagFilter} {handleTagClear} />
+          <PostCard {post} {selectedTag} />
         {/each}
       </div>
 
       <!-- 分頁導航 -->
       <div class="flex justify-center gap-16 mt-6">
-        <button on:click={() => changePage(currentPage - 1)} disabled={isFirstPage} class={isFirstPage ? 'text-gray-400' : 'text-blue-500 font-bold'}>上一頁</button>
+        {#if isFirstPage}
+          <p class="text-gray-400">上一頁</p>
+        {:else}
+        <a href={`/posts?page=${currentPage - 1}${selectedTag ? `&tag=${encodeURIComponent(selectedTag)}` : ''}`} class="text-blue-500 font-bold">上一頁</a>
+        {/if}
         <p class="font-bold">第 {currentPage} 頁 / 共 {totalPages} 頁</p>
-        <button on:click={() => changePage(currentPage + 1)} disabled={isLastPage} class={isLastPage ? 'text-gray-400' : 'text-blue-500 font-bold'}>下一頁</button>
+        {#if isLastPage}
+          <p class="text-gray-400">下一頁</p>
+        {:else}
+          <a href={`/posts?page=${currentPage + 1}${selectedTag ? `&tag=${encodeURIComponent(selectedTag)}` : ''}`} class="text-blue-500 font-bold">下一頁</a>
+        {/if}
       </div>
     </div>
   </section>

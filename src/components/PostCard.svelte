@@ -1,15 +1,12 @@
 <script>
     import { formatDate } from '../utils/formatDate';
     import Tag from './Tag.svelte';
-    import { link } from 'svelte-spa-router'
 
     export let post;
     export let selectedTag;
-    export let handleTagFilter;
-    export let handleTagClear;
 </script>
 
-<a href="/posts/{post.filename}" use:link class="hover:scale-105 transition-transform duration-300">
+<a href="/post/{post.filename}" class="hover:scale-105 transition-transform duration-300">
     <div class="border rounded-lg p-6 shadow-lg bg-white/75 backdrop-blur-lg">
         <img src={post.thumbnail} alt={post.title} class="w-full h-48 object-cover mb-4"/>
         <h3 class="text-2xl font-bold mb-2">
@@ -23,7 +20,7 @@
 
         <div class="flex flex-wrap mb-4">
         {#each post.tags as tag}
-            <Tag isAll={false} {tag} {selectedTag} on:filter={handleTagFilter} on:clear={handleTagClear}  />
+            <Tag isAll={false} {tag} {selectedTag}  />
         {/each}
         </div>
     </div>
