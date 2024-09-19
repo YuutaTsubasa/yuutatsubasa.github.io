@@ -3,7 +3,8 @@
   import ErrorMessage from './ErrorMessage.svelte';
   import PostCard from './PostCard.svelte';
   import Tag from './Tag.svelte';
-  import { loadPosts } from '../utils/loadPosts';
+  import { loadPosts } from '$lib/utils/loadPosts';
+  import { postsPerPage } from '$lib/settings.json';
 
   export let tag;
   export let page;
@@ -16,7 +17,6 @@
   let totalPages = 1;
   $: isFirstPage = currentPage <= 1;
   $: isLastPage = currentPage >= totalPages;
-  const postsPerPage = 2;
 
   onMount(async () => {
     window.scrollTo(0, 0);

@@ -1,5 +1,7 @@
 <script>
-    import { goto } from '$app/navigation';
-
-    goto(`/posts/tag/${tag}/1`);
+import { browser } from '$app/environment';
+    
+if (browser) { 
+    window.location.href = `/posts/tag/${encodeURIComponent(tag)}/1`;
+}
 </script>

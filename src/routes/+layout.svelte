@@ -1,3 +1,9 @@
+<style>
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+</style>
+
 <!-- 導覽列 -->
 <nav class="fixed left-0 w-full backdrop-blur-lg bg-black/30 text-white z-30">
   <div class="h-[20px] w-full bg-repeat-x scroll-bg opacity-50" style="background-image: url('/images/title_background.webp');"></div>

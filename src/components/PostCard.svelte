@@ -1,5 +1,5 @@
 <script>
-    import { formatDate } from '../utils/formatDate';
+    import { formatDate } from '../lib/utils/formatDate';
     import Tag from './Tag.svelte';
 
     export let post;

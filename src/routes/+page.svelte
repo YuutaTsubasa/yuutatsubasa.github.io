@@ -1,7 +1,7 @@
 
 <script>
   import { onMount } from 'svelte';
-  import { loadPosts } from '../utils/loadPosts';
+  import { loadPosts } from '$lib/utils/loadPosts';
   import ErrorMessage from '../components/ErrorMessage.svelte';
   import PostCard from '../components/PostCard.svelte';
 

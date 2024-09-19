@@ -24,10 +24,10 @@ export const dictionary = {
 		"/about": [7,[2]],
 		"/posts": [9],
 		"/posts/tag": [11],
-		"/posts/tag/[tag]": [12],
-		"/posts/tag/[tag]/[page]": [13,[5]],
-		"/posts/[page]": [10,[4]],
-		"/post/[filename]": [8,[3]]
+		"/posts/tag/[tag]": [~12],
+		"/posts/tag/[tag]/[page]": [~13,[5]],
+		"/posts/[page]": [~10,[4]],
+		"/post/[filename]": [~8,[3]]
 	};
 
 export const hooks = {

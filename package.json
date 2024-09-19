@@ -6,7 +6,7 @@
 		"preview": "vite preview",
 		"build": "vite build",
 		"predeploy": "npm run build",
-		"deploy": "gh-pages -d build"
+		"deploy": "gh-pages -d dist"
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^5.0.0",

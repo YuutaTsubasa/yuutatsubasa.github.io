@@ -40,7 +40,6 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { data_0 = null } = $$props;
   let { data_1 = null } = $$props;
   let { data_2 = null } = $$props;
-  let { data_3 = null } = $$props;
   {
     setContext("__svelte__", stores);
   }
@@ -53,7 +52,6 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   if ($$props.data_0 === void 0 && $$bindings.data_0 && data_0 !== void 0) $$bindings.data_0(data_0);
   if ($$props.data_1 === void 0 && $$bindings.data_1 && data_1 !== void 0) $$bindings.data_1(data_1);
   if ($$props.data_2 === void 0 && $$bindings.data_2 && data_2 !== void 0) $$bindings.data_2(data_2);
-  if ($$props.data_3 === void 0 && $$bindings.data_3 && data_3 !== void 0) $$bindings.data_3(data_3);
   let $$settled;
   let $$rendered;
   let previous_head = $$result.head;
@@ -85,31 +83,7 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             },
             {
               default: () => {
-                return `${constructors[3] ? `${validate_component(constructors[2] || missing_component, "svelte:component").$$render(
-                  $$result,
-                  { data: data_2, this: components[2] },
-                  {
-                    this: ($$value) => {
-                      components[2] = $$value;
-                      $$settled = false;
-                    }
-                  },
-                  {
-                    default: () => {
-                      return `${validate_component(constructors[3] || missing_component, "svelte:component").$$render(
-                        $$result,
-                        { data: data_3, form, this: components[3] },
-                        {
-                          this: ($$value) => {
-                            components[3] = $$value;
-                            $$settled = false;
-                          }
-                        },
-                        {}
-                      )}`;
-                    }
-                  }
-                )}` : `${validate_component(constructors[2] || missing_component, "svelte:component").$$render(
+                return `${validate_component(constructors[2] || missing_component, "svelte:component").$$render(
                   $$result,
                   { data: data_2, form, this: components[2] },
                   {
@@ -119,7 +93,7 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
                     }
                   },
                   {}
-                )}`}`;
+                )}`;
               }
             }
           )}` : `${validate_component(constructors[1] || missing_component, "svelte:component").$$render(
@@ -167,7 +141,7 @@ const options = {
   root: Root,
   service_worker: false,
   templates: {
-    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="icon" href="' + assets2 + '/favicon.ico" />\n    <link rel="stylesheet" href="' + assets2 + '/src/app.css" />\n    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />\n    <title>悠太翼官方網站</title>\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">\n    ' + head + `
+    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="icon" href="' + assets2 + '/favicon.ico" />\n    <link rel="stylesheet" href="' + assets2 + '/app.css" />\n    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />\n    <title>悠太翼官方網站</title>\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">\n    ' + head + `
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZG5BG6R36P"><\/script>
     <script>
@@ -252,7 +226,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "pmwsmq"
+  version_hash: "13zazcq"
 };
 async function get_hooks() {
   return {};

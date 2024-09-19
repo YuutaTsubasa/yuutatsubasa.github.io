@@ -4,7 +4,7 @@
   import yaml from 'js-yaml';
   import ErrorMessage from '../../../components/ErrorMessage.svelte';
   import Tag from '../../../components/Tag.svelte';
-  import { formatDate } from '../../../utils/formatDate';
+  import { formatDate } from '$lib/utils/formatDate';
 
   export let data;
 
