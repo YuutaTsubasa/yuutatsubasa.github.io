@@ -1,11 +1,12 @@
 <script>
   import { onMount } from 'svelte';
-  import ErrorMessage from '../components/ErrorMessage.svelte';
-  import PostCard from '../components/PostCard.svelte';
-  import Tag from '../components/Tag.svelte';
-  import { loadPosts } from '../utils/loadPosts';
+  import ErrorMessage from '../../components/ErrorMessage.svelte';
+  import PostCard from '../../components/PostCard.svelte';
+  import Tag from '../../components/Tag.svelte';
+  import { loadPosts } from '../../utils/loadPosts';
+  import { page } from '$app/stores';
 
-  $: queryParams = new URLSearchParams(window.location.search);
+  $: queryParams = new URLSearchParams($page.url.search);
 
   let posts = [];
   let filteredPosts = [];

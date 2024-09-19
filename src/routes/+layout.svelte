@@ -1,10 +1,3 @@
-<script context="module">
-  import { Router, createRouter } from '@roxi/routify'
-  import routes from '../.routify/routes.default.js'
-
-  export const router = createRouter({ routes })
-</script>
-
 <!-- 導覽列 -->
 <nav class="fixed left-0 w-full backdrop-blur-lg bg-black/30 text-white z-30">
   <div class="h-[20px] w-full bg-repeat-x scroll-bg opacity-50" style="background-image: url('/images/title_background.webp');"></div>
@@ -28,7 +21,7 @@
   </div>
   </nav>
 
-<Router {router} />
+<slot/>
 
 <footer class="bg-gray-900 text-white py-6">
   <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">

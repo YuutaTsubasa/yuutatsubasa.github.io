@@ -6,7 +6,7 @@
     export let selectedTag;
 </script>
 
-<a href="/post/{post.filename}" class="hover:scale-105 transition-transform duration-300">
+<a href="/posts/{post.filename}" class="hover:scale-105 transition-transform duration-300">
     <div class="border rounded-lg p-6 shadow-lg bg-white/75 backdrop-blur-lg">
         <img src={post.thumbnail} alt={post.title} class="w-full h-48 object-cover mb-4"/>
         <h3 class="text-2xl font-bold mb-2">

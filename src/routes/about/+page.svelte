@@ -1,5 +1,5 @@
 <script>
-    import { ItemGroup } from '../utils/itemGroup';
+    import { ItemGroup } from '../../utils/itemGroup';
     import { fly } from 'svelte/transition';
     import { cubicInOut } from 'svelte/easing';
     import { onMount } from 'svelte';

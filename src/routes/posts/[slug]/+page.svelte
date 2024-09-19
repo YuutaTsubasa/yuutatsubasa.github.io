@@ -2,11 +2,11 @@
   import { onMount } from 'svelte';
   import { marked } from 'marked';
   import yaml from 'js-yaml';
-  import ErrorMessage from '../../components/ErrorMessage.svelte';
-  import Tag from '../../components/Tag.svelte';
-  import { formatDate } from '../../utils/formatDate';
+  import ErrorMessage from '../../../components/ErrorMessage.svelte';
+  import Tag from '../../../components/Tag.svelte';
+  import { formatDate } from '../../../utils/formatDate';
 
-  export let filename;
+  export let data;
 
   let post;
   let loading = true;
@@ -16,7 +16,7 @@
 
     // 加載對應文件名的文章
     const postFiles = import.meta.glob('/src/posts/*.md', { query: '?raw', import: 'default' });
-    const path = `/src/posts/${filename}.md`;
+    const path = `/src/posts/${data.filename}.md`;
 
     if (postFiles[path]) {
       const postContent = await postFiles[path]();
