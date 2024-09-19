@@ -16,7 +16,7 @@
     <ul class="flex space-x-2 sm:space-x-4">
       <li><a href="/">Home</a></li>
       <li><a href="/about">About</a></li>
-      <li><a href="/posts">Posts</a></li>
+      <li><a href="/posts/1">Posts</a></li>
       <li><a href="https://yutaii.run/twitter" target="_blank" rel="noopener noreferrer">
         <i class="fab fa-x-twitter fa-lg"></i>
       </a></li>

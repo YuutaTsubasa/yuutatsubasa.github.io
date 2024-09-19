@@ -1,6 +1,6 @@
 <script>
     import Tag from './Tag.svelte';
-    import { tagColors } from '$lib/settings.json';
+    import { tagColors } from '$lib/settings';
 
     export let isAll = false;
     export let tag;

@@ -1,4 +1,4 @@
-import { tagColors } from "$lib/settings.json";
+import { tagColors } from "$lib/settings";
 
 /** @type {import('./$types').EntryGenerator} */
 export function entries() {

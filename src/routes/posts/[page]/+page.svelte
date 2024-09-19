@@ -3,4 +3,4 @@
 
     export let data;
 </script>
-<Posts page={data.page} tag={null}/>
+<Posts page={data.page} tag={null} totalPages={data.totalPages} posts={data.posts}/>

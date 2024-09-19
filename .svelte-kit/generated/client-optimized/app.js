@@ -20,14 +20,14 @@ export const nodes = [
 export const server_loads = [];
 
 export const dictionary = {
-		"/": [6],
+		"/": [~6],
 		"/about": [7,[2]],
 		"/posts": [9],
 		"/posts/tag": [11],
 		"/posts/tag/[tag]": [12],
-		"/posts/tag/[tag]/[page]": [13,[5]],
-		"/posts/[page]": [10,[4]],
-		"/post/[filename]": [8,[3]]
+		"/posts/tag/[tag]/[page]": [~13,[5]],
+		"/posts/[page]": [~10,[4]],
+		"/post/[filename]": [~8,[3]]
 	};
 
 export const hooks = {

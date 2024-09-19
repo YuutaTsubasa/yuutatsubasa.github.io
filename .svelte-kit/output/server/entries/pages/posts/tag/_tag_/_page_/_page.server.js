@@ -10,8 +10,20 @@ async function entries() {
   });
   return entries2;
 }
+async function load({ params }) {
+  const posts = await loadPosts();
+  const tag = decodeURIComponent(params.tag);
+  const page = parseInt(params.page);
+  const postsForTag = posts.filter((post) => post.tags.includes(tag));
+  const totalPages = Math.ceil(postsForTag.length / postsPerPage);
+  const start = (page - 1) * postsPerPage;
+  const end = start + postsPerPage;
+  const paginatedPosts = postsForTag.slice(start, end);
+  return { tag, posts: paginatedPosts, totalPages };
+}
 const prerender = true;
 export {
   entries,
+  load,
   prerender
 };

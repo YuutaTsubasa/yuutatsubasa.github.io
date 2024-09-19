@@ -8,7 +8,7 @@ const tagColors = {
   "遊戲作品": "bg-orange-500",
   "作曲實況": "bg-blue-500",
   "歌回實況": "bg-blue-500",
-  Cover: "bg-blue-500",
+  "Cover": "bg-blue-500",
   "3D 實況": "bg-cyan-500",
   "3D 作品": "bg-cyan-500",
   "繪圖實況": "bg-pink-500",

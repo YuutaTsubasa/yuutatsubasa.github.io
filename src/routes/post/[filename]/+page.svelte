@@ -1,49 +1,10 @@
 <script>
-  import { onMount } from 'svelte';
-  import { marked } from 'marked';
-  import yaml from 'js-yaml';
   import ErrorMessage from '../../../components/ErrorMessage.svelte';
   import Tag from '../../../components/Tag.svelte';
   import { formatDate } from '$lib/utils/formatDate';
 
   export let data;
-
-  let post;
-  let loading = true;
-
-  onMount(async () => {
-    window.scrollTo(0, 0);
-
-    // 加載對應文件名的文章
-    const postFiles = import.meta.glob('/src/posts/*.md', { query: '?raw', import: 'default' });
-    const path = `/src/posts/${data.filename}.md`;
-
-    if (postFiles[path]) {
-      const postContent = await postFiles[path]();
-      const yamlMatch = postContent.match(/---[\r\n]+([\s\S]+?)[\r\n]+---/);
-
-      let frontMatter = {};
-      let markdownContent = postContent;
-
-      if (yamlMatch) {
-        frontMatter = yaml.load(yamlMatch[1]);
-        markdownContent = postContent.slice(yamlMatch[0].length);
-      }
-
-      const parsedContent = marked(markdownContent);
-
-      post = {
-        title: frontMatter.title,
-        date: new Date(frontMatter.date),
-        author: frontMatter.author,
-        tags: frontMatter.tags,
-        thumbnail: frontMatter.thumbnail, // 文章的縮圖
-        content: parsedContent,
-      };
-    }
-
-    loading = false;
-  });
+  $: post = data.post;
 </script>
 
 <style>
@@ -121,9 +82,7 @@
   
 </style>
 
-{#if loading}
-  <ErrorMessage message="載入中..." />
-{:else if post}
+{#if post}
   <section class="fade-in-bg">
     <!-- 使用文章的 thumbnail 作為背景圖 -->
     <section class="post-header" style="background-image: url('{post.thumbnail}');">

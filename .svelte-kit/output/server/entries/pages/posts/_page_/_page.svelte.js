@@ -3,7 +3,17 @@ import { P as Posts } from "../../../../chunks/Posts.js";
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { data } = $$props;
   if ($$props.data === void 0 && $$bindings.data && data !== void 0) $$bindings.data(data);
-  return `${validate_component(Posts, "Posts").$$render($$result, { page: data.page, tag: null }, {}, {})}`;
+  return `${validate_component(Posts, "Posts").$$render(
+    $$result,
+    {
+      page: data.page,
+      tag: null,
+      totalPages: data.totalPages,
+      posts: data.posts
+    },
+    {},
+    {}
+  )}`;
 });
 export {
   Page as default
