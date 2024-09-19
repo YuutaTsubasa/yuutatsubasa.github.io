@@ -3,8 +3,10 @@
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "vite dev",
+		"preview": "vite preview",
 		"build": "vite build",
-		"preview": "vite preview"
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d build"
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^5.0.0",
@@ -17,7 +19,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-static": "^3.0.5",
 		"autoprefixer": "^10.4.20",
+		"gh-pages": "^6.1.1",
 		"js-yaml": "^4.1.0",
 		"marked": "^14.1.2",
 		"postcss": "^8.4.47",

@@ -5,8 +5,6 @@
     export let isAll = false;
     export let tag;
     export let selectedTag;
-  
-    const dispatch = createEventDispatcher();
 
     const tagColors = {
       "遊戲實況": "bg-red-500",
@@ -62,12 +60,10 @@
   
 {#if isAll}
     {#each Object.keys(tagColors) as tag}
-        <Tag isAll={false} {tag} {selectedTag} 
-        on:filter={() => dispatch('filter', { tag })} 
-        on:clear={() => dispatch('clear')}/>
+        <Tag isAll={false} {tag} {selectedTag} />
     {/each}
 {:else}
-    <a href = {isSeletedTag(tag) ? '/posts' : `/posts?tag=${tag}`}
+    <a data-sveltekit-reload href = {isSeletedTag(tag) ? '/posts/1' : `/posts/tag/${tag}/1`}
     class = "tag {isSeletedTag(tag) ? getSelectedTagColor(tag) : getTagColor(tag)}">
     {tag}
     </a>
