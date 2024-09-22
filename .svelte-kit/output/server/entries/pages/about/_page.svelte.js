@@ -1,7 +1,7 @@
-import { c as create_ssr_component, d as each, f as add_attribute, e as escape } from "../../../chunks/ssr.js";
+import { c as create_ssr_component, e as escape, d as add_attribute, f as each } from "../../../chunks/ssr.js";
 class ItemGroup {
-  constructor(title, content, items) {
-    this.title = title;
+  constructor(title2, content, items) {
+    this.title = title2;
     this.content = content;
     this.items = items.map((item) => this.parseItem(item));
     this.currentIndex = 0;
@@ -43,6 +43,8 @@ class ItemGroup {
     return this.slideDirection;
   }
 }
+let title = "悠太翼官方網站 | 關於我";
+let description = "程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。";
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let versionOneIntroduction = new ItemGroup(
     "1.0 & 1.5 版本",
@@ -208,7 +210,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       source: "https://yutaii.run/marshmallow"
     }
   ];
-  return `<section class="fade-in-bg"><section class="relative bg-cover bg-center bg-no-repeat h-96 w-screen flex items-center justify-center mb-12" style="background-image: url('/images/background.webp');" data-svelte-h="svelte-fifltq"><div class="flex flex-col items-center justify-center"><h2 class="flex-1 text-6xl font-bold text-white">關於我</h2></div></section> <div class="max-w-7xl mx-auto description"> ${each(descriptions, (itemGroup) => {
+  return `${$$result.head += `<!-- HEAD_svelte-1sygrc8_START -->${$$result.title = `<title>${escape(title)}</title>`, ""}<meta name="description"${add_attribute("content", description, 0)}><meta name="keywords" content="Vtuber, 悠太翼, 程式設計, 直播"><meta property="og:title"${add_attribute("content", title, 0)}><meta property="og:description"${add_attribute("content", description, 0)}><meta property="og:type" content="article"><meta property="og:url" content="https://yuuta-tsubasa.studio/about"><meta property="og:image" content="https://yuuta-tsubasa.studio/images/about/4.0-01.webp"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title"${add_attribute("content", title, 0)}><meta name="twitter:description"${add_attribute("content", description, 0)}><!-- HEAD_svelte-1sygrc8_END -->`, ""} <section class="fade-in-bg"><section class="relative bg-cover bg-center bg-no-repeat h-96 w-screen flex items-center justify-center mb-12" style="background-image: url('/images/background.webp');" data-svelte-h="svelte-fifltq"><div class="flex flex-col items-center justify-center"><h2 class="flex-1 text-6xl font-bold text-white">關於我</h2></div></section> <div class="max-w-7xl mx-auto description"> ${each(descriptions, (itemGroup) => {
     return `<div class="flex flex-col md:flex-row items-center mb-12 md:gap-12 bg-black/50 p-4 rounded-lg shadow-lg backdrop-blur-sm"> <div class="relative w-full md:w-1/2 h-64 md:h-80 mb-6 md:mb-0 shadow-lg flex items-center justify-center bg-white/50 rounded-lg backdrop-blur-sm"><div class="relative w-full h-full overflow-hidden"><div class="w-full h-full">${itemGroup.currentItem().type === "youtube" ? `<iframe${add_attribute("src", itemGroup.currentItem().url, 0)} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full object-contain rounded-lg shadow-lg"></iframe>` : `<button class="w-full h-full bg-transparent border-0 p-0 focus:outline-none"><img${add_attribute("src", itemGroup.currentItem().url, 0)} alt="Slide" class="w-full h-full object-contain rounded-lg shadow-lg"> </button>`} </div></div> <div class="absolute inset-0 flex justify-between items-center pointer-events-none"><button class="bg-white/75 hover:bg-white/100 p-2 rounded-full shadow-lg m-[-10px] hover:bg-yellow-500 hover:text-white pointer-events-auto" data-svelte-h="svelte-1g8gy9t"><i class="fas fa-chevron-left"></i></button> <button class="bg-white/75 hover:bg-white/100 p-2 rounded-full shadow-lg m-[-10px] hover:bg-yellow-500 hover:text-white pointer-events-auto" data-svelte-h="svelte-d3gqhr"><i class="fas fa-chevron-right"></i></button> </div></div>  <div class="w-full md:w-1/2 text-white self-start"><h2 class="text-3xl font-bold mb-4">${escape(itemGroup.title)}</h2> <p class="text-lg text-gray-200"><!-- HTML_TAG_START -->${itemGroup.content}<!-- HTML_TAG_END --></p></div> </div>`;
   })}  <div class="mt-12 mb-6 bg-black/50 p-10 rounded-lg shadow-lg backdrop-blur-sm text-white"><h2 class="text-3xl font-bold mb-2" data-svelte-h="svelte-8jj01t">實況資源來源</h2> <ul class="list-disc list-inside text-lg text-gray-200">${each(resources, (resource) => {
     return `<li>${escape(resource.name)}：<a${add_attribute("href", resource.source, 0)} target="_blank" class="text-blue-200 hover:underline">${escape(resource.source)}</a> </li>`;

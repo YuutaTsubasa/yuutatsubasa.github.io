@@ -1,4 +1,4 @@
-import { c as create_ssr_component, d as each, v as validate_component, f as add_attribute, e as escape } from "./ssr.js";
+import { c as create_ssr_component, f as each, v as validate_component, d as add_attribute, e as escape } from "./ssr.js";
 import { t as tagColors } from "./settings.js";
 function formatDate(date) {
   return date.toLocaleDateString("en-CA", { year: "numeric", month: "2-digit", day: "2-digit" });

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[悠太翼官方網站]]></title>
+        <description><![CDATA[程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。]]></description>
+        <link>https://yuuta-tsubasa.studio</link>
+        <image>
+            <url>https://yuuta-tsubasa.studio/favicon.ico</url>
+            <title>悠太翼官方網站</title>
+            <link>https://yuuta-tsubasa.studio</link>
+        </image>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Sun, 22 Sep 2024 19:33:33 GMT</lastBuildDate>
+        <atom:link href="https://yuuta-tsubasa.studio/rss.xml" rel="self" type="application/rss+xml"/>
+        <language><![CDATA[zh-TW]]></language>
+        <item>
+            <title><![CDATA[快速週表產生器]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/quick_scheduler_tool.webp" alt="快速週表產生器"></p><p><p>本來是在探索是否可以用網頁技術來製作週表，做著做著就發現當中的內容可以開成參數讓大家填寫，這樣就可以做到客製化好用的週表，然後又發現可以用相同的參數去套用多個版型，因此就做成了一個可以套用多個不同版型的週表產生器。</p>
+<p>做完的時候其實覺得很酷，也加了三個版型進去，只是因為後來我從當初使用的 C# 轉換 Web 的技術，改成使用 Svelte 了，所以後續做的東西就要另外改寫才能塞進去，就沒再更新了，之後有機會應該要繼續更新一下。</p>
+<ul>
+<li>工具使用連結：<a href="https://quickscheduler.yuuta-tsubasa.studio/">https://quickscheduler.yuuta-tsubasa.studio/</a></li>
+<li>程式碼連結：<a href="https://github.com/yuutatsubasa/quickscheduler">YuutaTsubasa/QuickScheduler: A schedule maker for VTubers.</a></li>
+</ul>
+</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/post/quick_scheduler_tool</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/quick_scheduler_tool</guid>
+            <dc:creator><![CDATA[悠太翼]]></dc:creator>
+            <pubDate>Fri, 14 Apr 2023 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[【#遊戲】Vol. 1: 雙人成行 #01 feat. 貓耳未來]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/streamings/1.webp" alt="【#遊戲】Vol. 1: 雙人成行 #01 feat. 貓耳未來"></p><p><iframe width="560" height="315" src="https://www.youtube.com/embed/Bb5PbxXB7lQ?si=MbyrFGxSPVb-IRwJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<p>這是我與貓耳未來首次合作的遊戲實況。我們選擇了《雙人成行》這款遊戲，但在遊玩過程中發現我的電腦配置不足，導致遊戲經常出現卡頓。為了改善這個問題，事後我在下次合作直播前趕緊去原價屋買了一台新的電腦。</p>
+<h2>🛡️連動夥伴🛡️</h2>
+<p>☆ Nekomix Ch. 貓耳未來 ☆
+➥Twitter: <a href="https://x.com/NekomixNx">https://x.com/NekomixNx</a>
+➥Youtube: <a href="https://www.youtube.com/channel/UCJyUJuz8L-mu1Ted8W-QR_Q">https://www.youtube.com/channel/UCJyUJuz8L-mu1Ted8W-QR_Q</a>
+➥貓耳側的實況: <a href="https://youtu.be/XC1ffeKncHM">https://youtu.be/XC1ffeKncHM</a></p>
+<h2>🛡️直播與影片連結🛡️</h2>
+<ul>
+<li>原直播：<a href="https://yutaii.run/v/0">https://yutaii.run/v/1</a></li>
+</ul>
+<h2>🛡️時間軸🛡️</h2>
+<ul>
+<li>00:00:00 Opening</li>
+<li>00:07:23 開場 (1)</li>
+<li>00:09:58 開場 (2) - 與貓耳未來嘗試連線</li>
+<li>00:20:11 遊戲開場影片</li>
+<li>00:21:40 第一章 小棚屋：當頭幫喝</li>
+<li>00:36:09 第一章 小棚屋：吸食灰塵</li>
+<li>00:56:36 BOSS 戰：吸塵塔</li>
+<li>01:01:19 第一章 小棚屋：深淵 (1)</li>
+<li>01:11:00 小遊戲：敲打科迪</li>
+<li>01:14:38 第一章 小棚屋：深淵 (2)</li>
+<li>01:16:52 小遊戲：翻轉開關</li>
+<li>01:18:02 第一章 小棚屋：深淵 (3)</li>
+<li>01:35:38 第一章 小棚屋：接通電源</li>
+<li>01:42:03 第二章 大樹：新鮮空氣</li>
+<li>01:49:23 第二章 大樹：捕獲俘虜 (1)</li>
+<li>02:19:14 小遊戲：拔河</li>
+<li>02:20:02 第二章 大樹：捕獲俘虜 (2)</li>
+<li>02:24:22 BOSS 戰：盾牌黃蜂</li>
+<li>02:26:26 第二章 大樹：根深蒂固 (1)</li>
+<li>02:30:11 BOSS 戰：砲擊黃蜂</li>
+<li>02:32:14 第二章 大樹：根深蒂固 (2)</li>
+<li>02:40:18 結尾</li>
+<li>02:42:51 Ending</li>
+</ul>
+</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/post/streaming_0001</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/streaming_0001</guid>
+            <dc:creator><![CDATA[悠太翼 feat. 貓耳未來]]></dc:creator>
+            <pubDate>Mon, 02 Aug 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[悠然翼繪 by 拉德 2021/07/31]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_04.webp" alt="悠然翼繪 by 拉德 2021/07/31"></p><p><p>【拉德】繪製的粉絲繪。</p>
+<p>感謝拉德老師祝賀我初配信成功，這張圖真的好可愛！</p>
+<p>作者推特：<a href="https://x.com/rabbitlader">https://x.com/rabbitlader</a></p>
+</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/post/fan_drawing_04</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_04</guid>
+            <dc:creator><![CDATA[拉德]]></dc:creator>
+            <pubDate>Sat, 31 Jul 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[悠然翼繪 by 肥羊皮 2021/07/31]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_05.webp" alt="悠然翼繪 by 肥羊皮 2021/07/31"></p><p><p>【肥羊皮】繪製的粉絲繪。</p>
+<p>感謝肥羊皮老師畫的我，真的超級帥氣！</p>
+<p>作者推特：<a href="https://x.com/FatYappy/status/1421320280073330694">https://x.com/FatYappy/status/1421320280073330694</a></p>
+</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/post/fan_drawing_05</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_05</guid>
+            <dc:creator><![CDATA[肥羊皮]]></dc:creator>
+            <pubDate>Sat, 31 Jul 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[【#歌回/#雜談】Vol. 0: 初配信，來做點自我介紹吧！]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/streamings/0.webp" alt="【#歌回/#雜談】Vol. 0: 初配信，來做點自我介紹吧！"></p><p><iframe width="560" height="315" src="https://www.youtube.com/embed/zbyvgQOZu8E?si=P9MpdFVNvwLierrg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<p>初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）。</p>
+<h2>🛡️直播與影片連結🛡️</h2>
+<ul>
+<li>原直播：<a href="https://yutaii.run/v/0">https://yutaii.run/v/0</a></li>
+<li>Shorts：【#shorts】初配信唱「不毛!」唱到快掛了！？(2021/07/31)：<a href="https://www.youtube.com/shorts/33PJMhkLOnk">https://www.youtube.com/shorts/33PJMhkLOnk</a></li>
+</ul>
+<h2>🛡️時間軸🛡️</h2>
+<ul>
+<li>00:00:00 Opening</li>
+<li>00:05:19 開場</li>
+<li>00:12:05 自我介紹 (1) - 基本介紹</li>
+<li>00:20:20 自我介紹 (2) - 實況時程</li>
+<li>00:22:18 自我介紹 (3) - Staff</li>
+<li>00:27:00 自我介紹 (4) - 實況相關的 Tag</li>
+<li>00:29:25 自我介紹 (5) - 未來規劃</li>
+<li>00:32:30 自我介紹 (6) - 第一次連動介紹</li>
+<li>00:32:55 自我介紹 (7) - 社群介紹</li>
+<li>00:36:13 模型展示</li>
+<li>00:41:12 歌回時間</li>
+<li>00:43:41 歌回時間 (1) - KING</li>
+<li>00:46:40 歌回時間 (2) - Bad Apple!</li>
+<li>00:50:52 歌回時間 (3) - ベノム</li>
+<li>00:55:34 歌回時間 (4) - 不毛!</li>
+<li>01:03:08 歌回時間 (5) - 歡喜就好</li>
+<li>01:07:12 歌回時間 (6) - 共感覚おばけ</li>
+<li>01:11:50 歌回時間 (7) - 踊</li>
+<li>01:15:58 歌回時間 (8) - シャルル</li>
+<li>01:21:36 棉花糖時間 (1) - 人設很可愛、唱歌也好聽 期待初配信 加油💪</li>
+<li>01:23:25 棉花糖時間 (2) - 平常有在D哪些v呢？？？</li>
+<li>01:32:56 棉花糖時間 (3) - 有宿命之敵嗎</li>
+<li>01:35:04 棉花糖時間 (4) - 第一次看到職業是程式設計師的V...</li>
+<li>01:37:12 棉花糖時間 (5) - 藍翼明決定了嗎？</li>
+<li>01:37:50 棉花糖時間 (6) - 悠太平常穿盔甲會很熱嗎?...</li>
+<li>01:39:11 棉花糖時間 (7) - 經過了這麼多月的努力終於迎來初配信了，期待之後悠太的直播...</li>
+<li>01:41:01 棉花糖時間 (8) - 初配信加油悠太翼！</li>
+<li>01:42:10 棉花糖時間 (9) - 鎧甲應該有訂到合身的尺寸了吧ww...</li>
+<li>01:44:04 棉花糖時間 (10) - 自己做網站也太猛了吧!</li>
+<li>01:46:41 結尾</li>
+<li>01:49:55 Ending</li>
+</ul>
+<h2>🛡️音源來源🛡️</h2>
+<ol>
+<li>KING: <a href="https://www.youtube.com/watch?v=LMQIlMbC4N8&t=0s">https://www.youtube.com/watch?v=LMQIlMbC4N8&amp;t=0s</a></li>
+<li>Bad Apple!: <a href="https://www.youtube.com/watch?v=GfTNCUG-7U8&t=0s">https://www.youtube.com/watch?v=GfTNCUG-7U8&amp;t=0s</a></li>
+<li>ベノム: <a href="https://www.youtube.com/watch?v=duvJFyF3fGI&t=0s">https://www.youtube.com/watch?v=duvJFyF3fGI&amp;t=0s</a></li>
+<li>不毛!: <a href="https://piapro.jp/t/Tbxe">https://piapro.jp/t/Tbxe</a></li>
+<li>歡喜就好: <a href="https://www.youtube.com/watch?v=G5izg5SHmbU&t=0s">https://www.youtube.com/watch?v=G5izg5SHmbU&amp;t=0s</a></li>
+<li>共感覚おばけ: <a href="https://www.youtube.com/watch?v=ocMGqYM8i5M&t=0s">https://www.youtube.com/watch?v=ocMGqYM8i5M&amp;t=0s</a>  </li>
+<li>踊: <a href="https://www.youtube.com/watch?v=Rg7yCnB7Zfo&t=0s">https://www.youtube.com/watch?v=Rg7yCnB7Zfo&amp;t=0s</a></li>
+<li>シャルル: <a href="https://www.youtube.com/watch?v=x7WQMdUP9Ko&t=0s">https://www.youtube.com/watch?v=x7WQMdUP9Ko&amp;t=0s</a></li>
+</ol>
+</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/post/streaming_0000</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/streaming_0000</guid>
+            <dc:creator><![CDATA[悠太翼]]></dc:creator>
+            <pubDate>Sat, 31 Jul 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[悠然翼繪 by 泡芙 2021/06/27]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_03.gif" alt="悠然翼繪 by 泡芙 2021/06/27"></p><p><p>【泡芙】所辦的繪製活動的成果。</p>
+<p>泡芙老師當時畫了一些大家腦袋運作中的動圖，就開了一個活動讓大家可以免費參加，我剛好被抽到就有了這個動畫。</p>
+<p>因為真的很好看，所以我就拿來當成實況時預備中的動畫了。</p>
+<p>原推文：<a href="https://x.com/noodle890812/status/1409024673619214342">https://x.com/noodle890812/status/1409024673619214342</a></p>
+</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/post/fan_drawing_03</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_03</guid>
+            <dc:creator><![CDATA[泡芙]]></dc:creator>
+            <pubDate>Sun, 27 Jun 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[悠然翼繪 by Zavir Wani（鱷魚） 2021/06/22]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_02.webp" alt="悠然翼繪 by Zavir Wani（鱷魚） 2021/06/22"></p><p><p>【Zavir Wani（鱷魚）】繪製的粉絲繪。</p>
+<p>鱷魚老師把我畫得好開朗呀！突然覺得好陽光！正向、積極、有活力！</p>
+<p>原推文：<a href="https://x.com/WaniVtuber/status/1407118929156182018">https://x.com/WaniVtuber/status/1407118929156182018</a></p>
+</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/post/fan_drawing_02</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_02</guid>
+            <dc:creator><![CDATA[Zavir Wani（鱷魚）]]></dc:creator>
+            <pubDate>Tue, 22 Jun 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[悠然翼繪 by 诗婷 2021/06/14]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_01.webp" alt="悠然翼繪 by 诗婷 2021/06/14"></p><p><p>【诗婷】繪製的粉絲繪。</p>
+<p>感覺是在咬著小籠包的我，也感覺好像其實是在咬著枕頭之類的東西～XD</p>
+<p>原推文：<a href="https://x.com/0112_ting/status/1404275813692760066">https://x.com/0112_ting/status/1404275813692760066</a></p>
+</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/post/fan_drawing_01</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_01</guid>
+            <dc:creator><![CDATA[诗婷]]></dc:creator>
+            <pubDate>Mon, 14 Jun 2021 00:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>

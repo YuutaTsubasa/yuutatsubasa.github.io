@@ -141,7 +141,7 @@ const options = {
   root: Root,
   service_worker: false,
   templates: {
-    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\r\n<html lang="en">\r\n  <head>\r\n    <meta charset="UTF-8" />\r\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\r\n    <link rel="icon" href="' + assets2 + '/favicon.ico" />\r\n    <link rel="stylesheet" href="' + assets2 + '/app.css" />\r\n    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />\r\n    <title>悠太翼官方網站</title>\r\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">\r\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">\r\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">\r\n    ' + head + `\r
+    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\r\n<html lang="en">\r\n  <head>\r\n    <meta charset="UTF-8" />\r\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\r\n    <meta name="robots" content="index, follow" />\r\n    <link rel="icon" href="' + assets2 + '/favicon.ico" />\r\n    <link rel="stylesheet" href="' + assets2 + '/app.css" />\r\n    <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="RSS feed" />\r\n    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />\r\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">\r\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">\r\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">\r\n    ' + head + `\r
     <!-- Google tag (gtag.js) -->\r
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZG5BG6R36P"><\/script>\r
     <script>\r
@@ -226,7 +226,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1j387q3"
+  version_hash: "1utez5j"
 };
 async function get_hooks() {
   return {};

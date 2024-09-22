@@ -162,7 +162,7 @@
       "_ssr.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.DsTi4eqS.css"
+      "_app/immutable/assets/_layout.Cxbj4kTD.css"
     ]
   },
   "src/routes/+page.server.js": {
@@ -326,6 +326,24 @@
     "imports": [
       "_ssr.js",
       "_Posts.js"
+    ]
+  },
+  "src/routes/rss.xml/+server.js": {
+    "file": "entries/endpoints/rss.xml/_server.js",
+    "name": "entries/endpoints/rss.xml/_server",
+    "src": "src/routes/rss.xml/+server.js",
+    "isEntry": true,
+    "imports": [
+      "_loadPosts.js"
+    ]
+  },
+  "src/routes/sitemap.xml/+server.js": {
+    "file": "entries/endpoints/sitemap.xml/_server.js",
+    "name": "entries/endpoints/sitemap.xml/_server",
+    "src": "src/routes/sitemap.xml/+server.js",
+    "isEntry": true,
+    "imports": [
+      "_loadPosts.js"
     ]
   }
 }

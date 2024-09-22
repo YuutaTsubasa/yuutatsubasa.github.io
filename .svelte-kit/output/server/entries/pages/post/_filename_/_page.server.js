@@ -26,6 +26,7 @@ async function load({ params }) {
       tags: frontMatter.tags,
       thumbnail: frontMatter.thumbnail,
       // 文章的縮圖
+      excerpt: frontMatter.excerpt,
       content: parsedContent
     };
   }

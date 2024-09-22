@@ -1,4 +1,4 @@
-import { c as create_ssr_component, e as escape, f as add_attribute, d as each, v as validate_component } from "./ssr.js";
+import { c as create_ssr_component, e as escape, d as add_attribute, f as each, v as validate_component } from "./ssr.js";
 import { f as formatDate, T as Tag_1 } from "./Tag.js";
 const PostCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { post } = $$props;
