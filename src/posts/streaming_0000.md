@@ -8,6 +8,8 @@ excerpt: "初配信，來做點自我介紹吧！（怎麼有點令人害羞😳
 ---
 <iframe width="560" height="315" src="https://www.youtube.com/embed/zbyvgQOZu8E?si=P9MpdFVNvwLierrg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
+初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）。
+
 ## 🛡️直播與影片連結🛡️
 - 原直播：[https://yutaii.run/v/0](https://yutaii.run/v/0)
 - Shorts：【#shorts】初配信唱「不毛!」唱到快掛了！？(2021/07/31)：[https://www.youtube.com/shorts/33PJMhkLOnk](https://www.youtube.com/shorts/33PJMhkLOnk)

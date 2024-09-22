@@ -115,6 +115,8 @@
         { name: "2.0 實況面板：Envato Elements", source: "https://elements.envato.com/cyberpunk-opener-RB4QDV9" },
         { name: "1.0 開頭待機 Q 版動畫：泡芙", source: "https://x.com/noodle890812" },
         { name: "1.0 結尾圖：鱷魚 Zavir Wani", source: "https://x.com/wanivtuber" },
+        { name: "BGM 製作：SIHanatsuka", source: "https://x.com/sihanatsuka" },
+        { name: "1.0 與 2.0 Logo 製作：緋千夜", source: "https://x.com/hisenya" },
         { name: "綠界贊助音效：フリー効果音素材 くらげ工匠", source: "http://www.kurage-kosho.info/" },
         { name: "無限版 3D 模型素材提供：神崎", source: "https://x.com/kannzakivtuber" },
         { name: "無限版 3D 模型參考：Midjourney", source: "https://www.midjourney.com/home?callbackUrl=%2Fapp%2F" },
