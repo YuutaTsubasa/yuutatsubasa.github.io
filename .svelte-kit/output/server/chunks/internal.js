@@ -141,20 +141,20 @@ const options = {
   root: Root,
   service_worker: false,
   templates: {
-    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="icon" href="' + assets2 + '/favicon.ico" />\n    <link rel="stylesheet" href="' + assets2 + '/app.css" />\n    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />\n    <title>悠太翼官方網站</title>\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">\n    ' + head + `
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZG5BG6R36P"><\/script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-ZG5BG6R36P');
-    <\/script>
-  </head>
-  <body class="h-screen w-screen m-0 overflow-x-hidden" data-sveltekit-preload-data="hover">
-    <div id="app">
-      ` + body + "\n    </div>\n  </body>\n</html>",
+    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\r\n<html lang="en">\r\n  <head>\r\n    <meta charset="UTF-8" />\r\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\r\n    <link rel="icon" href="' + assets2 + '/favicon.ico" />\r\n    <link rel="stylesheet" href="' + assets2 + '/app.css" />\r\n    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />\r\n    <title>悠太翼官方網站</title>\r\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">\r\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">\r\n    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">\r\n    ' + head + `\r
+    <!-- Google tag (gtag.js) -->\r
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZG5BG6R36P"><\/script>\r
+    <script>\r
+      window.dataLayer = window.dataLayer || [];\r
+      function gtag(){dataLayer.push(arguments);}\r
+      gtag('js', new Date());\r
+\r
+      gtag('config', 'G-ZG5BG6R36P');\r
+    <\/script>\r
+  </head>\r
+  <body class="h-screen w-screen m-0 overflow-x-hidden" data-sveltekit-preload-data="hover">\r
+    <div id="app">\r
+      ` + body + "\r\n    </div>\r\n  </body>\r\n</html>",
     error: ({ status, message }) => '<!doctype html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<title>' + message + `</title>
 
 		<style>
@@ -226,7 +226,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "tw7zfh"
+  version_hash: "103255e"
 };
 async function get_hooks() {
   return {};

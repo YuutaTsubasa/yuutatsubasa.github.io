@@ -150,6 +150,14 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       source: "https://x.com/wanivtuber"
     },
     {
+      name: "BGM 製作：SIHanatsuka",
+      source: "https://x.com/sihanatsuka"
+    },
+    {
+      name: "1.0 與 2.0 Logo 製作：緋千夜",
+      source: "https://x.com/hisenya"
+    },
+    {
       name: "綠界贊助音效：フリー効果音素材 くらげ工匠",
       source: "http://www.kurage-kosho.info/"
     },

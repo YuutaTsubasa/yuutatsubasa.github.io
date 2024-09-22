@@ -23,10 +23,10 @@ export const dictionary = {
 		"/": [~6],
 		"/about": [7,[2]],
 		"/posts": [9],
-		"/posts/tag": [11],
-		"/posts/tag/[tag]": [12],
-		"/posts/tag/[tag]/[page]": [~13,[5]],
-		"/posts/[page]": [~10,[4]],
+		"/posts/tag": [10],
+		"/posts/tag/[tag]": [11],
+		"/posts/tag/[tag]/[page]": [~12,[4]],
+		"/posts/[page]": [~13,[5]],
 		"/post/[filename]": [~8,[3]]
 	};
 

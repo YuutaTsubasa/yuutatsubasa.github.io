@@ -1,7 +1,7 @@
 import { marked } from "marked";
 import yaml from "js-yaml";
 async function loadPosts() {
-  const postFiles = /* @__PURE__ */ Object.assign({ "/src/posts/fan_drawing_01.md": () => import("./fan_drawing_01.js").then((m) => m["default"]), "/src/posts/fan_drawing_02.md": () => import("./fan_drawing_02.js").then((m) => m["default"]), "/src/posts/fan_drawing_03.md": () => import("./fan_drawing_03.js").then((m) => m["default"]), "/src/posts/fan_drawing_04.md": () => import("./fan_drawing_04.js").then((m) => m["default"]), "/src/posts/quick_scheduler_tool.md": () => import("./quick_scheduler_tool.js").then((m) => m["default"]), "/src/posts/streaming_0000.md": () => import("./streaming_0000.js").then((m) => m["default"]) });
+  const postFiles = /* @__PURE__ */ Object.assign({ "/src/posts/fan_drawing_01.md": () => import("./fan_drawing_01.js").then((m) => m["default"]), "/src/posts/fan_drawing_02.md": () => import("./fan_drawing_02.js").then((m) => m["default"]), "/src/posts/fan_drawing_03.md": () => import("./fan_drawing_03.js").then((m) => m["default"]), "/src/posts/fan_drawing_04.md": () => import("./fan_drawing_04.js").then((m) => m["default"]), "/src/posts/fan_drawing_05.md": () => import("./fan_drawing_05.js").then((m) => m["default"]), "/src/posts/quick_scheduler_tool.md": () => import("./quick_scheduler_tool.js").then((m) => m["default"]), "/src/posts/streaming_0000.md": () => import("./streaming_0000.js").then((m) => m["default"]), "/src/posts/streaming_0001.md": () => import("./streaming_0001.js").then((m) => m["default"]) });
   let allPosts = [];
   for (const path in postFiles) {
     const postContent = await postFiles[path]();

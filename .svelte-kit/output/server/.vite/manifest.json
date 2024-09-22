@@ -55,8 +55,10 @@
       "src/posts/fan_drawing_02.md?raw",
       "src/posts/fan_drawing_03.md?raw",
       "src/posts/fan_drawing_04.md?raw",
+      "src/posts/fan_drawing_05.md?raw",
       "src/posts/quick_scheduler_tool.md?raw",
-      "src/posts/streaming_0000.md?raw"
+      "src/posts/streaming_0000.md?raw",
+      "src/posts/streaming_0001.md?raw"
     ]
   },
   "_settings.js": {
@@ -121,6 +123,12 @@
     "src": "src/posts/fan_drawing_04.md?raw",
     "isDynamicEntry": true
   },
+  "src/posts/fan_drawing_05.md?raw": {
+    "file": "chunks/fan_drawing_05.js",
+    "name": "fan_drawing_05",
+    "src": "src/posts/fan_drawing_05.md?raw",
+    "isDynamicEntry": true
+  },
   "src/posts/quick_scheduler_tool.md?raw": {
     "file": "chunks/quick_scheduler_tool.js",
     "name": "quick_scheduler_tool",
@@ -131,6 +139,12 @@
     "file": "chunks/streaming_0000.js",
     "name": "streaming_0000",
     "src": "src/posts/streaming_0000.md?raw",
+    "isDynamicEntry": true
+  },
+  "src/posts/streaming_0001.md?raw": {
+    "file": "chunks/streaming_0001.js",
+    "name": "streaming_0001",
+    "src": "src/posts/streaming_0001.md?raw",
     "isDynamicEntry": true
   },
   "src/routes/+layout.js": {
@@ -207,8 +221,10 @@
       "src/posts/fan_drawing_02.md?raw",
       "src/posts/fan_drawing_03.md?raw",
       "src/posts/fan_drawing_04.md?raw",
+      "src/posts/fan_drawing_05.md?raw",
       "src/posts/quick_scheduler_tool.md?raw",
-      "src/posts/streaming_0000.md?raw"
+      "src/posts/streaming_0000.md?raw",
+      "src/posts/streaming_0001.md?raw"
     ]
   },
   "src/routes/post/[filename]/+page.svelte": {
