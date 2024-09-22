@@ -12,7 +12,7 @@ excerpt: "與貓耳未來一起來玩雙人成行"
 
 ## 🛡️連動夥伴🛡️
 ☆ Nekomix Ch. 貓耳未來 ☆
-➥Twitter: https://twitter.com/NekomixNx
+➥Twitter: https://x.com/NekomixNx
 ➥Youtube: https://www.youtube.com/channel/UCJyUJuz8L-mu1Ted8W-QR_Q
 ➥貓耳側的實況: https://youtu.be/XC1ffeKncHM
 
