@@ -11,10 +11,10 @@ excerpt: "與貓耳未來一起來玩雙人成行。"
 這是我與貓耳未來首次合作的遊戲實況。我們選擇了《雙人成行》這款遊戲，但在遊玩過程中發現我的電腦配置不足，導致遊戲經常出現卡頓。為了改善這個問題，事後我在下次合作直播前趕緊去原價屋買了一台新的電腦。
 
 ## 🛡️連動夥伴🛡️
-☆ Nekomix Ch. 貓耳未來 ☆
-➥Twitter: https://x.com/NekomixNx
-➥Youtube: https://www.youtube.com/channel/UCJyUJuz8L-mu1Ted8W-QR_Q
-➥貓耳側的實況: https://youtu.be/XC1ffeKncHM
+- ☆ Nekomix Ch. 貓耳未來 ☆
+    - ➥Twitter: https://x.com/NekomixNx
+    - ➥Youtube: https://www.youtube.com/channel/UCJyUJuz8L-mu1Ted8W-QR_Q
+    - ➥貓耳側的實況: https://youtu.be/XC1ffeKncHM
 
 ## 🛡️直播與影片連結🛡️
 - 原直播：[https://yutaii.run/v/1](https://yutaii.run/v/1)
