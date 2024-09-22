@@ -34,6 +34,7 @@ export async function load({ params }) {
         author: frontMatter.author,
         tags: frontMatter.tags,
         thumbnail: frontMatter.thumbnail, // 文章的縮圖
+        excerpt: frontMatter.excerpt,
         content: parsedContent,
       };
     }

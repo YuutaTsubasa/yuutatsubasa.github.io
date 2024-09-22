@@ -19,7 +19,7 @@
 </script>
 
 <svelte:head>
-    <title>{`${title} | ${selectedTag ? `標籤篩選：${selectedTag}` : '內容總覽'}`}</title>
+    <title>{`${title} | ${selectedTag ? `標籤篩選：${selectedTag}` : '內容總覽'}`} | 第 {currentPage} 頁</title>
     <meta name="description" content={description} />
     <meta name="keywords" content="Vtuber, 悠太翼, 程式設計, 直播" />
     <meta property="og:title" content={title} />

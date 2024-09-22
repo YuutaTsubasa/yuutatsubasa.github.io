@@ -5,9 +5,8 @@
 
   export let data;
   $: post = data.post;
-
-  let title = `悠太翼官方網站 | ${post.title}`;
-  let description = post.excerpt;
+  $: title = `悠太翼官方網站 | ${post.title}`;
+  $:description = post.excerpt;
 </script>
 
 <svelte:head>
