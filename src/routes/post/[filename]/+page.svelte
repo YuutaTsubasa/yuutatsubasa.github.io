@@ -5,7 +5,24 @@
 
   export let data;
   $: post = data.post;
+
+  let title = `悠太翼官方網站 | ${post.title}`;
+  let description = post.excerpt;
 </script>
+
+<svelte:head>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Vtuber, 悠太翼, 程式設計, 直播" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={`https://yuuta-tsubasa.studio/post/${post.filename}`} />
+    <meta property="og:image" content={`https://yuuta-tsubasa.studio${post.thumbnail}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+</svelte:head>
 
 <style>
   .post-container {

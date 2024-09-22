@@ -4,6 +4,8 @@
 
   export let data;
   $: latestPosts = data.latestPosts;
+  let title = "悠太翼官方網站 | 首頁";
+  let description = "程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。";
 </script>
 
 <style>
@@ -24,6 +26,20 @@
       }
     }
 </style>
+
+<svelte:head>
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="keywords" content="Vtuber, 悠太翼, 程式設計, 直播" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={`https://yuuta-tsubasa.studio/`} />
+  <meta property="og:image" content={`https://yuuta-tsubasa.studio/images/logo.webp`} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+</svelte:head>
 
 <!-- 首頁滿版區 -->
 <section class="h-screen w-screen relative flex items-center justify-between bg-cover bg-center fade-in-bg overflow-x-hidden" style="background-image: url('/images/background.webp')">

@@ -5,6 +5,9 @@
 
     let showModal = false;
     let currentModalImage = '';
+    
+    let title = "悠太翼官方網站 | 關於我";
+    let description = "程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。";
 
     function openModal(imageUrl) {
         if (imageUrl) {
@@ -148,7 +151,21 @@
         updateState();
     }
 </script>
-  
+
+<svelte:head>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Vtuber, 悠太翼, 程式設計, 直播" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://yuuta-tsubasa.studio/about" />
+    <meta property="og:image" content="https://yuuta-tsubasa.studio/images/about/4.0-01.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+</svelte:head>
+
 <section class="fade-in-bg">   
     <section class="relative bg-cover bg-center bg-no-repeat h-96 w-screen flex items-center justify-center mb-12"
       style="background-image: url('/images/background.webp');">

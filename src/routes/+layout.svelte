@@ -23,6 +23,9 @@
       <li><a href="https://yutaii.run/youtube" target="_blank" rel="noopener noreferrer">
         <i class="fab fa-youtube fa-lg"></i>
       </a></li>
+      <li><a href="/rss.xml" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-rss fa-lg"></i>
+      </a></li>
     </ul>
   </div>
   </nav>
@@ -46,6 +49,9 @@
       </a>
       <a href="https://yutaii.run/youtube" target="_blank" class="hover:text-red-500">
         <i class="fab fa-youtube fa-lg"></i>
+      </a>
+      <a href="/rss.xml" target="_blank" class="hover:text-yellow-500">
+        <i class="fas fa-rss fa-lg"></i>
       </a>
     </div>
   </div>
