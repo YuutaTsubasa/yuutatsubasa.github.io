@@ -42,7 +42,10 @@ body {
 
 .post-content iframe {
   aspect-ratio: 16/9;
-  @apply mx-auto w-full h-auto max-w-full;
+  margin: 25px auto;
+  width: 95%;
+  height: auto;
+  max-width: 95%;
 }
 
 .post-content h2 {
@@ -86,6 +89,7 @@ body {
 .post-content a {
   color: #007bff;
   text-decoration: underline;
+  word-break: break-all;
 }
 
 .description a {
