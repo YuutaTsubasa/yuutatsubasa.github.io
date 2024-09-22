@@ -6,7 +6,7 @@ thumbnail: "/images/posts/streamings/1.webp"
 tags: ["遊戲實況", "活動合作", "直播影片"]
 excerpt: "與貓耳未來一起來玩雙人成行"
 ---
-<iframe width="560" height="315" src="https://youtube.com/live/Bb5PbxXB7lQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Bb5PbxXB7lQ?si=MbyrFGxSPVb-IRwJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 這是我與貓耳未來首次合作的遊戲實況。我們選擇了《雙人成行》這款遊戲，但在遊玩過程中發現我的電腦配置不足，導致遊戲經常出現卡頓。為了改善這個問題，事後我在下次合作直播前趕緊去原價屋買了一台新的電腦。
 
