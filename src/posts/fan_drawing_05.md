@@ -10,4 +10,4 @@ excerpt: "【肥羊皮】繪製的粉絲繪。"
 
 感謝肥羊皮老師畫的我，真的超級帥氣！
 
-作者推特：[https://x.com/FatYappy/status/1421320280073330694](https://x.com/FatYappy/status/1421320280073330694)
+原推文：[https://x.com/FatYappy/status/1421320280073330694](https://x.com/FatYappy/status/1421320280073330694)
