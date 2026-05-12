@@ -1,0 +1,292 @@
+<script>
+  import { PROFILE } from '$lib/data/profile.js';
+  import SectionHead from '$lib/components/atoms/SectionHead.svelte';
+  import Panel from '$lib/components/atoms/Panel.svelte';
+  import Tag from '$lib/components/atoms/Tag.svelte';
+
+  const stats = [
+    { label: 'HEIGHT',   value: PROFILE.height },
+    { label: 'ORIGIN',   value: PROFILE.origin },
+    { label: 'BIRTHDAY', value: PROFILE.birth },
+    { label: 'ELEMENT',  value: PROFILE.element, accent: true },
+    { label: 'WEAPON',   value: 'BLADE / KEYS' },
+    { label: 'BLOOD',    value: PROFILE.blood }
+  ];
+
+  const codeBlock = `/**
+ * @class  KnightOfCode
+ * @author 悠太翼 / YUUTA TSUBASA
+ * @since  神話時代
+ */
+const yuuta = new Knight({
+  armor : "AZURE-PLATE",
+  blade : "Broadsword",
+  keys  : "Mechanical · Linear",
+  motto : "整潔的程式，鋒利的劍",
+});
+yuuta.stream(); // → 21:00 JST`;
+</script>
+
+<section id="about" class="about" data-screen-label="02 About">
+  <div class="wrap">
+    <SectionHead
+      num="01 / 06"
+      en="PROFILE"
+      zh="騎士檔案"
+      deco={'DOSSIER ID :: VTB-04\nCLEARANCE :: PUBLIC\nLAST SYNC :: 2026.05.04'}
+    />
+
+    <div class="grid">
+      <!-- LEFT: three-view + likes/dislikes -->
+      <div class="col-left">
+        <div class="num-mark display">
+          <span class="num-fill">01</span><span class="tech num-total">/06</span>
+        </div>
+
+        <Panel padding={32} glow minHeight={520}>
+          <div class="mono caption">// FIG.A — TRI-VIEW REFERENCE</div>
+          <div class="figure">
+            <img src="/images/character.webp" alt="三視圖" />
+            <span class="mono fig-label fl-front">FRONT</span>
+            <span class="mono fig-label fl-side">SIDE</span>
+            <span class="mono fig-label fl-back">BACK</span>
+            <div class="scan-overlay" aria-hidden></div>
+          </div>
+          <div class="meta mono">
+            <span>SCALE 1:1</span>
+            <span class="accent">● ARMOR INTEGRITY 98.3%</span>
+            <span>RIG VER. 2.4.1</span>
+          </div>
+        </Panel>
+
+        <div class="likes-grid">
+          <Panel padding={18}>
+            <div class="mono pos-cap">+ AFFINITIES</div>
+            <ul class="tag-list">
+              {#each PROFILE.likes as l}
+                <li><Tag color="#60A5FA">{l}</Tag></li>
+              {/each}
+            </ul>
+          </Panel>
+          <Panel padding={18}>
+            <div class="mono neg-cap">− HOSTILES</div>
+            <ul class="tag-list">
+              {#each PROFILE.dislikes as l}
+                <li><Tag color="#EF4444">{l}</Tag></li>
+              {/each}
+            </ul>
+          </Panel>
+        </div>
+      </div>
+
+      <!-- RIGHT: bio + stats -->
+      <div class="col-right">
+        <div class="display name-zh">悠太翼</div>
+        <div class="tech name-en">YUUTA TSUBASA · {PROFILE.callsign}</div>
+
+        <div class="divider"></div>
+
+        <div class="stats-grid">
+          {#each stats as s}
+            <div class="stat-cell">
+              <div class="mono stat-label">{s.label}</div>
+              <div class="tech stat-value" class:accent={s.accent}>{s.value}</div>
+            </div>
+          {/each}
+        </div>
+
+        {#each PROFILE.bio as p}
+          <p class="bio">{p}</p>
+        {/each}
+
+        <div class="actions">
+          <button class="btn btn-primary">▸ READ FULL DOSSIER</button>
+          <button class="btn">⬇ DOWNLOAD CARD</button>
+        </div>
+
+        <pre class="mono code-block">{codeBlock}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    position: relative;
+    padding: 140px 0 120px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .col-left { position: relative; }
+
+  .num-mark {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    z-index: 3;
+    font-size: 96px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .num-fill {
+    color: var(--silver-0);
+    -webkit-text-stroke: 0;
+  }
+  .num-total {
+    font-size: 18px;
+    color: var(--silver-3);
+    margin-left: 8px;
+  }
+
+  .caption {
+    font-size: 10px;
+    color: var(--silver-3);
+    letter-spacing: 0.2em;
+    margin-bottom: 6px;
+  }
+  .figure {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: radial-gradient(circle at center, rgba(96, 165, 250, 0.08), transparent 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(59, 130, 246, 0.3));
+  }
+  .fig-label {
+    position: absolute;
+    top: 8px;
+    font-size: 10px;
+    color: var(--blue-bright);
+  }
+  .fl-front { left: 8px; }
+  .fl-side { left: 50%; transform: translateX(-30%); }
+  .fl-back { right: 8px; }
+  .scan-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 48%, rgba(124, 196, 255, 0.4) 50%, transparent 52%);
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    font-size: 10px;
+    color: var(--silver-3);
+  }
+  .meta .accent { color: var(--blue-bright); }
+
+  .likes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 18px;
+  }
+  .pos-cap {
+    font-size: 10px;
+    color: #2563EB;
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+  }
+  .neg-cap {
+    font-size: 10px;
+    color: #B91C1C;
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+  }
+  .tag-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .name-zh {
+    font-size: 88px;
+    line-height: 0.9;
+    font-weight: 900;
+    color: var(--silver-0);
+    letter-spacing: 0.01em;
+  }
+  .name-en {
+    font-size: 18px;
+    color: var(--blue-bright);
+    letter-spacing: 0.18em;
+    margin-top: 6px;
+  }
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--blue-bright), transparent);
+    margin: 24px 0;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat-cell {
+    position: relative;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: var(--silver-3);
+    letter-spacing: 0.18em;
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--silver-0);
+  }
+  .stat-value.accent { color: var(--blue-bright); }
+
+  .bio {
+    font-size: 15px;
+    line-height: 2;
+    color: var(--silver-1);
+    margin-bottom: 14px;
+    text-wrap: pretty;
+  }
+  .actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .code-block {
+    margin-top: 32px;
+    padding: 20px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--silver-1);
+    background: linear-gradient(135deg, #F4F6FB, #E5EBF6);
+    border: 1px solid var(--line);
+    white-space: pre-wrap;
+  }
+
+  @media (max-width: 1100px) {
+    .grid { grid-template-columns: 1fr; }
+    .name-zh { font-size: 64px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

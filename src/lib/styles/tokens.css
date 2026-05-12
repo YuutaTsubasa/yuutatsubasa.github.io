@@ -1,0 +1,29 @@
+:root {
+  --bg-0: #F4F6FB;
+  --bg-1: #EAEEF6;
+  --bg-2: #DCE3EF;
+  --bg-3: #C9D2E2;
+
+  --line: rgba(30, 58, 138, 0.16);
+  --line-strong: rgba(30, 58, 138, 0.38);
+  --grid: rgba(30, 58, 138, 0.06);
+
+  --silver-0: #0B1428;
+  --silver-1: #1F2A44;
+  --silver-2: #475063;
+  --silver-3: #6B7794;
+  --silver-4: #B8C2D6;
+
+  --blue-electric: #2563EB;
+  --blue-bright: #1D4ED8;
+  --blue-glow: #3B82F6;
+  --blue-deep: #0F2D78;
+  --accent-cyan: #0891B2;
+  --accent-warn: #DC2626;
+  --accent-amber: #D97706;
+
+  --font-display: "Orbitron", "Chakra Petch", "Noto Sans TC", sans-serif;
+  --font-tech: "Chakra Petch", "Noto Sans TC", sans-serif;
+  --font-body: "Noto Sans TC", "Chakra Petch", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}

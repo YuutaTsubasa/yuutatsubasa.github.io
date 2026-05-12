@@ -1,31 +1,40 @@
-
 <script>
-  import PostCard from '../components/PostCard.svelte';
+  import { onMount, onDestroy } from 'svelte';
+  import { NAV } from '$lib/data/nav.js';
+  import { activeSection } from '$lib/stores/active.js';
 
-  export let data;
-  $: latestPosts = data.latestPosts;
-  let title = "悠太翼官方網站 | 首頁";
-  let description = "程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。";
+  import Hero from '$lib/components/sections/Hero.svelte';
+  import About from '$lib/components/sections/About.svelte';
+  import Schedule from '$lib/components/sections/Schedule.svelte';
+  import Videos from '$lib/components/sections/Videos.svelte';
+  import Avatars from '$lib/components/sections/Avatars.svelte';
+  import Gallery from '$lib/components/sections/Gallery.svelte';
+  import Connect from '$lib/components/sections/Connect.svelte';
+
+  const title = '悠太翼官方網站 | 首頁';
+  const description = '程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。';
+
+  function onScroll() {
+    const ids = NAV.map((n) => n.id);
+    let cur = ids[0];
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < 200) cur = id;
+    }
+    activeSection.set(cur);
+  }
+
+  onMount(() => {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  });
+
+  onDestroy(() => {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('scroll', onScroll);
+    }
+  });
 </script>
-
-<style>
-    .slide-to-right {
-      transform: translateX(-100%);
-      opacity: 0;
-      animation: slideToRight 1s forwards;
-    }
-  
-    @keyframes slideToRight {
-      0% {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-</style>
 
 <svelte:head>
   <title>{title}</title>
@@ -33,67 +42,26 @@
   <meta name="keywords" content="Vtuber, 悠太翼, 程式設計, 直播" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content={`https://yuuta-tsubasa.studio/`} />
-  <meta property="og:image" content={`https://yuuta-tsubasa.studio/images/logo.webp`} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yuuta-tsubasa.studio/" />
+  <meta property="og:image" content="https://yuuta-tsubasa.studio/images/logo.webp" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
 </svelte:head>
 
-<!-- 首頁滿版區 -->
-<section class="h-screen w-screen relative flex items-center justify-between bg-cover bg-center fade-in-bg overflow-x-hidden" style="background-image: url('/images/background.webp')">
-  <div class="relative max-w-7xl mx-auto flex justify-between w-full h-full items-center md:pl-12">
-    <div class="absolute md:relative mt-48 md:m-0 text-white max-w-lg relative z-20 bg-black/30 backdrop-blur-lg p-4">
-      <h2 class="text-6xl font-bold border-l-8 border-blue-500 pl-4 pb-2">悠太翼</h2>
-      <p class="mt-4 text-xl font-bold">程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。<a href="/about" class="text-blue-500">了解更多</a></p>
-    </div>
+<main>
+  <Hero />
+  <About />
+  <Schedule />
+  <Videos />
+  <Avatars />
+  <Gallery />
+  <Connect />
+</main>
 
-    <div class="absolute md:relative z-10 w-full md:w-3/4 h-full flex items-end pr-12">
-      <img src="/images/character.webp" alt="Character" class="overflow-visible object-cover slide-to-right" style="height: calc(100vh - 4rem);">
-    </div>
-  </div>
-</section>
-  
-<section class="bg-white py-12">
-  <div class="max-w-7xl mx-auto">
-    <h2 class="text-4xl font-bold text-center mb-6">最新文章</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-      {#each latestPosts as post}
-        <PostCard {post} selectedTag={null} handleTagFilter={() => {}} handleTagClear={() => {}} />
-      {/each}
-    </div>
-    <div class="text-center mt-8">
-      <a href="/posts" class="text-blue-500">查看全部文章</a>
-    </div>
-  </div>
-</section>
-  
-<section class="bg-blue-500 text-white py-12">
-  <div class="max-w-7xl mx-auto text-center">
-    <h2 class="text-4xl font-bold mb-4">訂閱我的頻道</h2>
-    <p class="text-xl mb-6">獲取最新的實況通知吧！</p>
-    <div class="flex justify-center mb-12 gap-4">
-      <a href="https://www.youtube.com/@YuutaTsubasa?sub_confirmation=1" target="_blank" 
-        class="bg-white text-blue-500 px-6 py-3 font-bold rounded-lg shadow-lg hover:bg-blue-500 hover:text-white transition-colors duration-300">
-        訂閱 YouTube 頻道
-      </a>
-      <a href="https://www.youtube.com/channel/UCTxs9vSVMBqAGQw-RiZR7UQ/join" target="_blank" 
-        class="bg-white text-blue-500 px-6 py-3 font-bold rounded-lg shadow-lg hover:bg-blue-500 hover:text-white transition-colors duration-300">
-        加入 YouTube會員
-      </a>
-    </div>
-  </div>
-</section>
-  
-<section class="bg-gray-800 text-white py-12">
-  <div class="max-w-7xl mx-auto text-center">
-    <h2 class="text-4xl font-bold mb-4">正在舉行的活動</h2>
-    <p class="text-xl mb-1">Yuuta Tsubasa's Creative Game Challenge #1 - BBQ</p>
-    <p class="text-l mb-4 text-gray-400">2024/09/01 ~ 2024/10/31</p>
-    <div class="flex justify-center mb-12">
-      <img src="/images/activities/1st-game-jam.webp" alt="Yuuta Tsubasa's Creative Game Challenge #1 - BBQ">
-    </div>
-    <a href="https://itch.io/jam/yuuta-tsubasa-creative-game-challenge-1" target="_blank" class="bg-blue-500 text-white px-6 py-3 font-bold rounded-lg shadow-lg hover:bg-white transition-colors duration-300 hover:text-blue-500">查看詳情</a>
-  </div>
-</section>
+<style>
+  main {
+    padding-top: 88px;
+  }
+</style>

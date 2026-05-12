@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# SvelteKit build artifacts (auto-generated)
+.svelte-kit/
+
+# Design reference (transferred out of band)
+__DESIGN__/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
