@@ -7,7 +7,7 @@
   import Tag from '$lib/components/atoms/Tag.svelte';
   import { reveal } from '$lib/utils/reveal.js';
 
-  const FALLBACK_IMG = '/images/yuuta-figure-1.jpg';
+  const FALLBACK_IMG = '/images/yuuta-figure-1.webp';
 
   let selectedIdx = VERSIONS.length - 1;
   let imgIdx = 0;

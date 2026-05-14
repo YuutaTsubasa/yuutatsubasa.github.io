@@ -45,7 +45,7 @@ yuuta.Topics
         <Panel padding={32} glow minHeight={520}>
           <div class="mono caption">// FIG.A — KEY VISUAL</div>
           <div class="figure">
-            <img src="/images/yuuta-figure-1.jpg" alt="悠太翼 V5.0 預先立繪" />
+            <img src="/images/yuuta-figure-1.webp" alt="悠太翼 V5.0 預先立繪" />
             <div class="scan-overlay" aria-hidden></div>
           </div>
           <div class="meta mono">

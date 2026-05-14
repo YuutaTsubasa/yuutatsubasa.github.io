@@ -243,7 +243,7 @@
   .bg-art {
     position: absolute;
     inset: 0;
-    background-image: url('/images/yuuta-figure-1.jpg');
+    background-image: url('/images/yuuta-figure-1.webp');
     background-size: cover;
     background-position: 70% 25%;
     background-repeat: no-repeat;
