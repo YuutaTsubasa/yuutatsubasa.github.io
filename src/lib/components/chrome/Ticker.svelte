@@ -1,21 +1,47 @@
 <script>
-  const messages = [
-    '▸ YUUTA TSUBASA · KNIGHT OF CODE',
-    '● LIVE NOW · 歌回・五月夜の星',
-    '▸ NEXT STREAM · 05.05 22:00 JST',
-    '▸ NEW COVER · 五月夜の星 · 32.4K VIEWS',
-    '▸ COMMISSION OPEN',
-    '▸ SITE V5.0 · BUILT WITH CODE & SWORD',
-    '▸ THE BLADE RESTS · THE KEYS NEVER SLEEP'
+  import { SCHEDULE } from '$lib/data/schedule.js';
+  import { VIDEOS } from '$lib/data/videos.js';
+  import { GALLERY } from '$lib/data/gallery.js';
+  import { currentLive, nextUpcoming, dayName, formatTime } from '$lib/utils/schedule.js';
+  import { now } from '$lib/stores/now.js';
+
+  $: liveStream = currentLive(SCHEDULE, $now);
+  $: nextStream = liveStream ? null : nextUpcoming(SCHEDULE, $now);
+  $: latestVideo = VIDEOS[0];
+  $: latestArt = GALLERY[0];
+
+  // 動態訊息（依當下狀態組合）
+  $: dynamic = [
+    liveStream
+      ? { text: `● LIVE NOW · ${liveStream.title}`, live: true }
+      : nextStream
+        ? { text: `▸ NEXT STREAM · ${dayName(new Date(nextStream.startsAt))} ${formatTime(new Date(nextStream.startsAt))}${nextStream.tbd ? ' TBD' : ` · ${nextStream.title}`}`, live: false }
+        : null,
+    latestVideo
+      ? { text: `▸ LATEST ARCHIVE · Vol. ${latestVideo.vol} · ${latestVideo.title}`, live: false }
+      : null,
+    latestArt
+      ? { text: `▸ NEW FAN ART · BY ${latestArt.artist} · ${latestArt.date}`, live: false }
+      : null
+  ].filter(Boolean);
+
+  // 固定訊息（標識身份 / 站點資訊）
+  const staticMsgs = [
+    { text: '▸ YUUTA TSUBASA · 悠太翼 · TAIWAN VTUBER', live: false },
+    { text: '▸ AGENCY :: ULTIMATE-UTOPIA · 終焉理想庭', live: false },
+    { text: '▸ HASHTAGS :: #翼直播 · #悠然翼繪 · #翼聞翼事', live: false },
+    { text: '▸ SITE V5.0 · BUILT WITH SVELTE', live: false }
   ];
+
+  $: messages = [...staticMsgs.slice(0, 1), ...dynamic, ...staticMsgs.slice(1)];
 </script>
 
 <div class="ticker">
   <div class="track mono">
     {#each [0, 1] as _}
       <span class="group">
-        {#each messages as msg, i}
-          <span class:live={i === 1}>{msg}</span>
+        {#each messages as msg}
+          <span class:live={msg.live}>{msg.text}</span>
         {/each}
       </span>
     {/each}
@@ -52,6 +78,7 @@
     padding-right: 48px;
   }
   .live {
-    color: var(--blue-bright);
+    color: #B91C1C;
+    font-weight: 700;
   }
 </style>

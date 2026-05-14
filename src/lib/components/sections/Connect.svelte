@@ -4,6 +4,7 @@
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Dot from '$lib/components/atoms/Dot.svelte';
+  import { reveal } from '$lib/utils/reveal.js';
 </script>
 
 <section id="connect" class="connect" data-screen-label="07 Connect">
@@ -17,7 +18,7 @@
 
     <div class="grid">
       {#each SOCIALS as s, i}
-        <a class="card" href={s.url} target="_blank" rel="noopener">
+        <a class="card" href={s.url} target="_blank" rel="noopener" use:reveal={{ delay: 80 + i * 100 }}>
           <Corners />
           <div class="mono ch">CHANNEL #{String(i + 1).padStart(2, '0')}</div>
           <div class="head">

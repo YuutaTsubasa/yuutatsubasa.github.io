@@ -5,6 +5,7 @@
   import Panel from '$lib/components/atoms/Panel.svelte';
   import Dot from '$lib/components/atoms/Dot.svelte';
   import Tag from '$lib/components/atoms/Tag.svelte';
+  import { reveal } from '$lib/utils/reveal.js';
 
   const FALLBACK_IMG = '/images/yuuta-figure-1.jpg';
 
@@ -157,6 +158,7 @@
             class="version-card"
             class:on={i === selectedIdx}
             on:click={() => selectVersion(i)}
+            use:reveal={{ delay: 80 + i * 80, distance: 18 }}
           >
             <div class="version-rail">
               <span class="rail-dot" class:on={i === selectedIdx}></span>

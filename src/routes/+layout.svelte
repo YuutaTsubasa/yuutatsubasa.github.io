@@ -7,7 +7,11 @@
   import RightRail from '$lib/components/chrome/RightRail.svelte';
   import Cursor from '$lib/components/atoms/Cursor.svelte';
 
+  // 新版設計的頁面：首頁、/archive 等。/posts 舊頁面仍走舊 nav。
+  $: isLegacy = $page.url.pathname.startsWith('/posts');
   $: isHome = $page.url.pathname === '/';
+  // Gallery 詳細頁是 lightbox 全暗版型，要把主 chrome 全部關掉，由頁面內建迷你 bar
+  $: isLightbox = /^\/gallery\/[^/]+$/.test($page.url.pathname);
 </script>
 
 <style>
@@ -16,13 +20,17 @@
   @tailwind utilities;
 </style>
 
-{#if isHome}
-  <Cursor />
+{#if !isLegacy && !isLightbox}
+  {#if isHome}
+    <Cursor />
+  {/if}
   <Ticker />
   <Nav />
-  <LeftRail />
-  <RightRail />
-{:else}
+  {#if isHome}
+    <LeftRail />
+    <RightRail />
+  {/if}
+{:else if isLegacy}
   <!-- 過渡期：/posts 等舊頁面保留原本的 nav -->
   <nav class="fixed left-0 w-full backdrop-blur-lg bg-black/30 text-white z-30">
     <div class="h-[20px] w-full bg-repeat-x scroll-bg opacity-50" style="background-image: url('/images/title_background.webp');"></div>
@@ -50,7 +58,7 @@
 
 <slot />
 
-{#if !isHome}
+{#if isLegacy}
   <footer class="bg-gray-900 text-white py-6">
     <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
       <div class="text-center md:text-left mb-4 md:mb-0">

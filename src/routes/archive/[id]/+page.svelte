@@ -1,0 +1,486 @@
+<script>
+  import { page } from '$app/stores';
+  import { VIDEOS, VIDEO_TAGS, findVideo, timeToSeconds } from '$lib/data/videos.js';
+  import Corners from '$lib/components/atoms/Corners.svelte';
+
+  $: video = findVideo($page.params.id);
+  $: idx = video ? VIDEOS.indexOf(video) : -1;
+  // VIDEOS 是新到舊，所以陣列下一個是更舊的 = PREV，上一個是更新的 = NEXT
+  $: prev = idx >= 0 ? VIDEOS[idx + 1] : null;
+  $: next = idx > 0 ? VIDEOS[idx - 1] : null;
+  $: tagObjs = video ? video.tags.map((id) => VIDEO_TAGS.find((t) => t.id === id)).filter(Boolean) : [];
+
+  function padCase(vol) {
+    return Number.isFinite(vol) ? String(vol).padStart(3, '0') : '???';
+  }
+  function chapterUrl(youtubeId, time) {
+    if (!youtubeId) return null;
+    return `https://www.youtube.com/watch?v=${youtubeId}&t=${timeToSeconds(time)}s`;
+  }
+</script>
+
+<svelte:head>
+  <title>{video ? `${video.title} · ARCHIVE` : 'ARCHIVE'} · 悠太翼 YUUTA TSUBASA</title>
+</svelte:head>
+
+<section class="detail">
+  <div class="wrap">
+    {#if !video}
+      <div class="not-found">
+        <Corners />
+        <div class="mono nf-cap">// FILE NOT FOUND</div>
+        <div class="display nf-title">#{padCase(parseInt($page.params.id, 10))} ／ NO MATCHING RECORD</div>
+        <a class="mono nf-back" href="/archive">◀ BACK TO ARCHIVE</a>
+      </div>
+    {:else}
+      <!-- breadcrumb -->
+      <div class="bc">
+        <span class="mono bc-id">ARCHIVE ▸ #{padCase(video.vol)}</span>
+        <span class="mono bc-open">CASE FILE OPEN</span>
+        <span class="spacer"></span>
+        <a class="mono bc-back" href="/archive">◀ BACK TO ARCHIVE</a>
+      </div>
+
+      <!-- title -->
+      <div class="title-row">
+        <h1 class="display dt-title">{video.title}</h1>
+        <div class="tech dt-meta">
+          STREAM #{padCase(video.vol)} ／ {video.date}{#if video.duration} ／ {video.duration}{/if}{#if tagObjs.length} ／ {tagObjs.map((t) => t.enLabel).join(' · ')}{/if}
+        </div>
+      </div>
+
+      <!-- main grid -->
+      <div class="grid">
+        <div class="main">
+          <!-- player -->
+          <div class="player">
+            <Corners />
+            {#if video.youtubeId}
+              <iframe
+                src={`https://www.youtube.com/embed/${video.youtubeId}`}
+                title={video.title}
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            {:else}
+              <div class="no-video mono">// NO EMBED AVAILABLE</div>
+            {/if}
+            <span class="mono player-tag">● VOD</span>
+            {#if video.duration}
+              <span class="mono player-dur">{video.duration}</span>
+            {/if}
+          </div>
+
+          <!-- chapters -->
+          {#if video.chapters.length}
+            <div class="chapters">
+              <Corners />
+              <div class="mono ch-cap">// CHAPTERS · {String(video.chapters.length).padStart(2, '0')} TRACKS</div>
+              {#each video.chapters as c, ci}
+                <svelte:element
+                  this={video.youtubeId ? 'a' : 'div'}
+                  class="ch-row"
+                  href={chapterUrl(video.youtubeId, c.time)}
+                  target={video.youtubeId ? '_blank' : undefined}
+                  rel={video.youtubeId ? 'noopener' : undefined}
+                >
+                  <span class="mono ch-time">{c.time}</span>
+                  <span class="ch-label">{c.label}</span>
+                  {#if video.youtubeId}
+                    <span class="mono ch-go">▶</span>
+                  {/if}
+                </svelte:element>
+              {/each}
+            </div>
+          {/if}
+        </div>
+
+        <!-- sidebar -->
+        <aside class="side">
+          <div class="panel">
+            <Corners />
+            <div class="mono panel-cap">// TAGS</div>
+            <div class="tag-list">
+              {#each tagObjs as t}
+                <span
+                  class="tag-chip tech"
+                  style:color={t.color}
+                  style:border-color={`${t.color}80`}
+                  style:background={`${t.color}14`}
+                >#{t.enLabel}</span>
+              {/each}
+            </div>
+          </div>
+
+          {#if prev || next}
+            <div class="panel">
+              <Corners />
+              <div class="mono panel-cap">// ADJACENT</div>
+              {#if prev}
+                <a class="adj" href={`/archive/${prev.slug}`}>
+                  <div class="mono adj-cap">◀ PREV #{padCase(prev.vol)}</div>
+                  <div class="adj-title">{prev.title}</div>
+                </a>
+              {/if}
+              {#if next}
+                <a class="adj" class:bordertop={!!prev} href={`/archive/${next.slug}`}>
+                  <div class="mono adj-cap next">NEXT #{padCase(next.vol)} ▶</div>
+                  <div class="adj-title">{next.title}</div>
+                </a>
+              {/if}
+            </div>
+          {/if}
+
+          {#if video.sourceUrl}
+            <a class="btn btn-primary watch" href={video.sourceUrl} target="_blank" rel="noopener">
+              ↗ WATCH ON YT
+            </a>
+          {/if}
+        </aside>
+      </div>
+
+      <!-- briefing -->
+      {#if video.bodyHtml}
+        <div class="briefing">
+          <Corners />
+          <div class="brief-head">
+            <span class="mono bh-cap">// BRIEFING</span>
+            <span class="display bh-title">補充說明</span>
+            <span class="tech bh-sub">DOSSIER NOTE ／ MARKDOWN</span>
+          </div>
+          <div class="brief-body">
+            {@html video.bodyHtml}
+          </div>
+        </div>
+      {/if}
+    {/if}
+  </div>
+</section>
+
+<style>
+  .detail {
+    position: relative;
+    padding: 130px 0 100px;
+    min-height: 100vh;
+  }
+  .wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* breadcrumb */
+  .bc {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .bc-id {
+    font-size: 10px;
+    color: var(--silver-3);
+    letter-spacing: 0.18em;
+  }
+  .bc-open {
+    font-size: 10px;
+    color: var(--blue-bright);
+    letter-spacing: 0.18em;
+  }
+  .spacer { flex: 1; }
+  .bc-back {
+    font-size: 10px;
+    color: var(--silver-2);
+    letter-spacing: 0.18em;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .bc-back:hover { color: var(--blue-bright); }
+
+  /* title */
+  .title-row {
+    padding: 20px 0 24px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 24px;
+  }
+  .dt-title {
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--silver-0);
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .dt-meta {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--silver-2);
+    letter-spacing: 0.14em;
+  }
+
+  /* main grid */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* player */
+  .player {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(135deg, #0F1B30, #050810);
+    border: 1px solid var(--line-strong);
+    overflow: hidden;
+  }
+  .player iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .no-video {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--silver-3);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+  }
+  .player-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    font-size: 10px;
+    color: #FCA5A5;
+    letter-spacing: 0.2em;
+    padding: 3px 8px;
+    border: 1px solid rgba(252, 165, 165, 0.5);
+    background: rgba(5, 8, 16, 0.6);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .player-dur {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    font-size: 11px;
+    color: #fff;
+    letter-spacing: 0.15em;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* chapters */
+  .chapters {
+    position: relative;
+    margin-top: 18px;
+    padding: 16px 18px 14px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.7);
+  }
+  .ch-cap {
+    font-size: 10px;
+    color: var(--silver-3);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+  }
+  .ch-row {
+    display: grid;
+    grid-template-columns: 84px 1fr 32px;
+    gap: 12px;
+    padding: 8px 4px;
+    align-items: center;
+    border-bottom: 1px dashed var(--line);
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .ch-row:last-child { border-bottom: 0; }
+  .ch-row:hover { background: rgba(37, 99, 235, 0.06); }
+  .ch-time {
+    font-size: 11px;
+    color: var(--blue-bright);
+  }
+  .ch-label {
+    font-size: 13px;
+    color: var(--silver-1);
+  }
+  .ch-go {
+    font-size: 10px;
+    color: var(--silver-3);
+    text-align: right;
+  }
+
+  /* side panels */
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .panel {
+    position: relative;
+    padding: 14px 16px 16px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--line);
+  }
+  .panel-cap {
+    font-size: 10px;
+    color: var(--silver-3);
+    letter-spacing: 0.2em;
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .tag-chip {
+    font-size: 10px;
+    padding: 3px 9px;
+    letter-spacing: 0.12em;
+    border: 1px solid;
+  }
+  .adj {
+    display: block;
+    padding: 8px 0;
+    text-decoration: none;
+    color: inherit;
+    margin-top: 8px;
+  }
+  .adj.bordertop {
+    border-top: 1px dashed var(--line);
+    padding-top: 10px;
+  }
+  .adj:hover .adj-title { color: var(--blue-bright); }
+  .adj-cap {
+    font-size: 10px;
+    color: var(--silver-3);
+    letter-spacing: 0.15em;
+  }
+  .adj-cap.next { color: var(--blue-bright); }
+  .adj-title {
+    font-size: 12px;
+    color: var(--silver-1);
+    margin-top: 4px;
+    transition: color 0.15s;
+  }
+  .watch {
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* briefing */
+  .briefing {
+    position: relative;
+    margin-top: 36px;
+    padding: 22px 28px 28px;
+    border: 1px solid var(--line);
+    background: linear-gradient(135deg, #FFFFFF, #EEF2FA);
+  }
+  .brief-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .bh-cap {
+    font-size: 10px;
+    color: var(--blue-bright);
+    letter-spacing: 0.25em;
+  }
+  .bh-title {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--silver-0);
+  }
+  .bh-sub {
+    font-size: 11px;
+    color: var(--silver-3);
+    letter-spacing: 0.18em;
+  }
+  .brief-body {
+    font-size: 13px;
+    line-height: 1.85;
+    color: var(--silver-1);
+  }
+  .brief-body :global(h2) {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--silver-0);
+    margin: 22px 0 8px;
+  }
+  .brief-body :global(h2 + ul) { margin-top: 4px; }
+  .brief-body :global(p) { margin: 0 0 12px; }
+  .brief-body :global(ul),
+  .brief-body :global(ol) {
+    margin: 0 0 14px;
+    padding-left: 22px;
+  }
+  .brief-body :global(li) { margin: 2px 0; }
+  .brief-body :global(a) {
+    color: var(--blue-bright);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--blue-bright);
+  }
+  .brief-body :global(a:hover) { color: var(--blue-electric); }
+  .brief-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    margin: 8px 0;
+  }
+  .brief-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 1px 5px;
+    background: rgba(37, 99, 235, 0.08);
+    border-radius: 2px;
+  }
+
+  /* 404 */
+  .not-found {
+    position: relative;
+    margin-top: 60px;
+    padding: 60px 32px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.6);
+    text-align: center;
+  }
+  .nf-cap {
+    font-size: 11px;
+    color: var(--accent-warn);
+    letter-spacing: 0.25em;
+  }
+  .nf-title {
+    margin-top: 14px;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--silver-0);
+  }
+  .nf-back {
+    display: inline-block;
+    margin-top: 18px;
+    color: var(--blue-bright);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .dt-title { font-size: 28px; }
+  }
+</style>

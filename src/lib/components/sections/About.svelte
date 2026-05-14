@@ -3,28 +3,27 @@
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Panel from '$lib/components/atoms/Panel.svelte';
   import Tag from '$lib/components/atoms/Tag.svelte';
+  import { reveal } from '$lib/utils/reveal.js';
 
   const stats = [
-    { label: 'HEIGHT',   value: PROFILE.height },
+    { label: 'DEBUT',    value: PROFILE.debut },
     { label: 'ORIGIN',   value: PROFILE.origin },
     { label: 'BIRTHDAY', value: PROFILE.birth },
-    { label: 'ELEMENT',  value: PROFILE.element, accent: true },
-    { label: 'WEAPON',   value: 'BLADE / KEYS' },
-    { label: 'BLOOD',    value: PROFILE.blood }
+    { label: 'FAV GAME', value: 'SONIC', accent: true },
+    { label: 'AGENCY',   value: PROFILE.agency },
+    { label: 'FANBASE',  value: PROFILE.fanbase }
   ];
 
-  const codeBlock = `/**
- * @class  KnightOfCode
- * @author 悠太翼 / YUUTA TSUBASA
- * @since  神話時代
- */
-const yuuta = new Knight({
-  armor : "AZURE-PLATE",
-  blade : "Broadsword",
-  keys  : "Mechanical · Linear",
-  motto : "整潔的程式，鋒利的劍",
-});
-yuuta.stream(); // → 21:00 JST`;
+  const codeBlock = `var yuuta = new VTuber {
+    Name   = "悠太翼",
+    Agency = "終焉理想庭",
+    Topics = new[] { "Sonic", "C#", "Svelte", "音樂遊戲", "唱歌" }
+};
+
+yuuta.Topics
+    .Where(t => yuuta.LovesIt(t))
+    .ToList()
+    .ForEach(t => Stream(t));`;
 </script>
 
 <section id="about" class="about" data-screen-label="02 About">
@@ -38,24 +37,21 @@ yuuta.stream(); // → 21:00 JST`;
 
     <div class="grid">
       <!-- LEFT: three-view + likes/dislikes -->
-      <div class="col-left">
+      <div class="col-left" use:reveal={{ delay: 80 }}>
         <div class="num-mark display">
           <span class="num-fill">01</span><span class="tech num-total">/06</span>
         </div>
 
         <Panel padding={32} glow minHeight={520}>
-          <div class="mono caption">// FIG.A — TRI-VIEW REFERENCE</div>
+          <div class="mono caption">// FIG.A — KEY VISUAL</div>
           <div class="figure">
-            <img src="/images/character.webp" alt="三視圖" />
-            <span class="mono fig-label fl-front">FRONT</span>
-            <span class="mono fig-label fl-side">SIDE</span>
-            <span class="mono fig-label fl-back">BACK</span>
+            <img src="/images/yuuta-figure-1.jpg" alt="悠太翼 V5.0 預先立繪" />
             <div class="scan-overlay" aria-hidden></div>
           </div>
           <div class="meta mono">
-            <span>SCALE 1:1</span>
-            <span class="accent">● ARMOR INTEGRITY 98.3%</span>
-            <span>RIG VER. 2.4.1</span>
+            <span>3D MODEL · UPCOMING</span>
+            <span class="accent">● V5.0 PREVIEW</span>
+            <span>BY 魯魯 @krain0406</span>
           </div>
         </Panel>
 
@@ -80,7 +76,7 @@ yuuta.stream(); // → 21:00 JST`;
       </div>
 
       <!-- RIGHT: bio + stats -->
-      <div class="col-right">
+      <div class="col-right" use:reveal={{ delay: 200 }}>
         <div class="display name-zh">悠太翼</div>
         <div class="tech name-en">YUUTA TSUBASA · {PROFILE.callsign}</div>
 
@@ -100,8 +96,8 @@ yuuta.stream(); // → 21:00 JST`;
         {/each}
 
         <div class="actions">
-          <button class="btn btn-primary">▸ READ FULL DOSSIER</button>
-          <button class="btn">⬇ DOWNLOAD CARD</button>
+          <a class="btn btn-primary" href="#connect">▸ OPEN COMMS ARRAY</a>
+          <a class="btn" href="https://yutaii.run/youtube" target="_blank" rel="noopener">↗ LAUNCH CHANNEL</a>
         </div>
 
         <pre class="mono code-block">{codeBlock}</pre>
@@ -164,15 +160,6 @@ yuuta.stream(); // → 21:00 JST`;
     object-fit: contain;
     filter: drop-shadow(0 10px 30px rgba(59, 130, 246, 0.3));
   }
-  .fig-label {
-    position: absolute;
-    top: 8px;
-    font-size: 10px;
-    color: var(--blue-bright);
-  }
-  .fl-front { left: 8px; }
-  .fl-side { left: 50%; transform: translateX(-30%); }
-  .fl-back { right: 8px; }
   .scan-overlay {
     position: absolute;
     inset: 0;

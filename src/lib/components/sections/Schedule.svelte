@@ -1,6 +1,7 @@
 <script>
   import { SCHEDULE } from '$lib/data/schedule.js';
   import { STREAM_TAGS } from '$lib/data/streamTags.js';
+  import { findVideo } from '$lib/data/videos.js';
   import {
     weekDays,
     streamForDay,
@@ -15,6 +16,7 @@
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Dot from '$lib/components/atoms/Dot.svelte';
+  import { reveal } from '$lib/utils/reveal.js';
 
   $: days = weekDays($now);
   $: weekStreams = days.map((d) => streamForDay(SCHEDULE, d));
@@ -45,12 +47,50 @@
   function tagOf(id) {
     return STREAM_TAGS.find((t) => t.id === id);
   }
+  function tagsOf(ids) {
+    return (ids ?? []).map((id) => tagOf(id)).filter(Boolean);
+  }
+  function platformsOf(stream) {
+    return (stream?.platforms ?? []).join(' · ');
+  }
+  function timeOf(stream) {
+    if (!stream) return '—';
+    if (stream.tbd) return 'TBD';
+    return formatTime(new Date(stream.startsAt));
+  }
+  function detailMeta(stream) {
+    const parts = [timeOf(stream)];
+    const p = platformsOf(stream);
+    if (p) parts.push(p);
+    const labels = tagsOf(stream.tags).map((t) => t.label);
+    if (labels.length) parts.push(labels.join(' · '));
+    return parts.join(' · ');
+  }
 
   function buttonLabel(status) {
     if (status === 'live') return 'GO TO STREAM ▸';
     if (status === 'upcoming') return 'SET REMINDER ▸';
     if (status === 'past') return 'WATCH ARCHIVE ▸';
     return '';
+  }
+
+  // 從 schedule id (例：'v908') 抓 vol number；對應到 ARCHIVE 中有沒有實際 markdown 條目
+  function volOf(stream) {
+    const m = (stream?.id ?? '').match(/^v(\d+)$/);
+    return m ? m[1] : null;
+  }
+  function archiveTarget(stream) {
+    const vol = volOf(stream);
+    if (vol == null) return null;
+    return findVideo(vol) ? `/archive/${vol}` : null;
+  }
+  // 過去場次：有 archive → 內部頁，沒有 → 退回 YT URL（external）
+  function buttonHref(stream, status) {
+    if (status === 'past') {
+      const internal = archiveTarget(stream);
+      if (internal) return { href: internal, external: false };
+    }
+    return stream?.url ? { href: stream.url, external: true } : null;
   }
 </script>
 
@@ -76,7 +116,7 @@
       {#each days as date, i}
         {@const stream = weekStreams[i]}
         {@const status = stream ? streamStatus(stream, $now) : 'off'}
-        {@const tag = stream ? tagOf(stream.tag) : null}
+        {@const streamTags = stream ? tagsOf(stream.tags) : []}
         {@const isActive = i === selectedIdx}
         {@const isToday = i === todayIdx}
         <button
@@ -86,6 +126,7 @@
           class:past={status === 'past'}
           class:today={isToday}
           on:click={() => pick(i)}
+          use:reveal={{ delay: 60 + i * 50, distance: 18 }}
         >
           <Corners color={isActive ? 'var(--blue-bright)' : 'var(--line-strong)'} size={10} />
           <div class="mono day-date">{formatDate(date)}</div>
@@ -95,7 +136,7 @@
           {/if}
           <div class="day-rule"></div>
           <div class="tech day-time">
-            {stream ? formatTime(new Date(stream.startsAt)) : '—'}
+            {timeOf(stream)}
           </div>
           {#if status === 'live'}
             <div class="live-chip"><Dot color="#EF4444" size={5} /> LIVE</div>
@@ -105,8 +146,14 @@
           <div class="day-title">{stream?.title ?? '休息日'}</div>
           {#if stream}
             <div class="day-foot">
-              <span class="mono">{stream.platform}</span>
-              <span class="day-dot" style:background={tag?.color}></span>
+              <span class="mono">{platformsOf(stream) || (stream.tbd ? 'TBD' : '—')}</span>
+              {#if streamTags.length}
+                <span class="day-dots">
+                  {#each streamTags as t}
+                    <span class="day-dot" style:background={t.color}></span>
+                  {/each}
+                </span>
+              {/if}
             </div>
           {/if}
         </button>
@@ -124,7 +171,7 @@
         {#if selected}
           <div class="detail-title">{selected.title}</div>
           <div class="tech detail-meta">
-            ▸ {formatTime(new Date(selected.startsAt))} · {selected.platform} · {tagOf(selected.tag)?.label}
+            ▸ {detailMeta(selected)}
             {#if selectedStatus === 'live'}
               <span class="status-live"> · LIVE NOW</span>
             {:else if selectedStatus === 'past'}
@@ -136,10 +183,18 @@
           <div class="tech detail-meta">▸ —</div>
         {/if}
       </div>
-      {#if selected && selected.url}
-        <a class="btn btn-primary" href={selected.url} target="_blank" rel="noopener">
-          {buttonLabel(selectedStatus)}
-        </a>
+      {#if selected}
+        {@const link = buttonHref(selected, selectedStatus)}
+        {#if link}
+          <a
+            class="btn btn-primary"
+            href={link.href}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener' : undefined}
+          >
+            {buttonLabel(selectedStatus)}
+          </a>
+        {/if}
       {/if}
     </div>
   </div>
@@ -171,14 +226,16 @@
   }
   .day {
     position: relative;
+    display: flex;
+    flex-direction: column;
     text-align: left;
-    padding: 18px 14px 16px;
+    padding: 18px 14px 14px;
     background: linear-gradient(180deg, #FFFFFF, #EEF2FA);
     border: 1px solid var(--line);
     cursor: pointer;
     color: inherit;
     transition: all 0.2s;
-    min-height: 200px;
+    min-height: 220px;
     font-family: inherit;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.95) inset, 0 4px 18px rgba(15, 45, 120, 0.06);
   }
@@ -256,20 +313,25 @@
     font-weight: 500;
   }
   .day-foot {
-    position: absolute;
-    bottom: 10px;
-    left: 14px;
-    right: 14px;
+    margin-top: auto;
+    padding-top: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
     font-size: 9px;
     color: var(--silver-3);
+  }
+  .day-dots {
+    display: inline-flex;
+    gap: 4px;
+    flex-shrink: 0;
   }
   .day-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
+    flex-shrink: 0;
   }
 
   .detail {

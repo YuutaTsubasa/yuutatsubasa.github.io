@@ -15,8 +15,11 @@
   let timeStr = '';
   let dateStr = '';
   let signal = 92;
+  let scrollY = 0;
   let interval;
   let signalInterval;
+  let scrollHandler;
+  let dust = [];
 
   function update() {
     const t = new Date();
@@ -30,25 +33,61 @@
     signalInterval = setInterval(() => {
       signal = Math.round(90 + Math.sin(Date.now() / 700) * 9);
     }, 140);
+
+    // dust 粒子：60 個小白點 + 各自 float-up + opacity twinkle
+    dust = Array.from({ length: 60 }, () => ({
+      cx: Math.random() * 1000,
+      cy: 350 + Math.random() * 400,
+      r: 0.5 + Math.random() * 1.4,
+      duration: 9 + Math.random() * 13,
+      delay: -Math.random() * 16,
+      opacity: 0.3 + Math.random() * 0.55
+    }));
+
+    // 視差：背景圖滾動時上移較慢
+    let raf = 0;
+    scrollHandler = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        scrollY = window.scrollY;
+        raf = 0;
+      });
+    };
+    window.addEventListener('scroll', scrollHandler, { passive: true });
   });
 
   onDestroy(() => {
     if (interval) clearInterval(interval);
     if (signalInterval) clearInterval(signalInterval);
+    if (scrollHandler && typeof window !== 'undefined') {
+      window.removeEventListener('scroll', scrollHandler);
+    }
   });
 
   const vitals = [
-    { label: 'HP',  value: 92, color: '#60A5FA' },
-    { label: 'MP',  value: 68, color: '#22D3EE' },
-    { label: 'EXP', value: 43, color: '#A78BFA' }
+    { label: 'SONIC LOVE',      value: 99, color: '#60A5FA' },
+    { label: 'CODING POWER',    value: 88, color: '#A78BFA' },
+    { label: 'STREAMING VALUE', value: 92, color: '#22D3EE' }
   ];
 </script>
 
 <section id="hero" class="hero" data-screen-label="01 Hero">
-  <div aria-hidden class="bg-art"></div>
+  <div aria-hidden class="bg-art" style:transform={`translate3d(0, ${scrollY * 0.28}px, 0) scale(1.05)`}></div>
   <div aria-hidden class="bg-vignette"></div>
   <div aria-hidden class="bg-slash"></div>
-  <div aria-hidden class="watermark display">KNIGHT</div>
+  <svg aria-hidden class="bg-dust" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
+    {#each dust as p}
+      <circle
+        cx={p.cx}
+        cy={p.cy}
+        r={p.r}
+        fill={`rgba(255, 255, 255, ${p.opacity})`}
+        class="dust-particle"
+        style="animation-duration: {p.duration}s; animation-delay: {p.delay}s;"
+      />
+    {/each}
+  </svg>
+  <div aria-hidden class="watermark display" style:transform={`translate3d(0, ${-scrollY * 0.12}px, 0)`}>KNIGHT</div>
 
   <div class="wrap inner">
     <!-- LEFT: identity card -->
@@ -58,12 +97,29 @@
       <div class="card">
         <Corners />
         <div class="mono caption">// IDENTITY CARD</div>
-        <div class="display name-en">{PROFILE.name_en}</div>
-        <div class="tech name-kana">{PROFILE.name_kana} ／ {PROFILE.name_zh}</div>
+        <div class="display name-block">
+          {#each PROFILE.name_breakdown as ch}
+            <div class="name-char">
+              <span class="kana-top">{ch.kana}</span>
+              <span class="cjk">{ch.cjk}</span>
+              <span class="bopo">
+                <span class="bopo-syl">{ch.bopo}</span>
+                {#if ch.tone}<span class={`bopo-tone tone-${ch.tone}`} aria-label={`第${ch.tone}聲`}></span>{/if}
+              </span>
+              <span class="pinyin">{ch.pinyin}</span>
+            </div>
+          {/each}
+        </div>
+        <div class="tech name-en-sub">
+          {#each PROFILE.name_en.split('') as c}
+            <span class="en-c">{c === ' ' ? ' ' : c}</span>
+          {/each}
+        </div>
         <div class="hr"></div>
         <div class="tele-list">
           <Tele label="ROLE" value={PROFILE.callsign} accent="var(--blue-bright)" />
           <Tele label="DEBUT" value={PROFILE.debut} />
+          <Tele label="BIRTH" value={PROFILE.birth} />
           <Tele label="ORIGIN" value={PROFILE.origin} />
           <Tele label="LANGUAGE" value={PROFILE.language} />
           <Tele label="CONTENT" value={PROFILE.content} />
@@ -81,7 +137,7 @@
           <span class="tech live-label">LIVE NOW</span>
           <span class="live-title">{liveStream.title}</span>
           <span class="spacer"></span>
-          <span class="mono live-time">{liveStream.platform}</span>
+          <span class="mono live-time">{liveStream.platforms?.join(' · ')}</span>
         </a>
       {:else if nextStream}
         <a class="live-pill next" href={nextStream.url} target="_blank" rel="noopener">
@@ -102,7 +158,7 @@
         <Corners />
         <div class="mono caption">// MISSION BRIEF</div>
         <div class="tech mission">
-          於現世以 Live2D 之軀繼續征途，<br />以鋒利的劍刃與整齊的縮排<br />砍除一切混亂。
+          來自【終焉理想庭】的台灣 VTuber，以程式・遊戲・唱歌・雜談為主軸，將日常的好奇心一同直播。
         </div>
       </div>
 
@@ -211,6 +267,30 @@
     z-index: 1;
     pointer-events: none;
   }
+  .bg-dust {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .dust-particle {
+    animation-name: dust-float;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @keyframes dust-float {
+    0%   { transform: translateY(0); opacity: 0; }
+    10%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { transform: translateY(-220px); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dust-particle { animation: none; opacity: 0.5; }
+  }
   .watermark {
     position: absolute;
     top: 120px;
@@ -245,10 +325,17 @@
   }
 
   .trans {
-    color: var(--blue-bright);
-    font-size: 11px;
-    letter-spacing: 0.24em;
-    margin-bottom: 16px;
+    display: inline-block;
+    color: #7CC4FF;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    margin-bottom: 14px;
+    padding: 4px 10px;
+    background: rgba(8, 16, 31, 0.92);
+    border: 1px solid rgba(124, 196, 255, 0.32);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 14px rgba(8, 16, 31, 0.18);
   }
 
   .card {
@@ -267,17 +354,122 @@
     letter-spacing: 0.2em;
     margin-bottom: 10px;
   }
-  .name-en {
-    font-size: 28px;
+  .name-block {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 32px;
+    width: 100%;
+  }
+  .name-char {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+  .kana-top {
+    font-size: 10px;
+    color: var(--blue-bright);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .cjk {
+    font-size: 38px;
     font-weight: 900;
     color: var(--silver-0);
-    line-height: 1.1;
+    line-height: 1;
   }
-  .name-kana {
+  .bopo {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .bopo-syl {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: 10px;
+    color: var(--silver-3);
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+  }
+  /* 用 CSS 畫聲調符號，避免 modifier letter 在不同瀏覽器渲染太小看不到 */
+  .bopo-tone {
+    display: inline-block;
+    width: 6px;
+    height: 14px;
+    position: relative;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+  .bopo-tone.tone-2::before {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    width: 5px;
+    height: 1px;
+    background: var(--silver-2);
+    transform: rotate(-40deg);
+    transform-origin: left center;
+  }
+  .bopo-tone.tone-3::before {
+    content: 'ˇ';
+    position: absolute;
+    top: -3px;
+    left: 0;
+    font-size: 10px;
+    color: var(--silver-2);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .bopo-tone.tone-4::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 0;
+    width: 5px;
+    height: 1px;
+    background: var(--silver-2);
+    transform: rotate(40deg);
+    transform-origin: left center;
+  }
+  .bopo-tone.tone-5::before {
+    content: '·';
+    position: absolute;
+    top: -2px;
+    left: 1px;
+    font-size: 12px;
+    color: var(--silver-2);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .pinyin {
+    font-size: 10px;
+    color: var(--silver-2);
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+  }
+  .name-en-sub {
+    display: flex;
+    justify-content: center;
+    width: 100%;
     font-size: 14px;
     color: var(--blue-bright);
-    margin-top: 4px;
-    letter-spacing: 0.18em;
+    margin-top: 8px;
+    letter-spacing: 0.22em;
+  }
+  .en-c {
+    display: inline-block;
+    min-width: 0.4em;
+    text-align: center;
   }
   .hr {
     height: 1px;

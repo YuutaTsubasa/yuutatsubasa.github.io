@@ -5,8 +5,9 @@
 
 <span
   class="tag tech"
+  class:solid
   style:background={solid ? color : `${color}1f`}
-  style:color={solid ? '#0A1322' : color}
+  style:color={solid ? '#FFFFFF' : color}
   style:border={`1px solid ${color}55`}
 >
   <slot />
@@ -22,5 +23,9 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     font-weight: 600;
+  }
+  .tag.solid {
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
   }
 </style>
