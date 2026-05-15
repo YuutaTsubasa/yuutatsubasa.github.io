@@ -3,6 +3,7 @@
   import { VIDEOS, VIDEO_TAGS, findVideo, timeToSeconds } from '$lib/data/videos.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
+  import { reveal } from '$lib/utils/reveal.js';
 
   $: video = findVideo($page.params.id);
   $: idx = video ? VIDEOS.indexOf(video) : -1;
@@ -18,6 +19,73 @@
     if (!youtubeId) return null;
     return `https://www.youtube.com/watch?v=${youtubeId}&t=${timeToSeconds(time)}s`;
   }
+
+  let playerEl;
+  function seekTo(time) {
+    if (!playerEl?.contentWindow) return;
+    const secs = timeToSeconds(time);
+    playerEl.contentWindow.postMessage(
+      JSON.stringify({ event: 'command', func: 'seekTo', args: [secs, true] }),
+      '*'
+    );
+    playerEl.contentWindow.postMessage(
+      JSON.stringify({ event: 'command', func: 'playVideo', args: [] }),
+      '*'
+    );
+    // 將 player 滑入視口
+    playerEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // HH:MM:SS → ISO 8601 PT#H#M#S
+  function isoDuration(d) {
+    if (!d) return undefined;
+    const secs = timeToSeconds(d);
+    const h = Math.floor(secs / 3600);
+    const m = Math.floor((secs % 3600) / 60);
+    const s = secs % 60;
+    return `PT${h ? h + 'H' : ''}${m ? m + 'M' : ''}${s ? s + 'S' : ''}` || 'PT0S';
+  }
+
+  // YYYY.MM.DD → YYYY-MM-DD
+  function isoDate(d) {
+    return d ? d.replace(/\./g, '-') : undefined;
+  }
+
+  $: jsonLd = video
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'VideoObject',
+          name: video.title,
+          description: video.excerpt || `Vol. ${video.vol} · ${video.title}`,
+          uploadDate: isoDate(video.date),
+          duration: isoDuration(video.duration),
+          thumbnailUrl: video.youtubeId
+            ? [`https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`]
+            : undefined,
+          embedUrl: video.youtubeId
+            ? `https://www.youtube.com/embed/${video.youtubeId}`
+            : undefined,
+          contentUrl: video.youtubeId
+            ? `https://www.youtube.com/watch?v=${video.youtubeId}`
+            : undefined,
+          publisher: {
+            '@type': 'Person',
+            name: '悠太翼',
+            url: 'https://yuuta-tsubasa.studio'
+          }
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home',    item: 'https://yuuta-tsubasa.studio/' },
+            { '@type': 'ListItem', position: 2, name: 'Archive', item: 'https://yuuta-tsubasa.studio/archive' },
+            { '@type': 'ListItem', position: 3, name: video.title, item: `https://yuuta-tsubasa.studio/archive/${video.slug}` }
+          ]
+        }
+      ]
+    : null;
 </script>
 
 {#if video}
@@ -31,6 +99,7 @@
     imageWidth={1280}
     imageHeight={720}
     type="video.other"
+    {jsonLd}
   />
 {:else}
   <Seo title="ARCHIVE · 悠太翼 YUUTA TSUBASA" />
@@ -47,7 +116,7 @@
       </div>
     {:else}
       <!-- breadcrumb -->
-      <div class="bc">
+      <div class="bc" use:reveal={{ delay: 0, distance: 10 }}>
         <span class="mono bc-id">ARCHIVE ▸ #{padCase(video.vol)}</span>
         <span class="mono bc-open">CASE FILE OPEN</span>
         <span class="spacer"></span>
@@ -55,7 +124,7 @@
       </div>
 
       <!-- title -->
-      <div class="title-row">
+      <div class="title-row" use:reveal={{ delay: 80 }}>
         <h1 class="display dt-title">{video.title}</h1>
         <div class="tech dt-meta">
           STREAM #{padCase(video.vol)} ／ {video.date}{#if video.duration} ／ {video.duration}{/if}{#if tagObjs.length} ／ {tagObjs.map((t) => t.enLabel).join(' · ')}{/if}
@@ -66,11 +135,12 @@
       <div class="grid">
         <div class="main">
           <!-- player -->
-          <div class="player">
+          <div class="player" use:reveal={{ delay: 140 }}>
             <Corners />
             {#if video.youtubeId}
               <iframe
-                src={`https://www.youtube.com/embed/${video.youtubeId}`}
+                bind:this={playerEl}
+                src={`https://www.youtube.com/embed/${video.youtubeId}?enablejsapi=1`}
                 title={video.title}
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -87,23 +157,33 @@
 
           <!-- chapters -->
           {#if video.chapters.length}
-            <div class="chapters">
+            <div class="chapters" use:reveal={{ delay: 220 }}>
               <Corners />
               <div class="mono ch-cap">// CHAPTERS · {String(video.chapters.length).padStart(2, '0')} TRACKS</div>
               {#each video.chapters as c, ci}
-                <svelte:element
-                  this={video.youtubeId ? 'a' : 'div'}
-                  class="ch-row"
-                  href={chapterUrl(video.youtubeId, c.time)}
-                  target={video.youtubeId ? '_blank' : undefined}
-                  rel={video.youtubeId ? 'noopener' : undefined}
-                >
-                  <span class="mono ch-time">{c.time}</span>
-                  <span class="ch-label">{c.label}</span>
+                <div class="ch-row" class:clickable={!!video.youtubeId}>
                   {#if video.youtubeId}
-                    <span class="mono ch-go">▶</span>
+                    <button
+                      class="ch-main"
+                      on:click={() => seekTo(c.time)}
+                      title="跳到此時間點"
+                    >
+                      <span class="mono ch-time">{c.time}</span>
+                      <span class="ch-label">{c.label}</span>
+                      <span class="mono ch-go">▶</span>
+                    </button>
+                    <a
+                      class="ch-yt"
+                      href={chapterUrl(video.youtubeId, c.time)}
+                      target="_blank"
+                      rel="noopener"
+                      title="在 YouTube 開啟此時間點"
+                    >↗</a>
+                  {:else}
+                    <span class="mono ch-time">{c.time}</span>
+                    <span class="ch-label">{c.label}</span>
                   {/if}
-                </svelte:element>
+                </div>
               {/each}
             </div>
           {/if}
@@ -111,7 +191,7 @@
 
         <!-- sidebar -->
         <aside class="side">
-          <div class="panel">
+          <div class="panel" use:reveal={{ delay: 180 }}>
             <Corners />
             <div class="mono panel-cap">// TAGS</div>
             <div class="tag-list">
@@ -127,7 +207,7 @@
           </div>
 
           {#if prev || next}
-            <div class="panel">
+            <div class="panel" use:reveal={{ delay: 260 }}>
               <Corners />
               <div class="mono panel-cap">// ADJACENT</div>
               {#if prev}
@@ -155,7 +235,7 @@
 
       <!-- briefing -->
       {#if video.bodyHtml}
-        <div class="briefing">
+        <div class="briefing" use:reveal={{ delay: 80 }}>
           <Corners />
           <div class="brief-head">
             <span class="mono bh-cap">// BRIEFING</span>
@@ -308,18 +388,43 @@
     margin-bottom: 10px;
   }
   .ch-row {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px dashed var(--line);
+    color: inherit;
+    transition: background 0.15s;
+  }
+  .ch-row:last-child { border-bottom: 0; }
+  .ch-row.clickable:hover { background: rgba(37, 99, 235, 0.06); }
+  .ch-main {
+    flex: 1;
     display: grid;
     grid-template-columns: 84px 1fr 32px;
     gap: 12px;
     padding: 8px 4px;
     align-items: center;
-    border-bottom: 1px dashed var(--line);
+    background: transparent;
+    border: 0;
     color: inherit;
-    text-decoration: none;
-    transition: background 0.15s;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
   }
-  .ch-row:last-child { border-bottom: 0; }
-  .ch-row:hover { background: rgba(37, 99, 235, 0.06); }
+  .ch-yt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    color: var(--silver-3);
+    text-decoration: none;
+    font-size: 13px;
+    border-left: 1px dashed var(--line);
+    transition: background 0.15s, color 0.15s;
+  }
+  .ch-yt:hover {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--blue-bright);
+  }
   .ch-time {
     font-size: 11px;
     color: var(--blue-bright);

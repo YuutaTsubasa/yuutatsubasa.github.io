@@ -13,9 +13,12 @@
   export let imageWidth = 1200;
   export let imageHeight = 630;
   export let type = 'website';
+  /** schema.org JSON-LD: 單一物件或陣列 */
+  export let jsonLd = null;
 
   $: fullUrl = `${SITE_URL}${$page.url.pathname}`;
   $: fullImage = image.startsWith('http') ? image : `${SITE_URL}${image}`;
+  $: jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 </script>
 
 <svelte:head>
@@ -39,4 +42,8 @@
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={fullImage} />
   <meta name="twitter:image:alt" content={imageAlt} />
+
+  {#each jsonLdItems as item}
+    {@html `<script type="application/ld+json">${JSON.stringify(item)}</script>`}
+  {/each}
 </svelte:head>

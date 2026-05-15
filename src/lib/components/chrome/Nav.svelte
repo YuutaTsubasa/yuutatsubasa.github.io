@@ -9,6 +9,7 @@
   let interval;
   let linksEl;
   let indicator = { left: 0, width: 0, visible: false };
+  let hasPositioned = false; // 首次定位前不開 left/width transition，避免從 (0,0) 滑入殘影
   let canScrollLeft = false;
   let canScrollRight = false;
 
@@ -68,6 +69,12 @@
       linksEl.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
     }
     updateScrollState();
+
+    // 首次定位完成 → 啟用 left/width transition
+    if (!hasPositioned) {
+      await tick();
+      requestAnimationFrame(() => { hasPositioned = true; });
+    }
   }
 
   function scrollByStep(dir) {
@@ -151,6 +158,7 @@
     >
       <span
         class="indicator"
+        class:positioned={hasPositioned}
         style:left={`${indicator.left}px`}
         style:width={`${indicator.width}px`}
         style:opacity={indicator.visible ? 1 : 0}
@@ -309,11 +317,15 @@
     border: 1px solid var(--line-strong);
     background: rgba(59, 130, 246, 0.12);
     box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.16) inset;
+    /* 首次定位前只 transition opacity，避免從 (0,0) 滑入 */
+    transition: opacity 0.2s;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .indicator.positioned {
     transition: left 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
       width 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
       opacity 0.2s;
-    pointer-events: none;
-    z-index: 0;
   }
   .nav-btn {
     position: relative;

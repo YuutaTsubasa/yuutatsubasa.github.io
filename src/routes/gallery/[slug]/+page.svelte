@@ -5,6 +5,7 @@
   import { GALLERY, findGallery } from '$lib/data/gallery.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
+  import { reveal } from '$lib/utils/reveal.js';
 
   $: piece = findGallery($page.params.slug);
   $: idx = piece ? GALLERY.indexOf(piece) : -1;
@@ -17,10 +18,17 @@
     return `${String(n).padStart(3, '0')} / ${String(total).padStart(3, '0')}`;
   }
 
+  function closeLightbox() {
+    if (typeof window === 'undefined') return goto('/gallery');
+    // 有上一頁就回上一頁（從首頁進來就回首頁）；直接深連則 fallback 到 /gallery
+    if (window.history.length > 1) window.history.back();
+    else goto('/gallery');
+  }
+
   function handleKey(e) {
-    if (e.key === 'Escape') goto('/gallery');
-    else if (e.key === 'ArrowLeft' && prev) goto(`/gallery/${prev.slug}`);
-    else if (e.key === 'ArrowRight' && next) goto(`/gallery/${next.slug}`);
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowLeft' && prev) goto(`/gallery/${prev.slug}`, { replaceState: true });
+    else if (e.key === 'ArrowRight' && next) goto(`/gallery/${next.slug}`, { replaceState: true });
   }
 
   onMount(() => {
@@ -61,12 +69,12 @@
     <div class="topbar">
       <a class="mono bc" href="/gallery">GALLERY ▸ #{padCase(piece.num, GALLERY.length)}</a>
       <span class="spacer"></span>
-      <a class="mono close" href="/gallery">ESC · CLOSE</a>
+      <a class="mono close" href="/gallery" on:click|preventDefault={closeLightbox}>ESC · CLOSE</a>
     </div>
 
     <div class="grid">
       <!-- left prev rail -->
-      <a class="rail prev" class:disabled={!prev} href={prev ? `/gallery/${prev.slug}` : '#'}>
+      <a class="rail prev" class:disabled={!prev} data-sveltekit-replacestate href={prev ? `/gallery/${prev.slug}` : '#'}>
         <div class="rail-inner">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4 L6 10 L12 16"/></svg>
           {#if prev}
@@ -76,7 +84,7 @@
       </a>
 
       <!-- center hero image -->
-      <div class="hero">
+      <div class="hero" use:reveal={{ delay: 80, distance: 14 }}>
         <div class="hero-inner">
           <Corners />
           <img class="hero-img" src={piece.thumbnail} alt={piece.title} />
@@ -85,7 +93,7 @@
       </div>
 
       <!-- right meta sidebar -->
-      <aside class="meta">
+      <aside class="meta" use:reveal={{ delay: 200, distance: 14 }}>
         <div class="meta-head">
           <div class="mono meta-id">PIECE #{String(piece.num ?? 0).padStart(3, '0')}</div>
           <div class="display meta-title">BY {piece.artist}</div>

@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { NAV } from '$lib/data/nav.js';
-  import { activeSection } from '$lib/stores/active.js';
+  import { activeSection, setActiveFromScroll } from '$lib/stores/active.js';
 
   import Hero from '$lib/components/sections/Hero.svelte';
   import About from '$lib/components/sections/About.svelte';
@@ -22,7 +22,7 @@
       const el = document.getElementById(id);
       if (el && el.getBoundingClientRect().top < 200) cur = id;
     }
-    activeSection.set(cur);
+    setActiveFromScroll(cur);
   }
 
   onMount(() => {

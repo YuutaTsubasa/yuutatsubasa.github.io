@@ -14,6 +14,8 @@
     { label: 'FANBASE',  value: PROFILE.fanbase }
   ];
 
+  const lastSync = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+
   const codeBlock = `var yuuta = new VTuber {
     Name   = "悠太翼",
     Agency = "終焉理想庭",
@@ -32,7 +34,7 @@ yuuta.Topics
       num="01 / 06"
       en="PROFILE"
       zh="騎士檔案"
-      deco={'DOSSIER ID :: VTB-04\nCLEARANCE :: PUBLIC\nLAST SYNC :: 2026.05.04'}
+      deco={`DOSSIER ID :: YUTAII-00\nCLEARANCE :: PUBLIC\nLAST SYNC :: ${lastSync}`}
     />
 
     <div class="grid">

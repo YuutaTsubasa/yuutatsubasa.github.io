@@ -3,10 +3,10 @@
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Tag from '$lib/components/atoms/Tag.svelte';
+  import { archiveHomeFilter } from '$lib/stores/filters.js';
   import { reveal } from '$lib/utils/reveal.js';
 
-  let filter = 'all';
-  $: list = filter === 'all' ? VIDEOS : VIDEOS.filter((v) => v.tags?.includes(filter));
+  $: list = $archiveHomeFilter === 'all' ? VIDEOS : VIDEOS.filter((v) => v.tags?.includes($archiveHomeFilter));
 
   function tagsOf(ids) {
     return (ids ?? []).map((id) => VIDEO_TAGS.find((t) => t.id === id)).filter(Boolean);
@@ -19,15 +19,15 @@
       num="03 / 06"
       en="ARCHIVE"
       zh="影片庫"
-      deco={`COUNT :: ${VIDEOS.length} ENTRIES\nFILTER :: ${VIDEO_FILTERS.find((f) => f.id === filter)?.enLabel ?? 'ALL'}\nUPDATED :: 2026.04.28`}
+      deco={`COUNT :: ${VIDEOS.length} ENTRIES\nFILTER :: ${VIDEO_FILTERS.find((f) => f.id === $archiveHomeFilter)?.enLabel ?? 'ALL'}\nUPDATED :: 2026.04.28`}
     />
 
     <div class="tabs">
       {#each VIDEO_FILTERS as f}
         <button
           class="tab tech"
-          class:active={filter === f.id}
-          on:click={() => (filter = f.id)}
+          class:active={$archiveHomeFilter === f.id}
+          on:click={() => archiveHomeFilter.set(f.id)}
         >
           {f.enLabel}
         </button>

@@ -4,9 +4,8 @@
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
+  import { galleryPageYear } from '$lib/stores/filters.js';
   import { reveal } from '$lib/utils/reveal.js';
-
-  let yearFilter = 'all';
   let cols = 3;
 
   function updateCols() {
@@ -35,9 +34,9 @@
     return [...map.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1));
   })();
 
-  $: list = yearFilter === 'all'
+  $: list = $galleryPageYear === 'all'
     ? GALLERY
-    : GALLERY.filter((g) => g.date.startsWith(yearFilter));
+    : GALLERY.filter((g) => g.date.startsWith($galleryPageYear));
 
   // 手動把 list round-robin 分到 N 欄。避免 CSS column-count 在動態 hover/reveal 時重排
   $: distributed = (() => {
@@ -58,7 +57,7 @@
       num="05 / 06 — VISUAL CODEX"
       en="GALLERY"
       zh="作品・画廊コーデックス"
-      deco={`ENTRIES :: ${String(GALLERY.length).padStart(3, '0')} PIECES\nSORT :: NEWEST\nFILTER :: ${yearFilter === 'all' ? 'ALL YEARS' : yearFilter}`}
+      deco={`ENTRIES :: ${String(GALLERY.length).padStart(3, '0')} PIECES\nSORT :: NEWEST\nFILTER :: ${$galleryPageYear === 'all' ? 'ALL YEARS' : $galleryPageYear}`}
     />
 
     <div class="filter-row">
@@ -67,14 +66,14 @@
       <span class="sep"></span>
       <button
         class="chip tech"
-        class:on={yearFilter === 'all'}
-        on:click={() => (yearFilter = 'all')}
+        class:on={$galleryPageYear === 'all'}
+        on:click={() => galleryPageYear.set('all')}
       >ALL · {String(GALLERY.length).padStart(2, '0')}</button>
       {#each years as [y, count]}
         <button
           class="chip tech"
-          class:on={yearFilter === y}
-          on:click={() => (yearFilter = y)}
+          class:on={$galleryPageYear === y}
+          on:click={() => galleryPageYear.set(y)}
         >{y} · {String(count).padStart(2, '0')}</button>
       {/each}
       <span class="spacer"></span>

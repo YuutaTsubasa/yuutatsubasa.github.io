@@ -2,9 +2,8 @@
   import { VIDEOS, VIDEO_TAGS } from '$lib/data/videos.js';
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Seo from '$lib/components/Seo.svelte';
+  import { archivePageFilter } from '$lib/stores/filters.js';
   import { reveal } from '$lib/utils/reveal.js';
-
-  let filter = 'all';
 
   function tagsOf(ids) {
     return (ids ?? []).map((id) => VIDEO_TAGS.find((t) => t.id === id)).filter(Boolean);
@@ -27,8 +26,8 @@
       count: VIDEOS.filter((v) => v.tags?.includes(t.id)).length
     })).filter((f) => f.count > 0)
   ];
-  $: list = filter === 'all' ? VIDEOS : VIDEOS.filter((v) => v.tags?.includes(filter));
-  $: filterLabel = filters.find((f) => f.id === filter)?.label ?? 'ALL';
+  $: list = $archivePageFilter === 'all' ? VIDEOS : VIDEOS.filter((v) => v.tags?.includes($archivePageFilter));
+  $: filterLabel = filters.find((f) => f.id === $archivePageFilter)?.label ?? 'ALL';
 </script>
 
 <Seo
@@ -50,8 +49,8 @@
       {#each filters as f}
         <button
           class="chip tech"
-          class:on={filter === f.id}
-          on:click={() => (filter = f.id)}
+          class:on={$archivePageFilter === f.id}
+          on:click={() => archivePageFilter.set(f.id)}
         >{f.label} · {String(f.count).padStart(2, '0')}</button>
       {/each}
       <span class="spacer"></span>
