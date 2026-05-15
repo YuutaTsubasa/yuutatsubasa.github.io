@@ -3,6 +3,7 @@
   import { GALLERY } from '$lib/data/gallery.js';
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
+  import Seo from '$lib/components/Seo.svelte';
   import { reveal } from '$lib/utils/reveal.js';
 
   let yearFilter = 'all';
@@ -46,9 +47,10 @@
   })();
 </script>
 
-<svelte:head>
-  <title>GALLERY · 悠太翼 YUUTA TSUBASA</title>
-</svelte:head>
+<Seo
+  title="GALLERY · 悠太翼 YUUTA TSUBASA"
+  description="粉絲為悠太翼繪製的同人作品收藏 — 翼友作品集。"
+/>
 
 <section class="gallery-list">
   <div class="wrap">

@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
   import { VIDEOS, VIDEO_TAGS, findVideo, timeToSeconds } from '$lib/data/videos.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
+  import Seo from '$lib/components/Seo.svelte';
 
   $: video = findVideo($page.params.id);
   $: idx = video ? VIDEOS.indexOf(video) : -1;
@@ -19,9 +20,21 @@
   }
 </script>
 
-<svelte:head>
-  <title>{video ? `${video.title} · ARCHIVE` : 'ARCHIVE'} · 悠太翼 YUUTA TSUBASA</title>
-</svelte:head>
+{#if video}
+  <Seo
+    title={`${video.title} · ARCHIVE · 悠太翼 YUUTA TSUBASA`}
+    description={video.excerpt || `Vol. ${video.vol} · ${video.title}`}
+    image={video.youtubeId
+      ? `https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`
+      : '/images/og-card.png'}
+    imageAlt={video.title}
+    imageWidth={1280}
+    imageHeight={720}
+    type="video.other"
+  />
+{:else}
+  <Seo title="ARCHIVE · 悠太翼 YUUTA TSUBASA" />
+{/if}
 
 <section class="detail">
   <div class="wrap">

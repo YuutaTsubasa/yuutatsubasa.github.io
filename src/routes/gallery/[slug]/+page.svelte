@@ -4,6 +4,7 @@
   import { goto } from '$app/navigation';
   import { GALLERY, findGallery } from '$lib/data/gallery.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
+  import Seo from '$lib/components/Seo.svelte';
 
   $: piece = findGallery($page.params.slug);
   $: idx = piece ? GALLERY.indexOf(piece) : -1;
@@ -30,9 +31,17 @@
   });
 </script>
 
-<svelte:head>
-  <title>{piece ? `${piece.title} · GALLERY` : 'GALLERY'} · 悠太翼 YUUTA TSUBASA</title>
-</svelte:head>
+{#if piece}
+  <Seo
+    title={`${piece.title} · GALLERY · 悠太翼 YUUTA TSUBASA`}
+    description={piece.author ? `翼友作品 · 繪師：${piece.author}` : '悠太翼翼友作品'}
+    image={piece.thumbnail || '/images/og-card.png'}
+    imageAlt={piece.title}
+    type="article"
+  />
+{:else}
+  <Seo title="GALLERY · 悠太翼 YUUTA TSUBASA" />
+{/if}
 
 <div class="lightbox">
   {#if !piece}

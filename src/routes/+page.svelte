@@ -10,6 +10,7 @@
   import Avatars from '$lib/components/sections/Avatars.svelte';
   import Gallery from '$lib/components/sections/Gallery.svelte';
   import Connect from '$lib/components/sections/Connect.svelte';
+  import Seo from '$lib/components/Seo.svelte';
 
   const title = '悠太翼官方網站 | 首頁';
   const description = '程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。';
@@ -36,19 +37,7 @@
   });
 </script>
 
-<svelte:head>
-  <title>{title}</title>
-  <meta name="description" content={description} />
-  <meta name="keywords" content="Vtuber, 悠太翼, 程式設計, 直播" />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://yuuta-tsubasa.studio/" />
-  <meta property="og:image" content="https://yuuta-tsubasa.studio/images/logo.webp" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
-</svelte:head>
+<Seo {title} {description} />
 
 <main>
   <Hero />

@@ -1,6 +1,7 @@
 <script>
   import { VIDEOS, VIDEO_TAGS } from '$lib/data/videos.js';
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
+  import Seo from '$lib/components/Seo.svelte';
   import { reveal } from '$lib/utils/reveal.js';
 
   let filter = 'all';
@@ -30,9 +31,10 @@
   $: filterLabel = filters.find((f) => f.id === filter)?.label ?? 'ALL';
 </script>
 
-<svelte:head>
-  <title>ARCHIVE · 悠太翼 YUUTA TSUBASA</title>
-</svelte:head>
+<Seo
+  title="ARCHIVE · 悠太翼 YUUTA TSUBASA"
+  description="悠太翼歷年直播回顧 — 遊戲、程式、歌回、雜談、3D、繪圖、音樂等內容。"
+/>
 
 <section class="archive">
   <div class="wrap">
