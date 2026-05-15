@@ -8,6 +8,7 @@
   import Tele from '$lib/components/atoms/Tele.svelte';
   import ScanBar from '$lib/components/atoms/ScanBar.svelte';
   import Dot from '$lib/components/atoms/Dot.svelte';
+  import { reveal } from '$lib/utils/reveal.js';
 
   $: liveStream = currentLive(SCHEDULE, $now);
   $: nextStream = liveStream ? null : nextUpcoming(SCHEDULE, $now);
@@ -94,7 +95,7 @@
     <div class="col-left">
       <div class="mono trans">▸ TRANSMISSION ESTABLISHED // {dateStr}</div>
 
-      <div class="card">
+      <div class="card" use:reveal={{ delay: 80 }}>
         <Corners />
         <div class="mono caption">// IDENTITY CARD</div>
         <div class="display name-block">
@@ -132,7 +133,7 @@
       </div>
 
       {#if liveStream}
-        <a class="live-pill live" href={liveStream.url} target="_blank" rel="noopener">
+        <a class="live-pill live" href={liveStream.url} target="_blank" rel="noopener" use:reveal={{ delay: 220 }}>
           <Dot color="#EF4444" />
           <span class="tech live-label">LIVE NOW</span>
           <span class="live-title">{liveStream.title}</span>
@@ -140,7 +141,7 @@
           <span class="mono live-time">{liveStream.platforms?.join(' · ')}</span>
         </a>
       {:else if nextStream}
-        <a class="live-pill next" href={nextStream.url} target="_blank" rel="noopener">
+        <a class="live-pill next" href={nextStream.url} target="_blank" rel="noopener" use:reveal={{ delay: 220 }}>
           <Dot color="#22D3EE" />
           <span class="tech next-label">NEXT STREAM</span>
           <span class="live-title">{nextStream.title}</span>
@@ -154,7 +155,7 @@
 
     <!-- MIDDLE: mission / vitals -->
     <div class="col-mid">
-      <div class="card pad-md">
+      <div class="card pad-md" use:reveal={{ delay: 140 }}>
         <Corners />
         <div class="mono caption">// MISSION BRIEF</div>
         <div class="tech mission">
@@ -162,7 +163,7 @@
         </div>
       </div>
 
-      <div class="card pad-md">
+      <div class="card pad-md" use:reveal={{ delay: 200 }}>
         <Corners />
         <div class="mono caption">// VITALS</div>
         <div class="vitals">
@@ -185,7 +186,7 @@
         </div>
       </div>
 
-      <div class="mono sysinfo">
+      <div class="mono sysinfo" use:reveal={{ delay: 280 }}>
         ::SYS / OPTIMAL<br />
         ::CONN / 4G STABLE<br />
         ::FPS / 60 LOCK<br />
@@ -618,6 +619,7 @@
   }
 
   @media (max-width: 1100px) {
+    .hero { padding-top: 700px; }
     .inner { grid-template-columns: 1fr; gap: 24px; }
     .col-right { height: 500px; min-height: 500px; }
     .watermark { font-size: min(36vw, 320px); }

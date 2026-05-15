@@ -9,6 +9,14 @@
   let interval;
   let linksEl;
   let indicator = { left: 0, width: 0, visible: false };
+  let canScrollLeft = false;
+  let canScrollRight = false;
+
+  function updateScrollState() {
+    if (!linksEl) return;
+    canScrollLeft = linksEl.scrollLeft > 1;
+    canScrollRight = linksEl.scrollLeft + linksEl.clientWidth < linksEl.scrollWidth - 1;
+  }
 
   function updateTime() {
     const t = new Date();
@@ -52,26 +60,53 @@
       width: childRect.width,
       visible: true
     };
+    // 若 active 按鈕跑出可視範圍，自動水平滑入
+    const linkLeftRel = childRect.left - parentRect.left;
+    const linkRightRel = linkLeftRel + childRect.width;
+    if (linkLeftRel < 8 || linkRightRel > parentRect.width - 8) {
+      const target = linksEl.scrollLeft + linkLeftRel - (parentRect.width - childRect.width) / 2;
+      linksEl.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    }
+    updateScrollState();
+  }
+
+  function scrollByStep(dir) {
+    if (!linksEl) return;
+    linksEl.scrollBy({ left: dir * 160, behavior: 'smooth' });
   }
 
   let resizeHandler;
+
+  let scrollHandler;
 
   onMount(() => {
     updateTime();
     interval = setInterval(updateTime, 1000);
 
-    resizeHandler = () => moveIndicator(activeNow);
+    resizeHandler = () => {
+      moveIndicator(activeNow);
+      updateScrollState();
+    };
     window.addEventListener('resize', resizeHandler);
+    scrollHandler = () => updateScrollState();
+    linksEl?.addEventListener('scroll', scrollHandler, { passive: true });
     // 初始：等字型載入完再對齊（字寬可能改變）
-    requestAnimationFrame(() => moveIndicator(activeNow));
+    requestAnimationFrame(() => {
+      moveIndicator(activeNow);
+      updateScrollState();
+    });
     if (document.fonts?.ready) {
-      document.fonts.ready.then(() => moveIndicator(activeNow));
+      document.fonts.ready.then(() => {
+        moveIndicator(activeNow);
+        updateScrollState();
+      });
     }
   });
 
   onDestroy(() => {
     if (interval) clearInterval(interval);
     if (resizeHandler) window.removeEventListener('resize', resizeHandler);
+    if (linksEl && scrollHandler) linksEl.removeEventListener('scroll', scrollHandler);
   });
 
   function handleClick(e, id) {
@@ -94,27 +129,60 @@
     </div>
   </a>
 
-  <nav class="links" bind:this={linksEl}>
-    <span
-      class="indicator"
-      style:left={`${indicator.left}px`}
-      style:width={`${indicator.width}px`}
-      style:opacity={indicator.visible ? 1 : 0}
-      aria-hidden
-    ></span>
-    {#each NAV as n}
-      <a
-        class="nav-btn tech"
-        class:active={activeNow === n.id}
-        data-section={n.id}
-        href={isHome ? `#${n.id}` : `/#${n.id}`}
-        on:click={(e) => handleClick(e, n.id)}
-      >
-        <span class="mono num">{n.num}</span>
-        {n.label}
-      </a>
-    {/each}
-  </nav>
+  <div class="links-wrap">
+    <button
+      class="arrow arrow-left"
+      class:on={canScrollLeft}
+      type="button"
+      aria-label="Scroll left"
+      tabindex={canScrollLeft ? 0 : -1}
+      on:click={() => scrollByStep(-1)}
+    >
+      <svg viewBox="0 0 10 16" aria-hidden>
+        <path d="M7 3 L3 8 L7 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <nav
+      class="links"
+      class:fade-left={canScrollLeft}
+      class:fade-right={canScrollRight}
+      bind:this={linksEl}
+    >
+      <span
+        class="indicator"
+        style:left={`${indicator.left}px`}
+        style:width={`${indicator.width}px`}
+        style:opacity={indicator.visible ? 1 : 0}
+        aria-hidden
+      ></span>
+      {#each NAV as n}
+        <a
+          class="nav-btn tech"
+          class:active={activeNow === n.id}
+          data-section={n.id}
+          href={isHome ? `#${n.id}` : `/#${n.id}`}
+          on:click={(e) => handleClick(e, n.id)}
+        >
+          <span class="mono num">{n.num}</span>
+          {n.label}
+        </a>
+      {/each}
+    </nav>
+
+    <button
+      class="arrow arrow-right"
+      class:on={canScrollRight}
+      type="button"
+      aria-label="Scroll right"
+      tabindex={canScrollRight ? 0 : -1}
+      on:click={() => scrollByStep(1)}
+    >
+      <svg viewBox="0 0 10 16" aria-hidden>
+        <path d="M3 3 L7 8 L3 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
 
   <div class="status">
     <span class="mono time">{timeStr}</span>
@@ -160,14 +228,79 @@
     color: var(--blue-bright);
     letter-spacing: 0.25em;
   }
+  .links-wrap {
+    position: relative;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
   .links {
     position: relative;
     display: flex;
     gap: 2px;
-    margin-left: auto;
     align-items: stretch;
     height: 34px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    min-width: 0;
+    scroll-behavior: smooth;
+  }
+  .links::-webkit-scrollbar { display: none; }
+  .links.fade-right {
+    -webkit-mask-image: linear-gradient(90deg, black, black calc(100% - 22px), transparent);
+    mask-image: linear-gradient(90deg, black, black calc(100% - 22px), transparent);
+  }
+  .links.fade-left {
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 22px, black);
+    mask-image: linear-gradient(90deg, transparent, black 22px, black);
+  }
+  .links.fade-left.fade-right {
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 22px, black calc(100% - 22px), transparent);
+    mask-image: linear-gradient(90deg, transparent, black 22px, black calc(100% - 22px), transparent);
+  }
+  .arrow {
+    flex-shrink: 0;
+    width: 22px;
+    height: 34px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid var(--line);
+    color: var(--blue-bright);
+    cursor: pointer;
+    padding: 0;
+    z-index: 4;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .arrow svg {
+    width: 10px;
+    height: 16px;
+    display: block;
+  }
+  .arrow.on { display: inline-flex; }
+  .arrow:hover {
+    background: var(--blue-bright);
+    color: #FFFFFF;
+    border-color: var(--blue-bright);
+  }
+  .arrow-left { margin-right: -1px; }
+  .arrow-right { margin-left: -1px; }
+  .arrow.on { animation: arrow-bob 1.6s ease-in-out infinite; }
+  .arrow-left.on { animation-name: arrow-bob-left; }
+  @keyframes arrow-bob-left {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(-3px); }
+  }
+  @keyframes arrow-bob {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .arrow.on { animation: none; }
   }
   .indicator {
     position: absolute;
@@ -225,14 +358,6 @@
   /* RWD */
   @media (max-width: 1100px) {
     .nav { padding: 0 16px; gap: 12px; }
-    .links {
-      overflow-x: auto;
-      overflow-y: hidden;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      min-width: 0;
-    }
-    .links::-webkit-scrollbar { display: none; }
     .nav-btn { padding: 6px 10px; font-size: 11px; letter-spacing: 0.14em; }
     .num { margin-right: 4px; }
   }

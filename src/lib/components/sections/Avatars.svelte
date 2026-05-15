@@ -655,7 +655,7 @@
     .wm-mid { display: none; }
   }
   @media (max-width: 760px) {
-    .slab { min-height: 760px; padding: 22px; }
+    .slab { min-height: 0; padding: 22px; }
     .viewport {
       position: relative;
       right: auto;
@@ -663,12 +663,21 @@
       bottom: auto;
       width: 100%;
       height: 220px;
-      margin: 80px 0 24px;
+      margin: 160px 0 24px;
     }
     .corner-mark { top: 80px; }
     .scan-panel { top: 80px; left: auto; right: 22px; width: auto; text-align: right; }
     .credits { position: relative; left: auto; bottom: auto; min-width: 0; max-width: 100%; }
-    .bottom-bar { position: relative; left: auto; bottom: auto; right: auto; margin-top: 20px; }
+    .bottom-bar {
+      position: relative;
+      left: auto;
+      bottom: auto;
+      right: auto;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .brand-tag { white-space: nowrap; }
     .wm-top { font-size: min(28vw, 160px); }
     .wm-sub { right: 22px; bottom: auto; top: 22px; font-size: 14px; }
   }

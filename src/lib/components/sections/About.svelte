@@ -275,5 +275,6 @@ yuuta.Topics
     .grid { grid-template-columns: 1fr; }
     .name-zh { font-size: 64px; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .col-left :global(.panel) { min-height: 0 !important; }
   }
 </style>
