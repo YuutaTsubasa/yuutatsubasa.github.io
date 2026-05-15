@@ -1,10 +1,11 @@
-import{m,j as w}from"./marked.esm.DKMbxwbe.js";const h=`---
+import{m as w,j as h}from"./marked.esm.DKMbxwbe.js";const d=`---
 title: "【#歌回/#雜談】Vol. 0: 初配信，來做點自我介紹吧！"
 date: "2021-07-31"
 author: "悠太翼"
 thumbnail: "/images/posts/streamings/0.webp"
 tags: ["歌回實況", "雜談實況", "直播影片"]
 excerpt: "初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）。"
+duration: "1:50:54"
 ---
 <iframe width="560" height="315" src="https://www.youtube.com/embed/zbyvgQOZu8E?si=P9MpdFVNvwLierrg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
@@ -62,6 +63,7 @@ author: "悠太翼 feat. 貓耳未來"
 thumbnail: "/images/posts/streamings/1.webp"
 tags: ["遊戲實況", "活動合作", "直播影片"]
 excerpt: "與貓耳未來一起來玩雙人成行。"
+duration: "2:43:35"
 ---
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Bb5PbxXB7lQ?si=MbyrFGxSPVb-IRwJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
@@ -103,4 +105,38 @@ excerpt: "與貓耳未來一起來玩雙人成行。"
 - 02:32:14 第二章 大樹：根深蒂固 (2)
 - 02:40:18 結尾
 - 02:42:51 Ending
-`,d=[{id:"game",label:"遊戲",enLabel:"GAME",color:"#EF4444"},{id:"code",label:"程式",enLabel:"CODE",color:"#F97316"},{id:"karaoke",label:"歌回",enLabel:"KARAOKE",color:"#3B82F6"},{id:"chat",label:"雜談",enLabel:"TALK",color:"#22C55E"},{id:"art",label:"繪圖",enLabel:"ART",color:"#F472B6"},{id:"3d",label:"3D",enLabel:"3D",color:"#2DD4BF"},{id:"music",label:"音樂",enLabel:"MUSIC",color:"#818CF8"}],f=[...d,{id:"cover",label:"Cover",enLabel:"COVER",color:"#D946EF"}],y={歌回實況:"karaoke",雜談實況:"chat",遊戲實況:"game",程式實況:"code",繪圖實況:"art","3D實況":"3d",音樂實況:"music",Cover:"cover"},g=Object.assign({"/src/posts/streaming_0000.md":h,"/src/posts/streaming_0001.md":b});function v(e){const t=e.match(/---[\r\n]+([\s\S]+?)[\r\n]+---/);return t?{meta:w.load(t[1])??{},body:e.slice(t[0].length)}:{meta:{},body:e}}function S(e){const t=e.match(/youtube\.com\/embed\/([A-Za-z0-9_-]{6,})/);return t?t[1]:null}function M(e){const t=[],n=e.split(/\r?\n/);let r=!1;for(const a of n){const s=a.trim();if(/時間軸/.test(s)&&s.startsWith("##")){r=!0;continue}if(r){if(s.startsWith("##"))break;const o=s.match(/^[-*]\s*(\d{1,2}:\d{2}:\d{2})\s+(.+?)\s*$/);o&&t.push({time:o[1],label:o[2]})}}return t}function T(e,t){const n=e.match(/https?:\/\/yutaii\.run\/v\/\d+/);return n?n[0]:t!=null?`https://yutaii.run/v/${t}`:null}function L(e){return(e??"").replace(/^【[^】]+】\s*/,"").trim()}function _(e){return/^\d:/.test(e)?`0${e}`:e}function x(e){let t=e.replace(/<iframe[\s\S]*?<\/iframe>/gi,"");return t=t.replace(/##[^\n]*時間軸[^\n]*\n([\s\S]*?)(?=\n##|\s*$)/g,""),t.trim()}function I(e){const t=(e??"").split(":").map(n=>parseInt(n,10)||0);return t.length===3?t[0]*3600+t[1]*60+t[2]:t.length===2?t[0]*60+t[1]:t[0]??0}const C=Object.entries(g).map(([e,t])=>{const{meta:n,body:r}=v(t),a=e.split("/").pop().replace(".md",""),s=a.match(/streaming_(\d+)/),o=s?parseInt(s[1],10):null,i=M(r),c=i[i.length-1],l=S(r),u=(n.tags??[]).map(p=>y[p]).filter(Boolean);return{id:o!=null?`v${o}`:a,vol:o,slug:o!=null?String(o):a,title:L(n.title),rawTitle:n.title??"",author:n.author,date:(n.date??"").replace(/-/g,"."),thumbnail:n.thumbnail,excerpt:n.excerpt,tags:u,duration:c?_(c.time):null,youtubeId:l,chapters:i,sourceUrl:T(r,o),bodyHtml:m.parse(x(r))}}),E=C.sort((e,t)=>e.date<t.date?1:e.date>t.date?-1:0),F=[{id:"all",enLabel:"ALL"},...f.map(e=>({id:e.id,enLabel:e.enLabel}))];function O(e){return E.find(t=>t.slug===e)}export{d as S,E as V,f as a,F as b,O as f,I as t};
+`,g=`---
+title: "【#遊戲】Vol. 908: 索尼克 英雄 Sonic Heroes #1"
+date: "2026-05-11"
+author: "悠太翼"
+thumbnail: "/images/posts/streamings/908.webp"
+tags: ["遊戲實況", "直播影片"]
+excerpt: "剛結束《Sonic Adventure 2: Battle》全成就的下禮拜，終於要進入索尼克遊戲主線系列的下一部作品《Sonic Heroes》。"
+duration: "1:31:27"
+---
+<iframe width="560" height="315" src="https://www.youtube.com/embed/VLSMehlXiJw?si=GGu9v7c1Mpq2EGfo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+剛結束《Sonic Adventure 2: Battle》全成就的下禮拜，終於要進入索尼克遊戲主線系列的下一部作品《Sonic Heroes》，一起來進入這款當年的神作吧！
+
+## 🛡️遊戲資訊🛡️
+- 索尼克 英雄: https://sonic.sega.jp/sonic_heroes/
+
+## 🛡️直播與影片連結🛡️
+- 原直播：[https://yutaii.run/v/908](https://yutaii.run/v/908)
+
+## 🛡️時間軸🛡️
+- 00:00:00 Opening
+- 00:07:43 開場
+- 00:08:20 索尼克英雄主題曲開唱！
+- 00:09:50 進入遊戲
+- 00:11:13 教學模式 (Tutorial) 開始
+- 00:21:00 故事模式 (Story Mode) 開始
+- 00:22:06 TEAM SONIC 第一關：Seaside Hill
+- 00:30:42 TEAM SONIC 第二關：Ocean Palace
+- 00:46:41 TEAM SONIC Special Stage Act 1
+- 00:47:35 TEAM SONIC Boss 戰：Egg Hawk
+- 00:50:25 TEAM SONIC 第三關：Grand Metropolis
+- 00:57:50 TEAM SONIC 第四關：Power Plant
+- 01:26:43 結尾
+- 01:28:26 Ending
+`,y=[{id:"game",label:"遊戲",enLabel:"GAME",color:"#EF4444"},{id:"code",label:"程式",enLabel:"CODE",color:"#F97316"},{id:"karaoke",label:"歌回",enLabel:"KARAOKE",color:"#3B82F6"},{id:"chat",label:"雜談",enLabel:"TALK",color:"#22C55E"},{id:"art",label:"繪圖",enLabel:"ART",color:"#F472B6"},{id:"3d",label:"3D",enLabel:"3D",color:"#2DD4BF"},{id:"music",label:"音樂",enLabel:"MUSIC",color:"#818CF8"}],f=[...y,{id:"cover",label:"Cover",enLabel:"COVER",color:"#D946EF"}],v={歌回實況:"karaoke",雜談實況:"chat",遊戲實況:"game",程式實況:"code",繪圖實況:"art","3D實況":"3d",音樂實況:"music",Cover:"cover"},S=Object.assign({"/src/posts/streaming_0000.md":d,"/src/posts/streaming_0001.md":b,"/src/posts/streaming_0908.md":g});function M(e){const t=e.match(/---[\r\n]+([\s\S]+?)[\r\n]+---/);return t?{meta:h.load(t[1])??{},body:e.slice(t[0].length)}:{meta:{},body:e}}function T(e){const t=e.match(/youtube\.com\/embed\/([A-Za-z0-9_-]{6,})/);return t?t[1]:null}function _(e){const t=[],n=e.split(/\r?\n/);let r=!1;for(const s of n){const a=s.trim();if(/時間軸/.test(a)&&a.startsWith("##")){r=!0;continue}if(r){if(a.startsWith("##"))break;const o=a.match(/^[-*]\s*(\d{1,2}:\d{2}:\d{2})\s+(.+?)\s*$/);o&&t.push({time:o[1],label:o[2]})}}return t}function E(e,t){const n=e.match(/https?:\/\/yutaii\.run\/v\/\d+/);return n?n[0]:t!=null?`https://yutaii.run/v/${t}`:null}function C(e){return(e??"").replace(/^【[^】]+】\s*/,"").trim()}function l(e){return/^\d:/.test(e)?`0${e}`:e}function O(e){let t=e.replace(/<iframe[\s\S]*?<\/iframe>/gi,"");return t=t.replace(/##[^\n]*時間軸[^\n]*\n([\s\S]*?)(?=\n##|\s*$)/g,""),t.trim()}function G(e){const t=(e??"").split(":").map(n=>parseInt(n,10)||0);return t.length===3?t[0]*3600+t[1]*60+t[2]:t.length===2?t[0]*60+t[1]:t[0]??0}const A=Object.entries(S).map(([e,t])=>{const{meta:n,body:r}=M(t),s=e.split("/").pop().replace(".md",""),a=s.match(/streaming_(\d+)/),o=a?parseInt(a[1],10):null,i=_(r),c=i[i.length-1],u=T(r),p=(n.tags??[]).map(m=>v[m]).filter(Boolean);return{id:o!=null?`v${o}`:s,vol:o,slug:o!=null?String(o):s,title:C(n.title),rawTitle:n.title??"",author:n.author,date:(n.date??"").replace(/-/g,"."),thumbnail:n.thumbnail,excerpt:n.excerpt,tags:p,duration:n.duration?l(n.duration):c?l(c.time):null,youtubeId:u,chapters:i,sourceUrl:E(r,o),bodyHtml:w.parse(O(r))}}),I=A.sort((e,t)=>e.date<t.date?1:e.date>t.date?-1:0),x=[{id:"all",enLabel:"ALL"},...f.map(e=>({id:e.id,enLabel:e.enLabel}))];function B(e){return I.find(t=>t.slug===e)}export{y as S,I as V,f as a,x as b,B as f,G as t};
