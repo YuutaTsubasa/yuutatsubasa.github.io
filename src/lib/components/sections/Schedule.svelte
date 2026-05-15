@@ -244,9 +244,10 @@
     border-color: var(--blue-bright);
     box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3), 0 6px 22px rgba(37, 99, 235, 0.18);
   }
-  .day.off { opacity: 0.55; }
-  .day.past { opacity: 0.65; }
-  .day.past.active { opacity: 1; }
+  /* 使用 filter: opacity() 而非 opacity，避免被 use:reveal 的 inline opacity 蓋掉 */
+  .day.off { filter: opacity(0.55); }
+  .day.past { filter: opacity(0.7); }
+  .day.past.active { filter: none; }
   .day-date {
     font-size: 10px;
     color: var(--silver-3);
