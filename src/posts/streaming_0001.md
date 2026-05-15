@@ -5,6 +5,7 @@ author: "悠太翼 feat. 貓耳未來"
 thumbnail: "/images/posts/streamings/1.webp"
 tags: ["遊戲實況", "活動合作", "直播影片"]
 excerpt: "與貓耳未來一起來玩雙人成行。"
+duration: "2:43:35"
 ---
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Bb5PbxXB7lQ?si=MbyrFGxSPVb-IRwJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 

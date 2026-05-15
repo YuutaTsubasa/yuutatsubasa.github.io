@@ -113,7 +113,7 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
     thumbnail: meta.thumbnail,
     excerpt: meta.excerpt,
     tags,
-    duration: lastChapter ? padDur(lastChapter.time) : null,
+    duration: meta.duration ? padDur(meta.duration) : (lastChapter ? padDur(lastChapter.time) : null),
     youtubeId,
     chapters,
     sourceUrl: extractSourceUrl(body, vol),

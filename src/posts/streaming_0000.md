@@ -5,6 +5,7 @@ author: "悠太翼"
 thumbnail: "/images/posts/streamings/0.webp"
 tags: ["歌回實況", "雜談實況", "直播影片"]
 excerpt: "初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）。"
+duration: "1:50:54"
 ---
 <iframe width="560" height="315" src="https://www.youtube.com/embed/zbyvgQOZu8E?si=P9MpdFVNvwLierrg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
