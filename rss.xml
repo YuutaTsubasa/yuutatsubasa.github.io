@@ -4,436 +4,233 @@
         <description><![CDATA[程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。]]></description>
         <link>https://yuuta-tsubasa.studio</link>
         <image>
-            <url>https://yuuta-tsubasa.studio/favicon.ico</url>
+            <url>https://yuuta-tsubasa.studio/android-chrome-512x512.png</url>
             <title>悠太翼官方網站</title>
             <link>https://yuuta-tsubasa.studio</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 15 May 2026 15:56:28 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 16 May 2026 08:24:02 GMT</lastBuildDate>
         <atom:link href="https://yuuta-tsubasa.studio/rss.xml" rel="self" type="application/rss+xml"/>
         <language><![CDATA[zh-TW]]></language>
         <item>
-            <title><![CDATA[【#遊戲】Vol. 908: 索尼克 英雄 Sonic Heroes #1]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/streamings/908.webp" alt="【#遊戲】Vol. 908: 索尼克 英雄 Sonic Heroes #1"></p><p><iframe width="560" height="315" src="https://www.youtube.com/embed/VLSMehlXiJw?si=GGu9v7c1Mpq2EGfo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<p>剛結束《Sonic Adventure 2: Battle》全成就的下禮拜，終於要進入索尼克遊戲主線系列的下一部作品《Sonic Heroes》，一起來進入這款當年的神作吧！</p>
-<h2>🛡️遊戲資訊🛡️</h2>
-<ul>
-<li>索尼克 英雄: <a href="https://sonic.sega.jp/sonic_heroes/">https://sonic.sega.jp/sonic_heroes/</a></li>
-</ul>
-<h2>🛡️直播與影片連結🛡️</h2>
-<ul>
-<li>原直播：<a href="https://yutaii.run/v/908">https://yutaii.run/v/908</a></li>
-</ul>
-<h2>🛡️時間軸🛡️</h2>
-<ul>
-<li>00:00:00 Opening</li>
-<li>00:07:43 開場</li>
-<li>00:08:20 索尼克英雄主題曲開唱！</li>
-<li>00:09:50 進入遊戲</li>
-<li>00:11:13 教學模式 (Tutorial) 開始</li>
-<li>00:21:00 故事模式 (Story Mode) 開始</li>
-<li>00:22:06 TEAM SONIC 第一關：Seaside Hill</li>
-<li>00:30:42 TEAM SONIC 第二關：Ocean Palace</li>
-<li>00:46:41 TEAM SONIC Special Stage Act 1</li>
-<li>00:47:35 TEAM SONIC Boss 戰：Egg Hawk</li>
-<li>00:50:25 TEAM SONIC 第三關：Grand Metropolis</li>
-<li>00:57:50 TEAM SONIC 第四關：Power Plant</li>
-<li>01:26:43 結尾</li>
-<li>01:28:26 Ending</li>
-</ul>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/streaming_0908</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/streaming_0908</guid>
+            <title><![CDATA[[ARCHIVE] Vol. 908: 索尼克 英雄 Sonic Heroes #1]]></title>
+            <description><![CDATA[<p><img src="https://img.youtube.com/vi/VLSMehlXiJw/maxresdefault.jpg" alt="Vol. 908: 索尼克 英雄 Sonic Heroes #1"></p><p>剛結束《Sonic Adventure 2: Battle》全成就的下禮拜，終於要進入索尼克遊戲主線系列的下一部作品《Sonic Heroes》。</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/archive/908</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/archive/908</guid>
+            <category><![CDATA[game]]></category>
             <dc:creator><![CDATA[悠太翼]]></dc:creator>
             <pubDate>Mon, 11 May 2026 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[悠然翼繪 by パンダ 2024/12/07]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_23.webp" alt="悠然翼繪 by パンダ 2024/12/07"></p><p><p>【パンダ】所辦的繪製活動的成果。</p>
-<p>感謝パンダ老師辦的活動，畫得超級美的！</p>
-<p>原推文：<a href="https://x.com/panda_no_pen/status/1867713658165637369">https://x.com/panda_no_pen/status/1867713658165637369</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_23</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_23</guid>
-            <dc:creator><![CDATA[パンダ]]></dc:creator>
-            <pubDate>Sat, 07 Dec 2024 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[Global Game Jam 素材 by 花枝丸 2024/01/27]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_22_1.webp" alt="Global Game Jam 素材 by 花枝丸 2024/01/27"></p><p><p><img src="/images/posts/fan_drawing_22_2.webp" alt="Global Game Jam 素材 by 花枝丸 2024/01/27"></p>
-<p><img src="/images/posts/fan_drawing_22_3.webp" alt="Global Game Jam 素材 by 花枝丸 2024/01/27"></p>
-<p>【花枝丸】繪製的 Global Game Jam 素材。</p>
-<p>感謝花枝丸老師在 Global Game Jam 時畫的我的素材，很帥氣！</p>
-<p>作者推特：<a href="https://twitter.com/huazhimaru0">https://twitter.com/huazhimaru0</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_22</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_22</guid>
-            <dc:creator><![CDATA[花枝丸]]></dc:creator>
-            <pubDate>Sat, 27 Jan 2024 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[快速週表產生器]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/quick_scheduler_tool.webp" alt="快速週表產生器"></p><p><p>本來是在探索是否可以用網頁技術來製作週表，做著做著就發現當中的內容可以開成參數讓大家填寫，這樣就可以做到客製化好用的週表，然後又發現可以用相同的參數去套用多個版型，因此就做成了一個可以套用多個不同版型的週表產生器。</p>
-<p>做完的時候其實覺得很酷，也加了三個版型進去，只是因為後來我從當初使用的 C# 轉換 Web 的技術，改成使用 Svelte 了，所以後續做的東西就要另外改寫才能塞進去，就沒再更新了，之後有機會應該要繼續更新一下。</p>
-<ul>
-<li>工具使用連結：<a href="https://quickscheduler.yuuta-tsubasa.studio/">https://quickscheduler.yuuta-tsubasa.studio/</a></li>
-<li>程式碼連結：<a href="https://github.com/yuutatsubasa/quickscheduler">YuutaTsubasa/QuickScheduler: A schedule maker for VTubers.</a></li>
-</ul>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/quick_scheduler_tool</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/quick_scheduler_tool</guid>
-            <dc:creator><![CDATA[悠太翼]]></dc:creator>
-            <pubDate>Fri, 14 Apr 2023 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 正太控かじ(ショタ) 2023/04/06]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_21.webp" alt="悠然翼繪 by 正太控かじ(ショタ) 2023/04/06"></p><p><p>【正太控かじ(ショタ)】繪製的粉絲繪。</p>
-<p>感謝正太控參加 3.0 新衣裝猜猜樂的活動，女僕加機甲的概念真的太強了！XD</p>
-<p>原推文：<a href="https://twitter.com/kajiyuti/status/1643647985035927552">https://twitter.com/kajiyuti/status/1643647985035927552</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_21</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_21</guid>
-            <dc:creator><![CDATA[正太控かじ(ショタ)]]></dc:creator>
-            <pubDate>Thu, 06 Apr 2023 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by Hunman360 2023/03/09]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_20_1.webp" alt="悠然翼繪 by Hunman360 2023/03/09"></p><p><p><img src="/images/posts/fan_drawing_20_2.webp" alt="悠然翼繪 by Hunman360 2023/03/09"></p>
-<p>【Hunman360】繪製的粉絲繪。</p>
-<p>感謝 Hunman 辦的活動，還畫了我的樣子在上面，真的很讚！</p>
-<p>原推文：<a href="https://twitter.com/man_hun_/status/1633691159292944384">https://twitter.com/man_hun_/status/1633691159292944384</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_20</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_20</guid>
-            <dc:creator><![CDATA[Hunman360]]></dc:creator>
-            <pubDate>Thu, 09 Mar 2023 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by CC 2022/09/05]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_19.webp" alt="悠然翼繪 by CC 2022/09/05"></p><p><p>【CC】繪製的粉絲繪。</p>
-<p>感謝 CC 畫的我，吃章魚燒的感覺好日常好讚！</p>
-<p>原推文：<a href="https://twitter.com/cctoo_ichigo/status/1566665947158417408">https://twitter.com/cctoo_ichigo/status/1566665947158417408</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_19</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_19</guid>
-            <dc:creator><![CDATA[CC]]></dc:creator>
-            <pubDate>Mon, 05 Sep 2022 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 正太控かじ(ショタ) 2022/07/17]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_18.webp" alt="悠然翼繪 by 正太控かじ(ショタ) 2022/07/17"></p><p><p>【正太控かじ(ショタ)】繪製的粉絲繪。</p>
-<p>感謝正太控的生日賀圖，不僅有 1.0 的盔甲，還順便附了 2.0 新衣服猜猜樂的圖，很讚！</p>
-<p>原推文：<a href="https://twitter.com/kajiyuti/status/1548382328132497409">https://twitter.com/kajiyuti/status/1548382328132497409</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_18</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_18</guid>
-            <dc:creator><![CDATA[正太控かじ(ショタ)]]></dc:creator>
-            <pubDate>Sun, 17 Jul 2022 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 陳昱謙 2022/04/29]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_17_1.webp" alt="悠然翼繪 by 陳昱謙 2022/04/29"></p><p><p><img src="/images/posts/fan_drawing_17_2.webp" alt="悠然翼繪 by 陳昱謙 2022/04/29"></p>
-<p>【陳昱謙】繪製的粉絲繪。</p>
-<p>感謝陳昱謙繪製的貓女僕的我，有一種可愛的奸詐感～XD</p>
-<p>原推文：<a href="https://twitter.com/yu_qian0918/status/1520009855423356928">https://twitter.com/yu_qian0918/status/1520009855423356928</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_17</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_17</guid>
-            <dc:creator><![CDATA[陳昱謙]]></dc:creator>
-            <pubDate>Fri, 29 Apr 2022 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 猫島羽依 2022/04/06]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_16.webp" alt="悠然翼繪 by 猫島羽依 2022/04/06"></p><p><p>【猫島羽依】繪製的粉絲繪。</p>
-<p>感謝猫島媽媽繪製的貓女僕版本的我，很害羞的可愛感！XD</p>
-<p>原推文：<a href="https://twitter.com/NekosimaYatai/status/1511394409115688960">https://twitter.com/NekosimaYatai/status/1511394409115688960</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_16</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_16</guid>
-            <dc:creator><![CDATA[猫島羽依]]></dc:creator>
-            <pubDate>Wed, 06 Apr 2022 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 陳昱謙 2022/04/04]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_15_1.webp" alt="悠然翼繪 by 陳昱謙 2022/04/04"></p><p><p><img src="/images/posts/fan_drawing_15_2.webp" alt="悠然翼繪 by 陳昱謙 2022/04/04"></p>
-<p><img src="/images/posts/fan_drawing_15_3.webp" alt="悠然翼繪 by 陳昱謙 2022/04/04"></p>
-<p>【陳昱謙】繪製的粉絲繪。</p>
-<p>感謝陳昱謙畫的我，有點可愛又有點帥氣的感覺。</p>
-<p>原推文：<a href="https://twitter.com/joachim0918/status/1510889292222009345">https://twitter.com/joachim0918/status/1510889292222009345</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_15</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_15</guid>
-            <dc:creator><![CDATA[陳昱謙]]></dc:creator>
-            <pubDate>Mon, 04 Apr 2022 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 诗婷 2022/01/21]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_14.webp" alt="悠然翼繪 by 诗婷 2022/01/21"></p><p><p>【诗婷】繪製的粉絲繪。</p>
-<p>感謝诗婷畫的我，很有一種小丑的感覺～XD</p>
-<p>原推文：<a href="https://twitter.com/0112_ting/status/1484211915727708160">https://twitter.com/0112_ting/status/1484211915727708160</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_14</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_14</guid>
-            <dc:creator><![CDATA[诗婷]]></dc:creator>
-            <pubDate>Fri, 21 Jan 2022 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 诗婷 2022/01/03]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_13.webp" alt="悠然翼繪 by 诗婷 2022/01/03"></p><p><p>【诗婷】繪製的粉絲繪。</p>
-<p>感謝诗婷畫的狐狸版本的我，這樣是不是就會變成跟 Tails 同個種族了呢～XD</p>
-<p>原推文：<a href="https://twitter.com/0112_ting/status/1477995240870932480">https://twitter.com/0112_ting/status/1477995240870932480</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_13</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_13</guid>
-            <dc:creator><![CDATA[诗婷]]></dc:creator>
-            <pubDate>Mon, 03 Jan 2022 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by きつね皓 2021/12/21]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_12.webp" alt="悠然翼繪 by きつね皓 2021/12/21"></p><p><p>【きつね皓】繪製的粉絲繪。</p>
-<p>感謝きつね皓的 700 訂閱加上聖誕賀圖，聖誕裝很可愛，還有一隻可愛的馴鹿在旁邊，看起來很像我要去送禮物給大家了！XD</p>
-<p>原推文：<a href="https://twitter.com/sUKFXoaNtGPbXPK/status/1473207751753203716">https://twitter.com/sUKFXoaNtGPbXPK/status/1473207751753203716</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_12</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_12</guid>
-            <dc:creator><![CDATA[きつね皓]]></dc:creator>
-            <pubDate>Tue, 21 Dec 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by Akane kun 2021/11/30]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_11.webp" alt="悠然翼繪 by Akane kun 2021/11/30"></p><p><p>【Akane kun】繪製的粉絲繪。</p>
-<p>感謝 Akane kun 畫的穿另外一套衣服的我，很帥氣！</p>
-<p>原推文：<a href="https://twitter.com/time_akane/status/1465587786409385990">https://twitter.com/time_akane/status/1465587786409385990</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_11</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_11</guid>
-            <dc:creator><![CDATA[Akane kun]]></dc:creator>
-            <pubDate>Tue, 30 Nov 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 鬆笥脆 2021/11/28]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_10.webp" alt="悠然翼繪 by 鬆笥脆 2021/11/28"></p><p><p>【鬆笥脆】繪製的粉絲繪。</p>
-<p>感謝鬆笥脆繪製的我，拿著劍有一種可愛又帥氣的感覺～XD</p>
-<p>原推文：<a href="https://twitter.com/songsicui/status/1464983355317915648">https://twitter.com/songsicui/status/1464983355317915648</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_10</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_10</guid>
-            <dc:creator><![CDATA[鬆笥脆]]></dc:creator>
-            <pubDate>Sun, 28 Nov 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by きつね皓 2021/11/04]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_09.webp" alt="悠然翼繪 by きつね皓 2021/11/04"></p><p><p>【きつね皓】繪製的粉絲繪。</p>
-<p>感謝きつね皓的 600 訂閱的慶祝賀圖，感覺好像養了一頭三頭犬一樣～XD</p>
-<p>原推文：<a href="https://twitter.com/sUKFXoaNtGPbXPK/status/1456175676722008071">https://twitter.com/sUKFXoaNtGPbXPK/status/1456175676722008071</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_09</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_09</guid>
-            <dc:creator><![CDATA[きつね皓]]></dc:creator>
-            <pubDate>Thu, 04 Nov 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 篁 2021/10/08]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_07.webp" alt="悠然翼繪 by 篁 2021/10/08"></p><p><p>【篁】繪製的粉絲繪。</p>
-<p>感謝篁老師畫的 Q 版圖，真的很可愛！</p>
-<p>原推文：<a href="https://twitter.com/sss094dog/status/1446166142691647498">https://twitter.com/sss094dog/status/1446166142691647498</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_07</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_07</guid>
-            <dc:creator><![CDATA[篁]]></dc:creator>
-            <pubDate>Fri, 08 Oct 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by CC 2021/10/08]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_08.webp" alt="悠然翼繪 by CC 2021/10/08"></p><p><p>【CC】繪製的粉絲繪。</p>
-<p>感謝 CC 畫的我，擺兔耳的動作真的很可愛！</p>
-<p>原推文：<a href="https://twitter.com/etcelebi/status/1446350461469020162">https://twitter.com/etcelebi/status/1446350461469020162</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_08</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_08</guid>
-            <dc:creator><![CDATA[CC]]></dc:creator>
-            <pubDate>Fri, 08 Oct 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 騎士奧蒂斯 2021/09/23]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_06.webp" alt="悠然翼繪 by 騎士奧蒂斯 2021/09/23"></p><p><p>【騎士奧蒂斯】繪製的粉絲繪。</p>
-<p>感謝騎士奧蒂斯祝賀我 1600 跟隨，非常感謝！</p>
-<p>原推文：<a href="https://twitter.com/KnightsOtis/status/1440762973635575808">https://twitter.com/KnightsOtis/status/1440762973635575808</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_06</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_06</guid>
-            <dc:creator><![CDATA[騎士奧蒂斯]]></dc:creator>
-            <pubDate>Thu, 23 Sep 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[【#遊戲】Vol. 1: 雙人成行 #01 feat. 貓耳未來]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/streamings/1.webp" alt="【#遊戲】Vol. 1: 雙人成行 #01 feat. 貓耳未來"></p><p><iframe width="560" height="315" src="https://www.youtube.com/embed/Bb5PbxXB7lQ?si=MbyrFGxSPVb-IRwJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<p>這是我與貓耳未來首次合作的遊戲實況。我們選擇了《雙人成行》這款遊戲，但在遊玩過程中發現我的電腦配置不足，導致遊戲經常出現卡頓。為了改善這個問題，事後我在下次合作直播前趕緊去原價屋買了一台新的電腦。</p>
-<h2>🛡️遊戲資訊🛡️</h2>
-<ul>
-<li>雙人成行: <a href="https://store.steampowered.com/app/1426210/_/?l=tchinese">https://store.steampowered.com/app/1426210/_/?l=tchinese</a></li>
-</ul>
-<h2>🛡️連動夥伴🛡️</h2>
-<ul>
-<li>☆ Nekomix Ch. 貓耳未來 ☆<ul>
-<li>➥Twitter: <a href="https://x.com/NekomixNx">https://x.com/NekomixNx</a></li>
-<li>➥Youtube: <a href="https://www.youtube.com/channel/UCJyUJuz8L-mu1Ted8W-QR_Q">https://www.youtube.com/channel/UCJyUJuz8L-mu1Ted8W-QR_Q</a></li>
-<li>➥貓耳側的實況: <a href="https://youtu.be/XC1ffeKncHM">https://youtu.be/XC1ffeKncHM</a></li>
-</ul>
-</li>
-</ul>
-<h2>🛡️直播與影片連結🛡️</h2>
-<ul>
-<li>原直播：<a href="https://yutaii.run/v/1">https://yutaii.run/v/1</a></li>
-</ul>
-<h2>🛡️時間軸🛡️</h2>
-<ul>
-<li>00:00:00 Opening</li>
-<li>00:07:23 開場 (1)</li>
-<li>00:09:58 開場 (2) - 與貓耳未來嘗試連線</li>
-<li>00:20:11 遊戲開場影片</li>
-<li>00:21:40 第一章 小棚屋：當頭幫喝</li>
-<li>00:36:09 第一章 小棚屋：吸食灰塵</li>
-<li>00:56:36 BOSS 戰：吸塵塔</li>
-<li>01:01:19 第一章 小棚屋：深淵 (1)</li>
-<li>01:11:00 小遊戲：敲打科迪</li>
-<li>01:14:38 第一章 小棚屋：深淵 (2)</li>
-<li>01:16:52 小遊戲：翻轉開關</li>
-<li>01:18:02 第一章 小棚屋：深淵 (3)</li>
-<li>01:35:38 第一章 小棚屋：接通電源</li>
-<li>01:42:03 第二章 大樹：新鮮空氣</li>
-<li>01:49:23 第二章 大樹：捕獲俘虜 (1)</li>
-<li>02:19:14 小遊戲：拔河</li>
-<li>02:20:02 第二章 大樹：捕獲俘虜 (2)</li>
-<li>02:24:22 BOSS 戰：盾牌黃蜂</li>
-<li>02:26:26 第二章 大樹：根深蒂固 (1)</li>
-<li>02:30:11 BOSS 戰：砲擊黃蜂</li>
-<li>02:32:14 第二章 大樹：根深蒂固 (2)</li>
-<li>02:40:18 結尾</li>
-<li>02:42:51 Ending</li>
-</ul>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/streaming_0001</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/streaming_0001</guid>
+            <title><![CDATA[[ARCHIVE] Vol. 1: 雙人成行 #01 feat. 貓耳未來]]></title>
+            <description><![CDATA[<p><img src="https://img.youtube.com/vi/Bb5PbxXB7lQ/maxresdefault.jpg" alt="Vol. 1: 雙人成行 #01 feat. 貓耳未來"></p><p>與貓耳未來一起來玩雙人成行。</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/archive/1</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/archive/1</guid>
+            <category><![CDATA[game]]></category>
             <dc:creator><![CDATA[悠太翼 feat. 貓耳未來]]></dc:creator>
             <pubDate>Mon, 02 Aug 2021 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[悠然翼繪 by 拉德 2021/07/31]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_04.webp" alt="悠然翼繪 by 拉德 2021/07/31"></p><p><p>【拉德】繪製的粉絲繪。</p>
-<p>感謝拉德老師祝賀我初配信成功，這張圖真的好可愛！</p>
-<p>作者推特：<a href="https://x.com/rabbitlader">https://x.com/rabbitlader</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_04</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_04</guid>
-            <dc:creator><![CDATA[拉德]]></dc:creator>
-            <pubDate>Sat, 31 Jul 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[悠然翼繪 by 肥羊皮 2021/07/31]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_05.webp" alt="悠然翼繪 by 肥羊皮 2021/07/31"></p><p><p>【肥羊皮】繪製的粉絲繪。</p>
-<p>感謝肥羊皮老師畫的我，真的超級帥氣！</p>
-<p>原推文：<a href="https://x.com/FatYappy/status/1421320280073330694">https://x.com/FatYappy/status/1421320280073330694</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_05</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_05</guid>
-            <dc:creator><![CDATA[肥羊皮]]></dc:creator>
-            <pubDate>Sat, 31 Jul 2021 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[【#歌回/#雜談】Vol. 0: 初配信，來做點自我介紹吧！]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/streamings/0.webp" alt="【#歌回/#雜談】Vol. 0: 初配信，來做點自我介紹吧！"></p><p><iframe width="560" height="315" src="https://www.youtube.com/embed/zbyvgQOZu8E?si=P9MpdFVNvwLierrg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<p>初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）。</p>
-<h2>🛡️直播與影片連結🛡️</h2>
-<ul>
-<li>原直播：<a href="https://yutaii.run/v/0">https://yutaii.run/v/0</a></li>
-<li>Shorts：【#shorts】初配信唱「不毛!」唱到快掛了！？(2021/07/31)：<a href="https://www.youtube.com/shorts/33PJMhkLOnk">https://www.youtube.com/shorts/33PJMhkLOnk</a></li>
-</ul>
-<h2>🛡️時間軸🛡️</h2>
-<ul>
-<li>00:00:00 Opening</li>
-<li>00:05:19 開場</li>
-<li>00:12:05 自我介紹 (1) - 基本介紹</li>
-<li>00:20:20 自我介紹 (2) - 實況時程</li>
-<li>00:22:18 自我介紹 (3) - Staff</li>
-<li>00:27:00 自我介紹 (4) - 實況相關的 Tag</li>
-<li>00:29:25 自我介紹 (5) - 未來規劃</li>
-<li>00:32:30 自我介紹 (6) - 第一次連動介紹</li>
-<li>00:32:55 自我介紹 (7) - 社群介紹</li>
-<li>00:36:13 模型展示</li>
-<li>00:41:12 歌回時間</li>
-<li>00:43:41 歌回時間 (1) - KING</li>
-<li>00:46:40 歌回時間 (2) - Bad Apple!</li>
-<li>00:50:52 歌回時間 (3) - ベノム</li>
-<li>00:55:34 歌回時間 (4) - 不毛!</li>
-<li>01:03:08 歌回時間 (5) - 歡喜就好</li>
-<li>01:07:12 歌回時間 (6) - 共感覚おばけ</li>
-<li>01:11:50 歌回時間 (7) - 踊</li>
-<li>01:15:58 歌回時間 (8) - シャルル</li>
-<li>01:21:36 棉花糖時間 (1) - 人設很可愛、唱歌也好聽 期待初配信 加油💪</li>
-<li>01:23:25 棉花糖時間 (2) - 平常有在D哪些v呢？？？</li>
-<li>01:32:56 棉花糖時間 (3) - 有宿命之敵嗎</li>
-<li>01:35:04 棉花糖時間 (4) - 第一次看到職業是程式設計師的V...</li>
-<li>01:37:12 棉花糖時間 (5) - 藍翼明決定了嗎？</li>
-<li>01:37:50 棉花糖時間 (6) - 悠太平常穿盔甲會很熱嗎?...</li>
-<li>01:39:11 棉花糖時間 (7) - 經過了這麼多月的努力終於迎來初配信了，期待之後悠太的直播...</li>
-<li>01:41:01 棉花糖時間 (8) - 初配信加油悠太翼！</li>
-<li>01:42:10 棉花糖時間 (9) - 鎧甲應該有訂到合身的尺寸了吧ww...</li>
-<li>01:44:04 棉花糖時間 (10) - 自己做網站也太猛了吧!</li>
-<li>01:46:41 結尾</li>
-<li>01:49:55 Ending</li>
-</ul>
-<h2>🛡️音源來源🛡️</h2>
-<ol>
-<li>KING: <a href="https://www.youtube.com/watch?v=LMQIlMbC4N8&t=0s">https://www.youtube.com/watch?v=LMQIlMbC4N8&amp;t=0s</a></li>
-<li>Bad Apple!: <a href="https://www.youtube.com/watch?v=GfTNCUG-7U8&t=0s">https://www.youtube.com/watch?v=GfTNCUG-7U8&amp;t=0s</a></li>
-<li>ベノム: <a href="https://www.youtube.com/watch?v=duvJFyF3fGI&t=0s">https://www.youtube.com/watch?v=duvJFyF3fGI&amp;t=0s</a></li>
-<li>不毛!: <a href="https://piapro.jp/t/Tbxe">https://piapro.jp/t/Tbxe</a></li>
-<li>歡喜就好: <a href="https://www.youtube.com/watch?v=G5izg5SHmbU&t=0s">https://www.youtube.com/watch?v=G5izg5SHmbU&amp;t=0s</a></li>
-<li>共感覚おばけ: <a href="https://www.youtube.com/watch?v=ocMGqYM8i5M&t=0s">https://www.youtube.com/watch?v=ocMGqYM8i5M&amp;t=0s</a>  </li>
-<li>踊: <a href="https://www.youtube.com/watch?v=Rg7yCnB7Zfo&t=0s">https://www.youtube.com/watch?v=Rg7yCnB7Zfo&amp;t=0s</a></li>
-<li>シャルル: <a href="https://www.youtube.com/watch?v=x7WQMdUP9Ko&t=0s">https://www.youtube.com/watch?v=x7WQMdUP9Ko&amp;t=0s</a></li>
-</ol>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/streaming_0000</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/streaming_0000</guid>
+            <title><![CDATA[[ARCHIVE] Vol. 0: 初配信，來做點自我介紹吧！]]></title>
+            <description><![CDATA[<p><img src="https://img.youtube.com/vi/zbyvgQOZu8E/maxresdefault.jpg" alt="Vol. 0: 初配信，來做點自我介紹吧！"></p><p>初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）。</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/archive/0</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/archive/0</guid>
+            <category><![CDATA[karaoke]]></category>
+            <category><![CDATA[chat]]></category>
             <dc:creator><![CDATA[悠太翼]]></dc:creator>
             <pubDate>Sat, 31 Jul 2021 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[悠然翼繪 by 泡芙 2021/06/27]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_03.gif" alt="悠然翼繪 by 泡芙 2021/06/27"></p><p><p>【泡芙】所辦的繪製活動的成果。</p>
-<p>泡芙老師當時畫了一些大家腦袋運作中的動圖，就開了一個活動讓大家可以免費參加，我剛好被抽到就有了這個動畫。</p>
-<p>因為真的很好看，所以我就拿來當成實況時預備中的動畫了。</p>
-<p>原推文：<a href="https://x.com/noodle890812/status/1409024673619214342">https://x.com/noodle890812/status/1409024673619214342</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_03</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_03</guid>
+            <title><![CDATA[[PROJECT] 快速週表產生器]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/quick_scheduler_tool.webp" alt="快速週表產生器"></p><p>一個可以填寫完資料後就可以直接套用多個不同版型的週表產生工具。</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/log/quickscheduler</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/log/quickscheduler</guid>
+            <category><![CDATA[VTuber 工具]]></category>
+            <category><![CDATA[Web App]]></category>
+            <dc:creator><![CDATA[悠太翼]]></dc:creator>
+            <pubDate>Fri, 14 Apr 2023 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by パンダ 2024/12/07]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_23.webp" alt="悠然翼繪 by パンダ 2024/12/07"></p><p>【パンダ】所辦的繪製活動的成果。</p><p>繪師：パンダ</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/23</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/23</guid>
+            <dc:creator><![CDATA[パンダ]]></dc:creator>
+            <pubDate>Sat, 07 Dec 2024 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] Global Game Jam 素材 by 花枝丸 2024/01/27]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_22_1.webp" alt="Global Game Jam 素材 by 花枝丸 2024/01/27"></p><p>【花枝丸】繪製的 Global Game Jam 素材</p><p>繪師：花枝丸</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/22</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/22</guid>
+            <dc:creator><![CDATA[花枝丸]]></dc:creator>
+            <pubDate>Sat, 27 Jan 2024 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 正太控かじ(ショタ) 2023/04/06]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_21.webp" alt="悠然翼繪 by 正太控かじ(ショタ) 2023/04/06"></p><p>【正太控かじ(ショタ)】繪製的粉絲繪</p><p>繪師：正太控かじ(ショタ)</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/21</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/21</guid>
+            <dc:creator><![CDATA[正太控かじ(ショタ)]]></dc:creator>
+            <pubDate>Thu, 06 Apr 2023 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by Hunman360 2023/03/09]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_20_1.webp" alt="悠然翼繪 by Hunman360 2023/03/09"></p><p>【Hunman360】繪製的粉絲繪</p><p>繪師：Hunman360</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/20</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/20</guid>
+            <dc:creator><![CDATA[Hunman360]]></dc:creator>
+            <pubDate>Thu, 09 Mar 2023 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by CC 2022/09/05]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_19.webp" alt="悠然翼繪 by CC 2022/09/05"></p><p>【CC】繪製的粉絲繪</p><p>繪師：CC</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/19</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/19</guid>
+            <dc:creator><![CDATA[CC]]></dc:creator>
+            <pubDate>Mon, 05 Sep 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 正太控かじ(ショタ) 2022/07/17]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_18.webp" alt="悠然翼繪 by 正太控かじ(ショタ) 2022/07/17"></p><p>【正太控かじ(ショタ)】繪製的粉絲繪</p><p>繪師：正太控かじ(ショタ)</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/18</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/18</guid>
+            <dc:creator><![CDATA[正太控かじ(ショタ)]]></dc:creator>
+            <pubDate>Sun, 17 Jul 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 陳昱謙 2022/04/29]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_17_1.webp" alt="悠然翼繪 by 陳昱謙 2022/04/29"></p><p>【陳昱謙】繪製的粉絲繪</p><p>繪師：陳昱謙</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/17</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/17</guid>
+            <dc:creator><![CDATA[陳昱謙]]></dc:creator>
+            <pubDate>Fri, 29 Apr 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 猫島羽依 2022/04/06]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_16.webp" alt="悠然翼繪 by 猫島羽依 2022/04/06"></p><p>【猫島羽依】繪製的粉絲繪</p><p>繪師：猫島羽依</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/16</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/16</guid>
+            <dc:creator><![CDATA[猫島羽依]]></dc:creator>
+            <pubDate>Wed, 06 Apr 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 陳昱謙 2022/04/04]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_15_1.webp" alt="悠然翼繪 by 陳昱謙 2022/04/04"></p><p>【陳昱謙】繪製的粉絲繪</p><p>繪師：陳昱謙</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/15</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/15</guid>
+            <dc:creator><![CDATA[陳昱謙]]></dc:creator>
+            <pubDate>Mon, 04 Apr 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 诗婷 2022/01/21]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_14.webp" alt="悠然翼繪 by 诗婷 2022/01/21"></p><p>【诗婷】繪製的粉絲繪</p><p>繪師：诗婷</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/14</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/14</guid>
+            <dc:creator><![CDATA[诗婷]]></dc:creator>
+            <pubDate>Fri, 21 Jan 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 诗婷 2022/01/03]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_13.webp" alt="悠然翼繪 by 诗婷 2022/01/03"></p><p>【诗婷】繪製的粉絲繪</p><p>繪師：诗婷</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/13</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/13</guid>
+            <dc:creator><![CDATA[诗婷]]></dc:creator>
+            <pubDate>Mon, 03 Jan 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by きつね皓 2021/12/21]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_12.webp" alt="悠然翼繪 by きつね皓 2021/12/21"></p><p>【きつね皓】繪製的粉絲繪</p><p>繪師：きつね皓</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/12</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/12</guid>
+            <dc:creator><![CDATA[きつね皓]]></dc:creator>
+            <pubDate>Tue, 21 Dec 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by Akane kun 2021/11/30]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_11.webp" alt="悠然翼繪 by Akane kun 2021/11/30"></p><p>【Akane kun】繪製的粉絲繪</p><p>繪師：Akane kun</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/11</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/11</guid>
+            <dc:creator><![CDATA[Akane kun]]></dc:creator>
+            <pubDate>Tue, 30 Nov 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 鬆笥脆 2021/11/28]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_10.webp" alt="悠然翼繪 by 鬆笥脆 2021/11/28"></p><p>【鬆笥脆】繪製的粉絲繪</p><p>繪師：鬆笥脆</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/10</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/10</guid>
+            <dc:creator><![CDATA[鬆笥脆]]></dc:creator>
+            <pubDate>Sun, 28 Nov 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by きつね皓 2021/11/04]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_09.webp" alt="悠然翼繪 by きつね皓 2021/11/04"></p><p>【きつね皓】繪製的粉絲繪</p><p>繪師：きつね皓</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/9</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/9</guid>
+            <dc:creator><![CDATA[きつね皓]]></dc:creator>
+            <pubDate>Thu, 04 Nov 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 篁 2021/10/08]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_07.webp" alt="悠然翼繪 by 篁 2021/10/08"></p><p>【篁】繪製的粉絲繪</p><p>繪師：篁</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/7</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/7</guid>
+            <dc:creator><![CDATA[篁]]></dc:creator>
+            <pubDate>Fri, 08 Oct 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by CC 2021/10/08]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_08.webp" alt="悠然翼繪 by CC 2021/10/08"></p><p>【CC】繪製的粉絲繪</p><p>繪師：CC</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/8</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/8</guid>
+            <dc:creator><![CDATA[CC]]></dc:creator>
+            <pubDate>Fri, 08 Oct 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 騎士奧蒂斯 2021/09/23]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_06.webp" alt="悠然翼繪 by 騎士奧蒂斯 2021/09/23"></p><p>【騎士奧蒂斯】繪製的粉絲繪</p><p>繪師：騎士奧蒂斯</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/6</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/6</guid>
+            <dc:creator><![CDATA[騎士奧蒂斯]]></dc:creator>
+            <pubDate>Thu, 23 Sep 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 拉德 2021/07/31]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_04.webp" alt="悠然翼繪 by 拉德 2021/07/31"></p><p>【拉德】繪製的粉絲繪。</p><p>繪師：拉德</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/4</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/4</guid>
+            <dc:creator><![CDATA[拉德]]></dc:creator>
+            <pubDate>Sat, 31 Jul 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 肥羊皮 2021/07/31]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_05.webp" alt="悠然翼繪 by 肥羊皮 2021/07/31"></p><p>【肥羊皮】繪製的粉絲繪。</p><p>繪師：肥羊皮</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/5</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/5</guid>
+            <dc:creator><![CDATA[肥羊皮]]></dc:creator>
+            <pubDate>Sat, 31 Jul 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 泡芙 2021/06/27]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_03.gif" alt="悠然翼繪 by 泡芙 2021/06/27"></p><p>【泡芙】所辦的繪製活動的成果。</p><p>繪師：泡芙</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/3</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/3</guid>
             <dc:creator><![CDATA[泡芙]]></dc:creator>
             <pubDate>Sun, 27 Jun 2021 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[悠然翼繪 by Zavir Wani（鱷魚） 2021/06/22]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_02.webp" alt="悠然翼繪 by Zavir Wani（鱷魚） 2021/06/22"></p><p><p>【Zavir Wani（鱷魚）】繪製的粉絲繪。</p>
-<p>鱷魚老師把我畫得好開朗呀！突然覺得好陽光！正向、積極、有活力！</p>
-<p>原推文：<a href="https://x.com/WaniVtuber/status/1407118929156182018">https://x.com/WaniVtuber/status/1407118929156182018</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_02</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_02</guid>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by Zavir Wani（鱷魚） 2021/06/22]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_02.webp" alt="悠然翼繪 by Zavir Wani（鱷魚） 2021/06/22"></p><p>【Zavir Wani（鱷魚）】繪製的粉絲繪。</p><p>繪師：Zavir Wani（鱷魚）</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/2</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/2</guid>
             <dc:creator><![CDATA[Zavir Wani（鱷魚）]]></dc:creator>
             <pubDate>Tue, 22 Jun 2021 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[悠然翼繪 by 诗婷 2021/06/14]]></title>
-            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_01.webp" alt="悠然翼繪 by 诗婷 2021/06/14"></p><p><p>【诗婷】繪製的粉絲繪。</p>
-<p>感覺是在咬著小籠包的我，也感覺好像其實是在咬著枕頭之類的東西～XD</p>
-<p>原推文：<a href="https://x.com/0112_ting/status/1404275813692760066">https://x.com/0112_ting/status/1404275813692760066</a></p>
-</p>]]></description>
-            <link>https://yuuta-tsubasa.studio/post/fan_drawing_01</link>
-            <guid isPermaLink="true">https://yuuta-tsubasa.studio/post/fan_drawing_01</guid>
+            <title><![CDATA[[GALLERY] 悠然翼繪 by 诗婷 2021/06/14]]></title>
+            <description><![CDATA[<p><img src="https://yuuta-tsubasa.studio/images/posts/fan_drawing_01.webp" alt="悠然翼繪 by 诗婷 2021/06/14"></p><p>【诗婷】繪製的粉絲繪。</p><p>繪師：诗婷</p>]]></description>
+            <link>https://yuuta-tsubasa.studio/gallery/1</link>
+            <guid isPermaLink="true">https://yuuta-tsubasa.studio/gallery/1</guid>
             <dc:creator><![CDATA[诗婷]]></dc:creator>
             <pubDate>Mon, 14 Jun 2021 00:00:00 GMT</pubDate>
         </item>

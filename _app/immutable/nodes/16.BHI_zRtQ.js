@@ -1,0 +1,1 @@
+import{s as n}from"../chunks/scheduler.DLUWEVah.js";import{S as e,i as s}from"../chunks/index.D_YC2x6c.js";function a(o){return window.location.href=`/posts/tag/${encodeURIComponent(tag)}/1`,[]}class c extends e{constructor(t){super(),s(this,t,a,null,n,{})}}export{c as component};
