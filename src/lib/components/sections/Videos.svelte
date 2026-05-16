@@ -16,10 +16,10 @@
 <section id="videos" class="videos" data-screen-label="04 Videos">
   <div class="wrap">
     <SectionHead
-      num="03 / 06"
+      id="videos"
       en="ARCHIVE"
       zh="影片庫"
-      deco={`COUNT :: ${VIDEOS.length} ENTRIES\nFILTER :: ${VIDEO_FILTERS.find((f) => f.id === $archiveHomeFilter)?.enLabel ?? 'ALL'}\nUPDATED :: 2026.04.28`}
+      deco={`COUNT :: ${VIDEOS.length} ENTRIES\nFILTER :: ${VIDEO_FILTERS.find((f) => f.id === $archiveHomeFilter)?.enLabel ?? 'ALL'}\nUPDATED :: ${VIDEOS[0]?.date ?? '—'}`}
     />
 
     <div class="tabs">

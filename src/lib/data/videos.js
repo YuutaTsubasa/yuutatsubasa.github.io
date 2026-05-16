@@ -1,5 +1,4 @@
 import yaml from 'js-yaml';
-import { marked } from 'marked';
 import { STREAM_TAGS } from './streamTags.js';
 
 // ARCHIVE 額外標籤：COVER（歌曲翻唱影片）。
@@ -117,7 +116,7 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
     youtubeId,
     chapters,
     sourceUrl: extractSourceUrl(body, vol),
-    bodyHtml: marked.parse(cleanBodyForDisplay(body))
+    bodyRaw: cleanBodyForDisplay(body)
   };
 });
 

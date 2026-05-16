@@ -31,7 +31,7 @@ yuuta.Topics
 <section id="about" class="about" data-screen-label="02 About">
   <div class="wrap">
     <SectionHead
-      num="01 / 06"
+      id="about"
       en="PROFILE"
       zh="騎士檔案"
       deco={`DOSSIER ID :: YUTAII-00\nCLEARANCE :: PUBLIC\nLAST SYNC :: ${lastSync}`}
@@ -47,7 +47,13 @@ yuuta.Topics
         <Panel padding={32} glow minHeight={520}>
           <div class="mono caption">// FIG.A — KEY VISUAL</div>
           <div class="figure">
-            <img src="/images/yuuta-figure-1.webp" alt="悠太翼 V5.0 預先立繪" />
+            <img
+              src="/images/yuuta-figure-1-1280.webp"
+              srcset="/images/yuuta-figure-1-1280.webp 1280w, /images/yuuta-figure-1-1920.webp 1920w"
+              sizes="(max-width: 1100px) calc(100vw - 40px), 600px"
+              alt="悠太翼 V5.0 預先立繪"
+              loading="lazy"
+            />
             <div class="scan-overlay" aria-hidden></div>
           </div>
           <div class="meta mono">

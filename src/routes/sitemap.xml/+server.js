@@ -2,6 +2,7 @@ import { SitemapStream, streamToPromise } from 'sitemap';
 import { loadPosts } from '$lib/utils/loadPosts';
 import { VIDEOS } from '$lib/data/videos.js';
 import { GALLERY } from '$lib/data/gallery.js';
+import { LOG_ENTRIES } from '$lib/data/log.js';
 
 export const prerender = true;
 
@@ -12,6 +13,7 @@ export async function GET() {
   sitemap.write({ url: '/',        changefreq: 'weekly',  priority: 1.0 });
   sitemap.write({ url: '/archive', changefreq: 'weekly',  priority: 0.9 });
   sitemap.write({ url: '/gallery', changefreq: 'weekly',  priority: 0.9 });
+  sitemap.write({ url: '/log',     changefreq: 'weekly',  priority: 0.9 });
 
   // RSS / 舊文章列表（過渡）
   sitemap.write({ url: '/rss.xml', changefreq: 'weekly',  priority: 0.5 });
@@ -24,6 +26,16 @@ export async function GET() {
       changefreq: 'monthly',
       priority: 0.7,
       lastmod: v.date ? v.date.replace(/\./g, '-') : undefined
+    });
+  });
+
+  // Log 詳情頁（作品 / 心得 / LeetCode 等）
+  LOG_ENTRIES.forEach((e) => {
+    sitemap.write({
+      url: `/log/${e.slug}`,
+      changefreq: 'monthly',
+      priority: 0.7,
+      lastmod: e.date ? e.date.replace(/\./g, '-') : undefined
     });
   });
 

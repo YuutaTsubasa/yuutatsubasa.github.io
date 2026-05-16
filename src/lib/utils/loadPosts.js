@@ -6,6 +6,8 @@ export async function loadPosts() {
   let allPosts = [];
 
   for (const path in postFiles) {
+    // 新內容類型（log_*）有獨立路由，不要再被舊 /post/ legacy 撈到避免重複
+    if (/\/log_[^/]+\.md$/.test(path)) continue;
     const postContent = await postFiles[path]();
     const yamlMatch = postContent.match(/---[\r\n]+([\s\S]+?)[\r\n]+---/);
 

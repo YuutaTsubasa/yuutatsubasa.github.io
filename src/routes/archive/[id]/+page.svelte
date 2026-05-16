@@ -1,5 +1,6 @@
 <script>
   import { page } from '$app/stores';
+  import { marked } from 'marked';
   import { VIDEOS, VIDEO_TAGS, findVideo, timeToSeconds } from '$lib/data/videos.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
@@ -105,7 +106,7 @@
   <Seo title="ARCHIVE · 悠太翼 YUUTA TSUBASA" />
 {/if}
 
-<section class="detail">
+<section id="main" class="detail">
   <div class="wrap">
     {#if !video}
       <div class="not-found">
@@ -234,7 +235,7 @@
       </div>
 
       <!-- briefing -->
-      {#if video.bodyHtml}
+      {#if video.bodyRaw}
         <div class="briefing" use:reveal={{ delay: 80 }}>
           <Corners />
           <div class="brief-head">
@@ -243,7 +244,7 @@
             <span class="tech bh-sub">DOSSIER NOTE ／ MARKDOWN</span>
           </div>
           <div class="brief-body">
-            {@html video.bodyHtml}
+            {@html marked.parse(video.bodyRaw)}
           </div>
         </div>
       {/if}

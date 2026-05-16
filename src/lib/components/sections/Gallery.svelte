@@ -28,7 +28,7 @@
 <section id="gallery" class="gallery" data-screen-label="06 Gallery">
   <div class="wrap">
     <SectionHead
-      num="05 / 06"
+      id="gallery"
       en="GALLERY"
       zh="繪圖收藏"
       deco={`ARTWORKS :: ${GALLERY.length}\nLAST UPDATE :: ${lastUpdate}\nALL CREDITS RESERVED`}

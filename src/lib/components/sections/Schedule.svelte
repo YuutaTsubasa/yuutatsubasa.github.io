@@ -97,7 +97,7 @@
 <section id="schedule" class="schedule" data-screen-label="03 Schedule">
   <div class="wrap">
     <SectionHead
-      num="02 / 06"
+      id="schedule"
       en="SCHEDULE"
       zh="直播時程"
       deco={`${weekLabel}\n${weekRange}\n計 ${String(streamCount).padStart(2, '0')} STREAMS`}

@@ -20,6 +20,8 @@
   @tailwind utilities;
 </style>
 
+<a class="skip-link" href="#main">SKIP TO CONTENT</a>
+
 {#if !isLegacy && !isLightbox}
   {#if isHome}
     <Cursor />
@@ -37,7 +39,7 @@
 
     <div class="max-w-7xl mx-auto p-4 flex justify-between items-center">
       <a href="/">
-        <img src="/images/logo.webp" alt="My Blog Logo" class="h-10 sm:h-12">
+        <img src="/images/logo.webp" alt="悠太翼 YUUTA TSUBASA" class="h-10 sm:h-12">
       </a>
       <ul class="flex space-x-2 sm:space-x-4">
         <li><a href="/">Home</a></li>

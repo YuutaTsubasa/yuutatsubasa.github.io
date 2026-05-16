@@ -1,19 +1,33 @@
 <script>
   import { reveal } from '$lib/utils/reveal.js';
+  import { NAV } from '$lib/data/nav.js';
+  /** 直接指定 nav id（如 'about'），元件自己算 "01 / 07" */
+  export let id = '';
+  /** 手動覆寫 num（不指定 id 時用，例如 list 頁想加副標） */
   export let num = '';
+  /** 附加在 num 後面的文字（例如 "STREAM ARCHIVE"），用 id 時才會渲染 */
+  export let suffix = '';
   export let en = '';
   export let zh = '';
   export let sub = '';
   export let deco = '';
+  /** 標題層級：頁面主要區塊用 1，首頁裡的次區塊用 2（預設） */
+  export let level = 2;
+
+  $: navItem = id ? NAV.find((n) => n.id === id) : null;
+  $: totalNum = NAV[NAV.length - 1].num;
+  $: computedNum = navItem
+    ? `${navItem.num} / ${totalNum}${suffix ? ` — ${suffix}` : ''}`
+    : num;
 </script>
 
 <div class="sec-head" use:reveal>
   <div>
     <div class="num-row">
       <span class="rule"></span>
-      <span class="mono num">SECTION / {num}</span>
+      <span class="mono num">SECTION / {computedNum}</span>
     </div>
-    <h2 class="display title">{en}</h2>
+    <svelte:element this={level === 1 ? 'h1' : 'h2'} class="display title">{en}</svelte:element>
     <div class="tech sub">／／ {zh}{sub ? ` · ${sub}` : ''}</div>
   </div>
   {#if deco}

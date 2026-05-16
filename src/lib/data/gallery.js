@@ -1,5 +1,4 @@
 import yaml from 'js-yaml';
-import { marked } from 'marked';
 
 // build-time 將 src/posts/fan_drawing_*.md 的 frontmatter 撈出來。
 // 圖片路徑、繪師、日期都來自 markdown 的 YAML 區塊。
@@ -47,7 +46,7 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
     extras,
     excerpt: meta.excerpt,
     sourceUrl: extractSourceUrl(body),
-    bodyHtml: marked.parse(body)
+    bodyRaw: body
   };
 });
 

@@ -27,7 +27,8 @@
   // 路由 prefix → 對應 nav id（讓 /archive 與 /archive/[id] 都高亮 ARCHIVE）
   const PATH_PREFIX_TO_SECTION = [
     ['/archive', 'videos'],
-    ['/gallery', 'gallery']
+    ['/gallery', 'gallery'],
+    ['/log',     'log']
   ];
 
   function matchSection(path) {

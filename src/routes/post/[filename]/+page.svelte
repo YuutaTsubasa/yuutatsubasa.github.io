@@ -99,7 +99,7 @@
 </style>
 
 {#if post}
-  <section class="fade-in-bg">
+  <section id="main" class="fade-in-bg">
     <!-- 使用文章的 thumbnail 作為背景圖 -->
     <section class="post-header" style="background-image: url('{post.thumbnail}');">
       <div class="h-[20vh]"></div>

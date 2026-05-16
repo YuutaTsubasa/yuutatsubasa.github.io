@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
+  import { marked } from 'marked';
   import { GALLERY, findGallery } from '$lib/data/gallery.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
@@ -17,6 +18,39 @@
     const n = Number.isFinite(num) ? num : 0;
     return `${String(n).padStart(3, '0')} / ${String(total).padStart(3, '0')}`;
   }
+
+  const SITE_URL = 'https://yuuta-tsubasa.studio';
+  $: jsonLd = piece
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'ImageObject',
+          contentUrl: piece.thumbnail?.startsWith('http')
+            ? piece.thumbnail
+            : `${SITE_URL}${piece.thumbnail}`,
+          name: piece.title,
+          description: piece.excerpt || `翼友作品 · 繪師：${piece.artist}`,
+          datePublished: piece.date ? piece.date.replace(/\./g, '-') : undefined,
+          creator: {
+            '@type': 'Person',
+            name: piece.artist
+          },
+          copyrightHolder: {
+            '@type': 'Person',
+            name: piece.artist
+          }
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home',    item: `${SITE_URL}/` },
+            { '@type': 'ListItem', position: 2, name: 'Gallery', item: `${SITE_URL}/gallery` },
+            { '@type': 'ListItem', position: 3, name: piece.title, item: `${SITE_URL}/gallery/${piece.slug}` }
+          ]
+        }
+      ]
+    : null;
 
   function closeLightbox() {
     if (typeof window === 'undefined') return goto('/gallery');
@@ -46,12 +80,13 @@
     image={piece.thumbnail || '/images/og-card.png'}
     imageAlt={piece.title}
     type="article"
+    {jsonLd}
   />
 {:else}
   <Seo title="GALLERY · 悠太翼 YUUTA TSUBASA" />
 {/if}
 
-<div class="lightbox">
+<div id="main" class="lightbox">
   {#if !piece}
     <div class="topbar">
       <span class="mono bc">GALLERY ▸ #??? / {String(GALLERY.length).padStart(3, '0')}</span>
@@ -121,10 +156,10 @@
           </div>
         {/if}
 
-        {#if piece.bodyHtml}
+        {#if piece.bodyRaw}
           <div class="meta-rule"></div>
           <div class="body">
-            {@html piece.bodyHtml}
+            {@html marked.parse(piece.bodyRaw)}
           </div>
         {/if}
 

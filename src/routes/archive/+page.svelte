@@ -35,12 +35,14 @@
   description="悠太翼歷年直播回顧 — 遊戲、程式、歌回、雜談、3D、繪圖、音樂等內容。"
 />
 
-<section class="archive">
+<section id="main" class="archive">
   <div class="wrap">
     <SectionHead
-      num="04 / 06 — STREAM ARCHIVE"
+      id="videos"
+      suffix="STREAM ARCHIVE"
       en="ARCHIVE"
       zh="直播檔案・任務日誌"
+      level={1}
       deco={`ENTRIES :: ${String(VIDEOS.length).padStart(3, '0')} LOGGED\nFILTER :: ${filterLabel}\nSORT :: NEWEST\nENC :: TLS 1.3`}
     />
 

@@ -73,6 +73,7 @@
 </script>
 
 <section id="hero" class="hero" data-screen-label="01 Hero">
+  <h1 class="sr-only">悠太翼 YUUTA TSUBASA · 程式系台灣 VTuber</h1>
   <div aria-hidden class="bg-art" style:transform={`translate3d(0, ${scrollY * 0.28}px, 0) scale(1.05)`}></div>
   <div aria-hidden class="bg-vignette"></div>
   <div aria-hidden class="bg-slash"></div>
@@ -244,11 +245,30 @@
   .bg-art {
     position: absolute;
     inset: 0;
-    background-image: url('/images/yuuta-figure-1.webp');
+    background-image: image-set(
+      url('/images/yuuta-figure-1-1280.webp') 1x,
+      url('/images/yuuta-figure-1-2560.webp') 2x
+    );
+    background-image: -webkit-image-set(
+      url('/images/yuuta-figure-1-1280.webp') 1x,
+      url('/images/yuuta-figure-1-2560.webp') 2x
+    );
     background-size: cover;
     background-position: 70% 25%;
     background-repeat: no-repeat;
     z-index: 0;
+  }
+  @media (min-width: 1280px) {
+    .bg-art {
+      background-image: image-set(
+        url('/images/yuuta-figure-1-1920.webp') 1x,
+        url('/images/yuuta-figure-1-2560.webp') 1.5x
+      );
+      background-image: -webkit-image-set(
+        url('/images/yuuta-figure-1-1920.webp') 1x,
+        url('/images/yuuta-figure-1-2560.webp') 1.5x
+      );
+    }
   }
   .bg-vignette {
     position: absolute;

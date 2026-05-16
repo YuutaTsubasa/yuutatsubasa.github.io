@@ -5,5 +5,6 @@ export const NAV = [
   { id: 'videos',   num: '03', label: 'ARCHIVE',  zh: '影片' },
   { id: 'avatars',  num: '04', label: 'AVATARS',  zh: '化身' },
   { id: 'gallery',  num: '05', label: 'GALLERY',  zh: '繪圖' },
-  { id: 'connect',  num: '06', label: 'CONNECT',  zh: '聯絡' }
+  { id: 'log',      num: '06', label: 'LOG',      zh: '日誌' },
+  { id: 'connect',  num: '07', label: 'CONNECT',  zh: '聯絡' }
 ];

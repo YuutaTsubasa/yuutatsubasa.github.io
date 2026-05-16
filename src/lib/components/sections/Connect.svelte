@@ -10,7 +10,7 @@
 <section id="connect" class="connect" data-screen-label="07 Connect">
   <div class="wrap">
     <SectionHead
-      num="06 / 06"
+      id="connect"
       en="CONNECT"
       zh="聯絡通道"
       deco={`CHANNELS :: ${SOCIALS.length} OPEN\nSIGNAL :: STRONG\nENC :: TLS 1.3`}

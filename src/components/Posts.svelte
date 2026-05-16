@@ -32,7 +32,7 @@
     <meta name="twitter:description" content={description} />
 </svelte:head>
 
-<section class="pb-12 fade-in-bg">
+<section id="main" class="pb-12 fade-in-bg">
   <section class="relative bg-cover bg-center bg-no-repeat h-96 w-screen flex items-center justify-center mb-12"
     style="background-image: url('/images/background.webp');">
     <div class="flex flex-col items-center justify-center">

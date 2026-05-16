@@ -7,7 +7,7 @@
   import Tag from '$lib/components/atoms/Tag.svelte';
   import { reveal } from '$lib/utils/reveal.js';
 
-  const FALLBACK_IMG = '/images/yuuta-figure-1.webp';
+  const FALLBACK_IMG = '/images/yuuta-figure-1-1920.webp';
 
   let selectedIdx = VERSIONS.length - 1;
   let imgIdx = 0;
@@ -43,7 +43,7 @@
 <section id="avatars" class="avatars" data-screen-label="05 Avatars">
   <div class="wrap">
     <SectionHead
-      num="04 / 06"
+      id="avatars"
       en="AVATARS"
       zh="化身展示"
       deco={`RIGS :: ${VERSIONS.length}\nFORMATS :: LIVE2D / 3D\nLATEST :: V${VERSIONS.at(-1)?.version ?? ''}`}

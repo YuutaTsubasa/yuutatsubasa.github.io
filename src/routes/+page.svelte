@@ -9,11 +9,44 @@
   import Videos from '$lib/components/sections/Videos.svelte';
   import Avatars from '$lib/components/sections/Avatars.svelte';
   import Gallery from '$lib/components/sections/Gallery.svelte';
+  import Log from '$lib/components/sections/Log.svelte';
   import Connect from '$lib/components/sections/Connect.svelte';
   import Seo from '$lib/components/Seo.svelte';
 
   const title = '悠太翼官方網站 | 首頁';
   const description = '程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。';
+
+  const SITE_URL = 'https://yuuta-tsubasa.studio';
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: '悠太翼',
+      alternateName: 'YUUTA TSUBASA',
+      url: SITE_URL,
+      image: `${SITE_URL}/images/yuuta-figure-1-1920.webp`,
+      jobTitle: 'VTuber',
+      description,
+      nationality: 'Taiwanese',
+      worksFor: {
+        '@type': 'Organization',
+        name: 'ULTIMATE-UTOPIA',
+        alternateName: '終焉理想庭'
+      },
+      sameAs: [
+        'https://yutaii.run/twitter',
+        'https://yutaii.run/youtube',
+        'https://yutaii.run/twitch'
+      ]
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: '悠太翼 YUUTA TSUBASA',
+      url: SITE_URL,
+      inLanguage: 'zh-Hant-TW'
+    }
+  ];
 
   function onScroll() {
     const ids = NAV.map((n) => n.id);
@@ -37,15 +70,16 @@
   });
 </script>
 
-<Seo {title} {description} />
+<Seo {title} {description} {jsonLd} />
 
-<main>
+<main id="main">
   <Hero />
   <About />
   <Schedule />
   <Videos />
   <Avatars />
   <Gallery />
+  <Log />
   <Connect />
 </main>
 

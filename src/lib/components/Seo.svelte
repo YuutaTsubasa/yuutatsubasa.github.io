@@ -3,6 +3,7 @@
 
   const SITE_URL = 'https://yuuta-tsubasa.studio';
   const SITE_NAME = '悠太翼 YUUTA TSUBASA';
+  const SITE_TWITTER = '@yuutatsubasa';
   const DEFAULT_IMAGE = `${SITE_URL}/images/og-card.png`;
   const DEFAULT_DESCRIPTION = '程式系台灣 Vtuber，主要實況遊戲、程式、歌回、雜談類型的直播。';
 
@@ -38,6 +39,8 @@
   <meta property="og:image:alt" content={imageAlt} />
 
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content={SITE_TWITTER} />
+  <meta name="twitter:creator" content={SITE_TWITTER} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={fullImage} />

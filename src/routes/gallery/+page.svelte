@@ -51,12 +51,14 @@
   description="粉絲為悠太翼繪製的同人作品收藏 — 翼友作品集。"
 />
 
-<section class="gallery-list">
+<section id="main" class="gallery-list">
   <div class="wrap">
     <SectionHead
-      num="05 / 06 — VISUAL CODEX"
+      id="gallery"
+      suffix="VISUAL CODEX"
       en="GALLERY"
       zh="作品・画廊コーデックス"
+      level={1}
       deco={`ENTRIES :: ${String(GALLERY.length).padStart(3, '0')} PIECES\nSORT :: NEWEST\nFILTER :: ${$galleryPageYear === 'all' ? 'ALL YEARS' : $galleryPageYear}`}
     />
 
