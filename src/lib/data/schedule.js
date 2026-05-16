@@ -21,6 +21,6 @@
 export const SCHEDULE = [
   { id: 'v908',      startsAt: '2026-05-11T23:00:00+08:00', durationMinutes: 90, title: '索尼克 英雄 Sonic Heroes #1', platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/908' },
   // 週二~週五 05-12~05-15 休息日（不放任何場次）
-  { id: 'tbd-0516',  startsAt: '2026-05-16T23:00:00+08:00', durationMinutes: 90, title: '未定',                        platforms: [],                    tags: [],       url: null, tbd: true }
+  { id: 'v909',      startsAt: '2026-05-16T23:30:00+08:00', durationMinutes: 90, title: '明日方舟：終末地',              platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/909' }
   // 週日 05-17 休息日
 ];
