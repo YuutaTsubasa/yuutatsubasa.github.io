@@ -14,7 +14,7 @@
 
   {#if showDate}
     <span class="mono date">
-      {entry.date}{#if entry.time}<span class="sep">·</span>{entry.time}{/if}
+      <span class="date-part">{entry.date}</span>{#if entry.time}<span class="sep">·</span><span class="time-part">{entry.time}</span>{/if}
     </span>
   {/if}
 
@@ -44,7 +44,7 @@
 <style>
   .row {
     display: grid;
-    grid-template-columns: 14px 138px 100px minmax(0, 2.2fr) minmax(0, 1fr) 18px;
+    grid-template-columns: 14px 138px auto minmax(0, 2.2fr) minmax(0, 1fr) 18px;
     align-items: center;
     gap: 14px;
     padding: 14px 16px;
@@ -86,7 +86,7 @@
   .chip {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 6px;
     padding: 3px 8px;
     font-size: 10px;
@@ -149,19 +149,34 @@
   /* Compact: hide meta col on narrow screens / inside grouped views */
   @media (max-width: 880px) {
     .row {
-      grid-template-columns: 14px 110px 90px minmax(0, 1fr) 18px;
-      gap: 10px;
+      grid-template-columns: 14px 130px auto minmax(0, 1fr) 18px;
+      gap: 14px;
     }
     .meta { display: none; }
   }
   @media (max-width: 600px) {
     .row {
-      grid-template-columns: 14px 1fr 18px;
-      gap: 10px;
-      padding: 12px 14px;
+      grid-template-columns: 14px 90px 10px minmax(0, 1fr) 18px;
+      gap: 8px;
+      padding: 12px 12px;
     }
-    .date { display: none; }
-    .chip { display: none; }
     .title-row .leader { display: none; }
+    /* 縮短日期：只留日期，時間隱藏 */
+    .date .sep, .date .time-part { display: none; }
+    .date { font-size: 10px; }
+    /* chip 縮成圓形燈號 */
+    .chip {
+      width: 10px; height: 10px;
+      padding: 0;
+      margin: 0;
+      border: none;
+      border-radius: 50%;
+      background: var(--accent);
+      overflow: hidden;
+      font-size: 0;
+      letter-spacing: 0;
+      justify-self: center;
+    }
+    .chip-glyph { display: none; }
   }
 </style>

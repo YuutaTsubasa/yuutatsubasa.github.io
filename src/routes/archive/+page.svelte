@@ -63,12 +63,12 @@
 
     <div class="table">
       <div class="row head mono">
-        <span>CASE</span>
-        <span>DATE</span>
-        <span>DUR</span>
-        <span>CAT</span>
-        <span>TITLE</span>
-        <span class="right">ST</span>
+        <span class="case">CASE</span>
+        <span class="date">DATE</span>
+        <span class="dur">DUR</span>
+        <span class="cat">CAT</span>
+        <span class="title">TITLE</span>
+        <span class="st right">ST</span>
       </div>
       {#each list as v, i (v.id)}
         {@const tags = tagsOf(v.tags)}
@@ -200,13 +200,13 @@
     transform: translateY(-50%) rotate(45deg);
   }
 
-  .case {
+  .row.data .case {
     font-size: 13px;
     color: var(--blue-bright);
     font-weight: 600;
   }
-  .date { font-size: 12px; color: var(--silver-1); }
-  .dur  { font-size: 12px; color: var(--silver-2); }
+  .row.data .date { font-size: 12px; color: var(--silver-1); }
+  .row.data .dur  { font-size: 12px; color: var(--silver-2); }
   .cat {
     display: inline-flex;
     align-items: center;
@@ -228,7 +228,7 @@
     color: var(--silver-3);
     font-size: 10px;
   }
-  .title {
+  .row.data .title {
     font-size: 14px;
     color: var(--silver-0);
     font-weight: 500;
@@ -238,7 +238,7 @@
   }
   .row.data:hover .title { color: var(--blue-bright); }
   .right { text-align: right; }
-  .st {
+  .row.data .st {
     font-size: 10px;
     color: var(--silver-3);
     letter-spacing: 0.15em;
@@ -281,8 +281,16 @@
   }
   @media (max-width: 700px) {
     .row {
-      grid-template-columns: 50px 90px 1fr 56px;
+      grid-template-columns: 50px 90px auto 1fr 56px;
+      gap: 10px;
     }
-    .row .dur, .row .cat { display: none; }
+    .row .dur { display: none; }
+    /* CAT 變成只剩 tag pip 燈號（不顯示英文字） */
+    .row.head .cat { font-size: 0; }
+    .row.head .cat::after { content: 'TAGS'; font-size: 10px; letter-spacing: 0.18em; }
+    .row.data .cat-name,
+    .row.data .cat-sep { display: none; }
+    .row.data .cat { gap: 4px; }
+    .row.data .cat-pip { width: 10px; height: 10px; }
   }
 </style>

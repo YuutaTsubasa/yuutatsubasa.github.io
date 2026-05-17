@@ -16,9 +16,10 @@
   function padCase(vol) {
     return Number.isFinite(vol) ? String(vol).padStart(3, '0') : '???';
   }
-  function chapterUrl(youtubeId, time) {
-    if (!youtubeId) return null;
-    return `https://www.youtube.com/watch?v=${youtubeId}&t=${timeToSeconds(time)}s`;
+  function chapterUrl(sourceUrl, time) {
+    if (!sourceUrl) return null;
+    const sep = sourceUrl.includes('?') ? '&' : '?';
+    return `${sourceUrl}${sep}t=${timeToSeconds(time)}s`;
   }
 
   let playerEl;
@@ -175,7 +176,7 @@
                     </button>
                     <a
                       class="ch-yt"
-                      href={chapterUrl(video.youtubeId, c.time)}
+                      href={chapterUrl(video.sourceUrl, c.time)}
                       target="_blank"
                       rel="noopener"
                       title="在 YouTube 開啟此時間點"
