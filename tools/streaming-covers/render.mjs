@@ -92,7 +92,7 @@ async function renderOne(vol, port, hasCwebp) {
     '--disable-gpu',
     '--hide-scrollbars',
     '--no-sandbox',
-    '--force-device-scale-factor=1',
+    '--force-device-scale-factor=1.5',
     '--window-size=1280,720',
     '--virtual-time-budget=6000',
     `--screenshot=${tmpPng}`,

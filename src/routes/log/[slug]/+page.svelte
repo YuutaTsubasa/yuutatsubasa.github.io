@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
   import { marked } from 'marked';
   import { LOG_ENTRIES, findLog, findLogCategory } from '$lib/data/log.js';
+  import { VIDEOS } from '$lib/data/videos.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Dot from '$lib/components/atoms/Dot.svelte';
   import Seo from '$lib/components/Seo.svelte';
@@ -55,6 +56,11 @@
   // Related: same category, not self, up to 3
   $: related = entry
     ? LOG_ENTRIES.filter((e) => e.category === entry.category && e.id !== entry.id).slice(0, 3)
+    : [];
+
+  // Linked streams: resolve vol numbers in entry.streams to VIDEOS（保留陣列順序）
+  $: linkedStreams = entry?.streams?.length
+    ? entry.streams.map((vol) => VIDEOS.find((v) => v.vol === Number(vol))).filter(Boolean)
     : [];
 
   const SITE_URL = 'https://yuuta-tsubasa.studio';
@@ -232,7 +238,22 @@
             </div>
           {/if}
 
-          {#if entry.category === 'project' && entry.links?.length}
+          {#if linkedStreams.length}
+            <div class="panel streams-panel" use:reveal={{ delay: 200 }}>
+              <Corners color="var(--line-strong)" size={9} />
+              <div class="mono panel-cap">// LINKED STREAMS</div>
+              <div class="streams-list">
+                {#each linkedStreams as v}
+                  <a class="stream-card" href={`/archive/${v.slug}`}>
+                    <span class="mono stream-id">📺 #{String(v.vol).padStart(3, '0')} · {v.date}</span>
+                    <span class="stream-title">{v.title}</span>
+                  </a>
+                {/each}
+              </div>
+            </div>
+          {/if}
+
+          {#if (entry.category === 'project' || entry.category === 'workshop') && entry.links?.length}
             <div class="panel" use:reveal={{ delay: 220 }}>
               <Corners color="var(--line-strong)" size={9} />
               <div class="mono panel-cap">// ACCESS</div>
@@ -662,6 +683,45 @@
     background: transparent;
     color: var(--blue-bright);
     border-color: var(--blue-bright);
+  }
+
+  .streams-panel {
+    border-color: rgba(37, 99, 235, 0.32);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(255, 255, 255, 0.75));
+  }
+  .streams-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stream-card {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+  }
+  .stream-card:hover {
+    border-color: var(--blue-bright);
+    background: rgba(37, 99, 235, 0.06);
+    transform: translateX(2px);
+  }
+  .stream-card:hover .stream-title { color: var(--blue-bright); }
+  .stream-id {
+    font-size: 10px;
+    color: var(--blue-bright);
+    letter-spacing: 0.12em;
+  }
+  .stream-title {
+    font-size: 12px;
+    color: var(--silver-0);
+    font-weight: 500;
+    line-height: 1.4;
+    transition: color 0.15s;
   }
 
   .related {

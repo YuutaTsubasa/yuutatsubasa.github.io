@@ -58,7 +58,7 @@
 
 <Seo
   title="LOG · 悠太翼 YUUTA TSUBASA"
-  description="悠太翼的遊戲心得、遊戲作品、LeetCode 解題筆記與雜記。"
+  description="悠太翼的遊戲心得、遊戲作品、LeetCode 解題筆記、Workshop 講義與雜記。"
 />
 
 <section id="main" class="log-list">

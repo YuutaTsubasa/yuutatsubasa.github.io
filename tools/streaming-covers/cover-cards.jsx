@@ -32,16 +32,18 @@ function CardA({ d }) {
   return (
     <div className={`cover ${d.mode === "light" ? "light" : ""}`}>
       {/* layered bg: full bg image or theme gradient */}
-      <div className={`game-bg theme-${d.theme}${d.bgSrc ? "" : " game-bg-blur"}`} style={bgStyle}/>
+      <div
+        className={`game-bg theme-${d.theme}${d.bgSrc ? "" : " game-bg-blur"}${d.bgSrc && d.bgEffect ? ` bg-${d.bgEffect}` : ""}`}
+        style={d.bgSrc && d.bgEffect === "soft"
+          ? { ...bgStyle, filter: "blur(4px) saturate(.85)", transform: "scale(1.02)" }
+          : bgStyle}
+      />
+      {d.bgSrc && d.bgEffect === "soft" && (
+        <div className="bg-soft-tint" style={typeof d.bgTint === "number" ? { background: `rgba(8,16,32,${d.bgTint})` } : undefined}/>
+      )}
       <div className="fx-grid"/>
       <div className="fx-slashes"/>
       <div className="fx-scan"/>
-
-      {/* HERO character — fits within right half (640×720), bottom-aligned */}
-      <Hero src={d.heroSrc} style={{
-        right:0, bottom:0, width:640, height:720,
-        opacity:.98
-      }} position="center bottom" size="contain"/>
 
       {/* Big watermark text behind */}
       <div style={{
@@ -56,6 +58,13 @@ function CardA({ d }) {
       <div className="fx-noise"/>
       <div className="fx-vignette"/>
 
+      {/* HERO character — fits within right half (640×720), bottom-aligned
+          放在 fx 層之上，避免 vignette / noise / tint 壓在角色身上 */}
+      <Hero src={d.heroSrc} style={{
+        right:0, bottom:0, width:640, height:720,
+        opacity:.98
+      }} position="center bottom" size="contain"/>
+
       {/* TOP HEADER STRIP */}
       <div style={{
         position:"absolute", left:0, right:0, top:0, height:48,
@@ -67,8 +76,10 @@ function CardA({ d }) {
         <span style={{ color:"var(--blue-bright)" }}>▸ TRANSMISSION ESTABLISHED</span>
         <span style={{ color:"var(--silver-3)" }}>//</span>
         <span>{d.artist ? `ARTIST / ${d.artist}` : "SYS / ONLINE"}</span>
-        <span style={{ color:"var(--silver-3)" }}>//</span>
-        <span>CONN / 4G STABLE</span>
+        {!d.artist && <>
+          <span style={{ color:"var(--silver-3)" }}>//</span>
+          <span>CONN / 4G STABLE</span>
+        </>}
         <span style={{ flex:1 }}/>
         {d.streamTime && <span>{d.streamTime}</span>}
         <span style={{ width:1, height:14, background:"var(--line-strong)" }}/>
@@ -106,7 +117,8 @@ function CardA({ d }) {
           <h1 style={{
             margin:0, fontFamily:"var(--font-body)", fontWeight:900,
             fontSize:46, lineHeight:1.08, color:"var(--silver-0)",
-            textShadow:"var(--c-shadow-title)", letterSpacing:"-.01em"
+            textShadow:"var(--c-shadow-title)", letterSpacing:"-.01em",
+            fontSynthesis:"none"
           }}>
             {d.titleMain}
             {d.episode != null && d.episode !== "" && (
@@ -181,7 +193,15 @@ function CardB({ d }) {
   return (
     <div className={`cover ${d.mode === "light" ? "light" : ""}`}>
       {/* Full background image (or theme gradient fallback) */}
-      <div className={`game-bg theme-${d.theme}${d.bgSrc ? "" : " game-bg-blur"}`} style={bgStyle}/>
+      <div
+        className={`game-bg theme-${d.theme}${d.bgSrc ? "" : " game-bg-blur"}${d.bgSrc && d.bgEffect ? ` bg-${d.bgEffect}` : ""}`}
+        style={d.bgSrc && d.bgEffect === "soft"
+          ? { ...bgStyle, filter: "blur(4px) saturate(.85)", transform: "scale(1.02)" }
+          : bgStyle}
+      />
+      {d.bgSrc && d.bgEffect === "soft" && (
+        <div className="bg-soft-tint" style={typeof d.bgTint === "number" ? { background: `rgba(8,16,32,${d.bgTint})` } : undefined}/>
+      )}
       <div className="fx-grid"/>
 
       {/* Big VOL watermark — behind backdrop */}

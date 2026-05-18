@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
   import { marked } from 'marked';
   import { VIDEOS, VIDEO_TAGS, findVideo, timeToSeconds } from '$lib/data/videos.js';
+  import { findLogsByStream, findLogCategory } from '$lib/data/log.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
   import { reveal } from '$lib/utils/reveal.js';
@@ -12,6 +13,7 @@
   $: prev = idx >= 0 ? VIDEOS[idx + 1] : null;
   $: next = idx > 0 ? VIDEOS[idx - 1] : null;
   $: tagObjs = video ? video.tags.map((id) => VIDEO_TAGS.find((t) => t.id === id)).filter(Boolean) : [];
+  $: relatedLogs = video ? findLogsByStream(video.vol) : [];
 
   function padCase(vol) {
     return Number.isFinite(vol) ? String(vol).padStart(3, '0') : '???';
@@ -132,6 +134,29 @@
           STREAM #{padCase(video.vol)} ／ {video.date}{#if video.duration} ／ {video.duration}{/if}{#if tagObjs.length} ／ {tagObjs.map((t) => t.enLabel).join(' · ')}{/if}
         </div>
       </div>
+
+      <!-- related LOG callout -->
+      {#if relatedLogs.length}
+        <div class="related-logs" use:reveal={{ delay: 100, distance: 10 }}>
+          <Corners color="var(--blue-bright)" size={10} />
+          <div class="rl-head">
+            <span class="mono rl-cap">// LINKED LOG ENTRIES</span>
+            <span class="tech rl-sub">📄 相關紀錄 · {relatedLogs.length}</span>
+          </div>
+          <div class="rl-list">
+            {#each relatedLogs as l}
+              {@const cat = findLogCategory(l.category)}
+              <a class="rl-item" href={`/log/${l.slug}`} style:--accent={cat?.color ?? 'var(--blue-bright)'}>
+                <span class="tech rl-chip">
+                  <span class="rl-glyph">{cat?.glyph ?? '▸'}</span>{cat?.enLabel ?? 'LOG'}
+                </span>
+                <span class="rl-title">{l.title}</span>
+                <span class="mono rl-arrow">↗</span>
+              </a>
+            {/each}
+          </div>
+        </div>
+      {/if}
 
       <!-- main grid -->
       <div class="grid">
@@ -314,6 +339,97 @@
     font-size: 13px;
     color: var(--silver-2);
     letter-spacing: 0.14em;
+  }
+
+  /* related LOG callout */
+  .related-logs {
+    position: relative;
+    padding: 14px 18px 16px;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(255, 255, 255, 0.7));
+    border: 1px solid rgba(37, 99, 235, 0.32);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.95) inset, 0 4px 16px rgba(37, 99, 235, 0.08);
+  }
+  .rl-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px dashed rgba(37, 99, 235, 0.25);
+    flex-wrap: wrap;
+  }
+  .rl-cap {
+    font-size: 10px;
+    color: var(--blue-bright);
+    letter-spacing: 0.22em;
+  }
+  .rl-sub {
+    font-size: 12px;
+    color: var(--silver-1);
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+  .rl-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .rl-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    padding: 8px 10px;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  }
+  .rl-item:hover {
+    background: rgba(37, 99, 235, 0.08);
+    border-color: var(--accent);
+    transform: translateX(2px);
+  }
+  .rl-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 9px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+    color: var(--accent);
+  }
+  .rl-glyph { font-size: 11px; }
+  .rl-title {
+    font-size: 13px;
+    color: var(--silver-0);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rl-arrow {
+    font-size: 12px;
+    color: var(--silver-3);
+    transition: color 0.15s, transform 0.15s;
+  }
+  .rl-item:hover .rl-arrow {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+  @media (max-width: 600px) {
+    .rl-item {
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+    }
+    .rl-arrow { display: none; }
+    .rl-title { white-space: normal; }
   }
 
   /* main grid */

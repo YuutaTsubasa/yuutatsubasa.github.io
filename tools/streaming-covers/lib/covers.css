@@ -175,6 +175,16 @@
   .game-bg-blur{ filter: blur(10px) saturate(.7) brightness(.7); }
   .cover.light .game-bg-blur{ filter: blur(10px) saturate(.6) brightness(1.05); }
 
+  /* bgEffect="soft" — for raw game screenshots：模糊 + 黑透蒙版
+     （白色面板需要深色 bg 才有對比）
+     blur 與 transform 透過 inline style 套在 .game-bg 上（避開 .cover.light .game-bg 的 filter 蓋寫） */
+  .bg-soft-tint{
+    position:absolute; inset:0;
+    background: rgba(8,16,32,.3);
+    pointer-events:none;
+  }
+  .cover.light .bg-soft-tint{ background: rgba(8,16,32,.28); }
+
   /* Light-mode game-bg variants — pale tinted, brighter base */
   .cover.light .game-bg{
     background:

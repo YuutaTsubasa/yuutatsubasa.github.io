@@ -1,7 +1,8 @@
 import yaml from 'js-yaml';
 
-// LOG：遊戲心得（review）、遊戲作品（project）、LeetCode 解題筆記（solve）。
+// LOG：作品（project）、心得（review）、解題（solve）、講義（workshop）。
 // 來源：src/posts/log_*.md，frontmatter 內 category 區分類型。
+// frontmatter 內可加 `streams: [908, 910]` 串接對應的 ARCHIVE 場次。
 
 const files = import.meta.glob('/src/posts/log_*.md', {
   query: '?raw',
@@ -32,6 +33,7 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
     tags: meta.tags ?? [],
     stack: meta.stack ?? [],
     links: meta.links ?? [],
+    streams: Array.isArray(meta.streams) ? meta.streams.map((v) => Number(v)).filter(Number.isFinite) : [],
     meta: meta.meta ?? {},
     bodyRaw: body.trim()
   };
@@ -49,9 +51,10 @@ export const LOG_ENTRIES = ENTRIES
   .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 export const LOG_CATEGORIES = [
-  { id: 'project', enLabel: 'PROJECT', label: '作品', color: '#22D3EE', glyph: '▣' },
-  { id: 'review',  enLabel: 'REVIEW',  label: '心得', color: '#F472B6', glyph: '★' },
-  { id: 'solve',   enLabel: 'SOLVE',   label: '解題', color: '#A78BFA', glyph: '◆' }
+  { id: 'project',  enLabel: 'PROJECT',  label: '作品', color: '#22D3EE', glyph: '▣' },
+  { id: 'review',   enLabel: 'REVIEW',   label: '心得', color: '#F472B6', glyph: '★' },
+  { id: 'solve',    enLabel: 'SOLVE',    label: '解題', color: '#A78BFA', glyph: '◆' },
+  { id: 'workshop', enLabel: 'WORKSHOP', label: '講義', color: '#FBBF24', glyph: '📘' }
 ];
 
 // LOG_TYPES：以 enLabel 為 key，方便 terminal-row 用
@@ -65,6 +68,11 @@ export function findLogCategory(id) {
 
 export function findLog(slug) {
   return LOG_ENTRIES.find((e) => e.slug === slug);
+}
+
+export function findLogsByStream(vol) {
+  if (vol == null) return [];
+  return LOG_ENTRIES.filter((e) => e.streams?.includes(Number(vol)));
 }
 
 // Tag 索引：tags + stack（去重），用於 tag cloud / 篩選 / 搜尋。

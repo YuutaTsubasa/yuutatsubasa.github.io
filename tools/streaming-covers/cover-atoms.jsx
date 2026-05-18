@@ -31,6 +31,8 @@ const DEFAULTS = /*EDITMODE-BEGIN*/{
   "mode": "light",
   "heroSrc": "assets/vtuber1.0-0.png",
   "bgSrc": "assets/0.webp",
+  "bgEffect": "",
+  "bgTint": null,
   "vtuberLogoSrc": "assets/vtuber-logo.png"
 }/*EDITMODE-END*/;
 
