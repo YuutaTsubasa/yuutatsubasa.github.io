@@ -19,8 +19,12 @@
 //
 // 過往的直播保留在這裡也沒關係，網站只會撈當週的。
 export const SCHEDULE = [
-  { id: 'v908',      startsAt: '2026-05-11T23:00:00+08:00', durationMinutes: 90, title: '索尼克 英雄 Sonic Heroes #1', platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/908' },
+  { id: 'v908',      startsAt: '2026-05-11T23:00:00+08:00', durationMinutes: 90,  title: '索尼克 英雄 Sonic Heroes #1',                platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/908' },
   // 週二~週五 05-12~05-15 休息日（不放任何場次）
-  { id: 'v909',      startsAt: '2026-05-16T23:30:00+08:00', durationMinutes: 90, title: '明日方舟：終末地',              platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/909' }
+  { id: 'v909',      startsAt: '2026-05-16T23:30:00+08:00', durationMinutes: 90,  title: '明日方舟：終末地',                            platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/909' },
   // 週日 05-17 休息日
+  { id: 'v910',      startsAt: '2026-05-18T23:00:00+08:00', durationMinutes: 90,  title: '索尼克 英雄 Sonic Heroes #2',                platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/910' },
+  { id: 'v911',      startsAt: '2026-05-19T23:00:00+08:00', durationMinutes: 120, title: 'LM Studio Workshop',                          platforms: ['YouTube', 'Twitch'], tags: ['code'], url: 'https://yutaii.run/v/911' },
+  // 週三~週五 05-20~05-22 休息日
+  { id: 'v912',      startsAt: '2026-05-23T23:00:00+08:00', durationMinutes: 90,  title: '索尼克賽車 交叉世界 或 明日方舟：終末地？', platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/912' }
 ];
