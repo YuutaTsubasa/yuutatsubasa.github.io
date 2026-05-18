@@ -59,7 +59,7 @@ yuuta.Topics
           <div class="meta mono">
             <span>3D MODEL · UPCOMING</span>
             <span class="accent">● V5.0 PREVIEW</span>
-            <span>BY 魯魯 @krain0406</span>
+            <span>BY <a href="https://x.com/krain0406" target="_blank" rel="noopener noreferrer">魯魯 @krain0406</a></span>
           </div>
         </Panel>
 
@@ -183,6 +183,13 @@ yuuta.Topics
     color: var(--silver-3);
   }
   .meta .accent { color: var(--blue-bright); }
+  .meta a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dashed currentColor;
+    transition: color 0.15s;
+  }
+  .meta a:hover { color: var(--blue-bright); }
 
   .likes-grid {
     display: grid;

@@ -28,3 +28,4 @@ __DESIGN__/
 *.njsproj
 *.sln
 *.sw?
+tools/streaming-covers/.chrome-data/

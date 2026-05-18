@@ -233,6 +233,13 @@
       <div class="scroll-hint mono">▼ SCROLL TO UNFOLD ARCHIVE ▼</div>
     </div>
   </div>
+
+  <div aria-hidden class="hero-scroll-cue mono" class:hidden={scrollY > 60}>
+    <span class="cue-label">SCROLL TO UNFOLD</span>
+    <svg class="cue-chevron" viewBox="0 0 16 10" width="16" height="10">
+      <path d="M2 2 L8 7 L14 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
 </section>
 
 <style>
@@ -638,10 +645,48 @@
     letter-spacing: 0.2em;
   }
 
+  .hero-scroll-cue { display: none; }
+
   @media (max-width: 1100px) {
     .hero { padding-top: 700px; }
     .inner { grid-template-columns: 1fr; gap: 24px; }
     .col-right { height: 500px; min-height: 500px; }
     .watermark { font-size: min(36vw, 320px); }
+
+    .hero-scroll-cue {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 30;
+      padding: 6px 12px 8px;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: var(--blue-bright);
+      background: rgba(8, 16, 31, 0.78);
+      border: 1px solid rgba(124, 196, 255, 0.36);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 6px 18px rgba(8, 16, 31, 0.28);
+      pointer-events: none;
+      transition: opacity 0.35s, transform 0.35s;
+      animation: cue-rise 1.8s ease-in-out infinite;
+    }
+    .hero-scroll-cue .cue-label { color: #7CC4FF; }
+    .hero-scroll-cue.hidden {
+      opacity: 0;
+      animation: none;
+      transform: translate(-50%, 10px);
+    }
+  }
+
+  @keyframes cue-rise {
+    0%, 100% { transform: translate(-50%, 0); }
+    50%      { transform: translate(-50%, -6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-scroll-cue { animation: none; transform: translateX(-50%); }
   }
 </style>

@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import { VIDEOS, VIDEO_TAGS, VIDEO_FILTERS } from '$lib/data/videos.js';
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
@@ -11,6 +12,26 @@
   function tagsOf(ids) {
     return (ids ?? []).map((id) => VIDEO_TAGS.find((t) => t.id === id)).filter(Boolean);
   }
+
+  // 標籤過長時用左右箭頭代替 scrollbar
+  let tabsEl;
+  let canLeft = false;
+  let canRight = false;
+  function updateScroll() {
+    if (!tabsEl) return;
+    canLeft = tabsEl.scrollLeft > 1;
+    canRight = tabsEl.scrollLeft < tabsEl.scrollWidth - tabsEl.clientWidth - 1;
+  }
+  function scrollTabs(dir) {
+    if (!tabsEl) return;
+    tabsEl.scrollBy({ left: dir * 200, behavior: 'smooth' });
+  }
+  onMount(() => {
+    updateScroll();
+    const ro = new ResizeObserver(updateScroll);
+    if (tabsEl) ro.observe(tabsEl);
+    return () => ro.disconnect();
+  });
 </script>
 
 <section id="videos" class="videos" data-screen-label="04 Videos">
@@ -22,16 +43,48 @@
       deco={`COUNT :: ${VIDEOS.length} ENTRIES\nFILTER :: ${VIDEO_FILTERS.find((f) => f.id === $archiveHomeFilter)?.enLabel ?? 'ALL'}\nUPDATED :: ${VIDEOS[0]?.date ?? '—'}`}
     />
 
-    <div class="tabs">
-      {#each VIDEO_FILTERS as f}
-        <button
-          class="tab tech"
-          class:active={$archiveHomeFilter === f.id}
-          on:click={() => archiveHomeFilter.set(f.id)}
-        >
-          {f.enLabel}
-        </button>
-      {/each}
+    <div class="tabs-wrap">
+      <button
+        class="tabs-arrow tabs-arrow-left"
+        class:on={canLeft}
+        type="button"
+        aria-label="scroll left"
+        tabindex={canLeft ? 0 : -1}
+        on:click={() => scrollTabs(-1)}
+      >
+        <svg viewBox="0 0 10 16" aria-hidden>
+          <path d="M7 3 L3 8 L7 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div
+        class="tabs"
+        class:fade-left={canLeft}
+        class:fade-right={canRight}
+        bind:this={tabsEl}
+        on:scroll={updateScroll}
+      >
+        {#each VIDEO_FILTERS as f}
+          <button
+            class="tab tech"
+            class:active={$archiveHomeFilter === f.id}
+            on:click={() => archiveHomeFilter.set(f.id)}
+          >
+            {f.enLabel}
+          </button>
+        {/each}
+      </div>
+      <button
+        class="tabs-arrow tabs-arrow-right"
+        class:on={canRight}
+        type="button"
+        aria-label="scroll right"
+        tabindex={canRight ? 0 : -1}
+        on:click={() => scrollTabs(1)}
+      >
+        <svg viewBox="0 0 10 16" aria-hidden>
+          <path d="M3 3 L7 8 L3 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
 
     <div class="grid">
@@ -102,12 +155,77 @@
     position: relative;
     padding: 140px 0 120px;
   }
+  .tabs-wrap {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 32px;
+  }
   .tabs {
+    flex: 1;
     display: flex;
     gap: 0;
-    margin-bottom: 32px;
-    border-bottom: 1px solid var(--line);
     overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    min-width: 0;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs.fade-right {
+    -webkit-mask-image: linear-gradient(90deg, black, black calc(100% - 22px), transparent);
+    mask-image: linear-gradient(90deg, black, black calc(100% - 22px), transparent);
+  }
+  .tabs.fade-left {
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 22px, black);
+    mask-image: linear-gradient(90deg, transparent, black 22px, black);
+  }
+  .tabs.fade-left.fade-right {
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 22px, black calc(100% - 22px), transparent);
+    mask-image: linear-gradient(90deg, transparent, black 22px, black calc(100% - 22px), transparent);
+  }
+  .tabs-arrow {
+    flex-shrink: 0;
+    width: 24px;
+    height: 38px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid var(--line);
+    color: var(--blue-bright);
+    cursor: pointer;
+    padding: 0;
+    z-index: 4;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    align-self: center;
+  }
+  .tabs-arrow svg {
+    width: 10px;
+    height: 16px;
+    display: block;
+  }
+  .tabs-arrow.on { display: inline-flex; }
+  .tabs-arrow:hover {
+    background: var(--blue-bright);
+    color: #FFFFFF;
+    border-color: var(--blue-bright);
+  }
+  .tabs-arrow-left { margin-right: -1px; }
+  .tabs-arrow-right { margin-left: -1px; }
+  .tabs-arrow.on { animation: tabs-arrow-bob 1.6s ease-in-out infinite; }
+  .tabs-arrow-left.on { animation-name: tabs-arrow-bob-left; }
+  @keyframes tabs-arrow-bob-left {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(-3px); }
+  }
+  @keyframes tabs-arrow-bob {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tabs-arrow.on { animation: none; }
   }
   .tab {
     padding: 12px 20px;
