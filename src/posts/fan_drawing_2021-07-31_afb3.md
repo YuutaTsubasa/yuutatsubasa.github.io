@@ -4,9 +4,9 @@ date: "2021-07-31"
 author: "肥羊皮"
 thumbnail: "/images/posts/fan_drawing_2021-07-31_afb3.webp"
 tags: ["翼友作品"]
-excerpt: "_肥羊皮_ 繪製的粉絲繪。"
+excerpt: "肥羊皮 繪製的粉絲繪。"
 ---
-_肥羊皮_ 繪製的粉絲繪。
+<u>肥羊皮</u> 繪製的粉絲繪。
 
 感謝肥羊皮老師畫的我，真的超級帥氣！
 

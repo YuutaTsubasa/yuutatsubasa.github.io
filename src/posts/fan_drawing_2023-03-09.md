@@ -4,11 +4,11 @@ date: "2023-03-09"
 author: "Hunman360"
 thumbnail: "/images/posts/fan_drawing_2023-03-09_1.webp"
 tags: ["翼友作品"]
-excerpt: "_Hunman360_ 繪製的粉絲繪"
+excerpt: "Hunman360 繪製的粉絲繪"
 ---
 ![悠然翼繪 by Hunman360 2023/03/09](/images/posts/fan_drawing_2023-03-09_2.webp)
 
-_Hunman360_ 繪製的粉絲繪。
+<u>Hunman360</u> 繪製的粉絲繪。
 
 感謝 Hunman 辦的活動，還畫了我的樣子在上面，真的很讚！
 

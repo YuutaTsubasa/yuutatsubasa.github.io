@@ -4,8 +4,8 @@ date: "2021-12-17"
 author: "野雲"
 thumbnail: "/images/posts/commission_2021-12-17.webp"
 tags: ["委託繪"]
-excerpt: "_野雲_ 繪製的委託作品。"
+excerpt: "野雲 繪製的委託作品。"
 ---
-_野雲_ 繪製的委託作品。
+<u>野雲</u> 繪製的委託作品。
 
 繪師 X：[https://x.com/Wild_Cloud_Art](https://x.com/Wild_Cloud_Art)

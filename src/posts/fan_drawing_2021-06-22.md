@@ -4,9 +4,9 @@ date: "2021-06-22"
 author: "Zavir Wani（鱷魚）"
 thumbnail: "/images/posts/fan_drawing_2021-06-22.webp"
 tags: ["翼友作品"]
-excerpt: "_Zavir Wani（鱷魚）_ 繪製的粉絲繪。"
+excerpt: "Zavir Wani（鱷魚） 繪製的粉絲繪。"
 ---
-_Zavir Wani（鱷魚）_ 繪製的粉絲繪。
+<u>Zavir Wani（鱷魚）</u> 繪製的粉絲繪。
 
 鱷魚老師把我畫得好開朗呀！突然覺得好陽光！正向、積極、有活力！
 

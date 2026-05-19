@@ -4,13 +4,13 @@ date: "2022-04-04"
 author: "陳昱謙"
 thumbnail: "/images/posts/fan_drawing_2022-04-04_1.webp"
 tags: ["翼友作品"]
-excerpt: "_陳昱謙_ 繪製的粉絲繪"
+excerpt: "陳昱謙 繪製的粉絲繪"
 ---
 ![悠然翼繪 by 陳昱謙 2022/04/04](/images/posts/fan_drawing_2022-04-04_2.webp)
 
 ![悠然翼繪 by 陳昱謙 2022/04/04](/images/posts/fan_drawing_2022-04-04_3.webp)
 
-_陳昱謙_ 繪製的粉絲繪。
+<u>陳昱謙</u> 繪製的粉絲繪。
 
 感謝陳昱謙畫的我，有點可愛又有點帥氣的感覺。
 

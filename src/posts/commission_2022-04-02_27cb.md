@@ -4,8 +4,8 @@ date: "2022-04-02"
 author: "白蛇梅伊"
 thumbnail: "/images/posts/commission_2022-04-02_27cb.webp"
 tags: ["委託繪"]
-excerpt: "_白蛇梅伊_ 繪製的委託作品。"
+excerpt: "白蛇梅伊 繪製的委託作品。"
 ---
-_白蛇梅伊_ 繪製的委託作品。
+<u>白蛇梅伊</u> 繪製的委託作品。
 
 繪師 X：[https://x.com/Wander2_Meii](https://x.com/Wander2_Meii)

@@ -4,9 +4,9 @@ date: "2021-11-30"
 author: "Akane kun"
 thumbnail: "/images/posts/fan_drawing_2021-11-30.webp"
 tags: ["翼友作品"]
-excerpt: "_Akane kun_ 繪製的粉絲繪"
+excerpt: "Akane kun 繪製的粉絲繪"
 ---
-_Akane kun_ 繪製的粉絲繪。
+<u>Akane kun</u> 繪製的粉絲繪。
 
 感謝 Akane kun 畫的穿另外一套衣服的我，很帥氣！
 

@@ -16,19 +16,28 @@ for (const file of files) {
   const author = meta.author;
   if (!author) continue;
 
-  let next = raw;
   const esc = author.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const wrapped = `<u>${author}</u>`;
 
-  // A) 【author】 → _author_
-  next = next.replaceAll(`【${author}】`, `_${author}_`);
+  // 拆 frontmatter / body
+  const fmEnd = m[0].length;
+  let fm = raw.slice(0, fmEnd);
+  let body = raw.slice(fmEnd);
 
-  // B) bare 'author 繪製' → '_author_ 繪製'（前面不是 _ 或 】 才包）
-  const bare = new RegExp(`(?<![_】])${esc}(?=\\s+繪製)`, 'g');
-  next = next.replace(bare, `_${author}_`);
+  // Frontmatter：保持純文字（避免 SEO description / JSON-LD 出現原始 tag）
+  //   - 把【author】、_author_、<u>author</u> 都壓回純 author
+  fm = fm.replaceAll(`【${author}】`, author);
+  fm = fm.replaceAll(`_${author}_`, author);
+  fm = fm.replaceAll(wrapped, author);
 
-  // C) 確保斜體結尾後緊接的非空白字元中間有空白：_author_繪 → _author_ 繪
-  const trailing = new RegExp(`(_${esc}_)(\\S)`, 'g');
-  next = next.replace(trailing, '$1 $2');
+  // Body：作者名統一包 <u>...</u>
+  body = body.replaceAll(`【${author}】`, wrapped);
+  body = body.replaceAll(`_${author}_`, wrapped);
+  // bare 'author 繪製' → '<u>author</u> 繪製'（前面不是 > 或 】 才包）
+  const bare = new RegExp(`(?<![>】])${esc}(?=\\s+繪製)`, 'g');
+  body = body.replace(bare, wrapped);
+
+  const next = fm + body;
 
   if (next !== raw) {
     writeFileSync(full, next);
