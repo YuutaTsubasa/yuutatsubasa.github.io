@@ -205,14 +205,13 @@
     background: linear-gradient(135deg, rgba(15, 30, 60, 0.85), rgba(5, 15, 35, 0.95));
     color: inherit;
     text-decoration: none;
-    transition: transform 0.25s, border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
     margin-bottom: 16px;
     break-inside: avoid;
   }
   .tile:hover {
-    transform: translateY(-4px) scale(1.01);
     border-color: var(--blue-bright);
-    box-shadow: 0 14px 40px rgba(37, 99, 235, 0.22), 0 0 0 1px rgba(37, 99, 235, 0.28);
+    box-shadow: 0 10px 32px rgba(37, 99, 235, 0.28), 0 0 0 1px rgba(37, 99, 235, 0.32);
   }
   .tile-img {
     display: block;
