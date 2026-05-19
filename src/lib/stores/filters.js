@@ -5,4 +5,5 @@ import { writable } from 'svelte/store';
 export const archivePageFilter   = writable('all'); // /archive list - tag
 export const archiveHomeFilter   = writable('all'); // 首頁 Archive 區 - tag
 export const galleryPageYear     = writable('all'); // /gallery list - year
+export const galleryPageCategory = writable('all'); // /gallery list + 首頁 Gallery 區 - category
 export const logFilter           = writable('all'); // /log + 首頁 Log 區 - category

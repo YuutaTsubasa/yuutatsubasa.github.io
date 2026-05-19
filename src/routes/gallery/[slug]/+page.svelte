@@ -3,7 +3,8 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { marked } from 'marked';
-  import { GALLERY, findGallery } from '$lib/data/gallery.js';
+  import { GALLERY, findGallery, findGalleryCategory } from '$lib/data/gallery.js';
+  import { VIDEOS } from '$lib/data/videos.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
   import { reveal } from '$lib/utils/reveal.js';
@@ -13,6 +14,10 @@
   // GALLERY 是新到舊：陣列下一個是更舊的 = PREV，上一個是更新的 = NEXT
   $: prev = idx >= 0 ? GALLERY[idx + 1] : null;
   $: next = idx > 0 ? GALLERY[idx - 1] : null;
+  $: cat = piece ? findGalleryCategory(piece.category) : null;
+  $: linkedStreams = piece?.streams?.length
+    ? piece.streams.map((vol) => VIDEOS.find((v) => v.vol === Number(vol))).filter(Boolean)
+    : [];
 
   function padCase(num, total) {
     const n = Number.isFinite(num) ? num : 0;
@@ -29,7 +34,7 @@
             ? piece.thumbnail
             : `${SITE_URL}${piece.thumbnail}`,
           name: piece.title,
-          description: piece.excerpt || `翼友作品 · 繪師：${piece.artist}`,
+          description: piece.excerpt || `${cat?.label ?? '作品'} · 繪師：${piece.artist}`,
           datePublished: piece.date ? piece.date.replace(/\./g, '-') : undefined,
           creator: {
             '@type': 'Person',
@@ -132,7 +137,7 @@
         <div class="meta-head">
           <div class="mono meta-id">PIECE #{String(piece.num ?? 0).padStart(3, '0')}</div>
           <div class="display meta-title">BY {piece.artist}</div>
-          <div class="tech meta-sub">FAN ART · 翼友作品</div>
+          <div class="tech meta-sub" style:color={cat?.color ?? 'var(--silver-2)'}>{cat?.enLabel ?? 'ART'} · {cat?.label ?? piece.category}</div>
         </div>
 
         <div class="meta-rule"></div>
@@ -143,10 +148,25 @@
           <span class="mono mr-label">ARTIST</span>
           <span class="mr-val">{piece.artist}</span>
           <span class="mono mr-label">MEDIUM</span>
-          <span class="mr-val">FAN ART</span>
+          <span class="mr-val">{cat?.enLabel ?? 'ART'}</span>
           <span class="mono mr-label">FILE</span>
           <span class="mr-val mono small">{piece.id}</span>
         </div>
+
+        {#if linkedStreams.length}
+          <div class="meta-rule"></div>
+          <div>
+            <div class="mono mn-cap">// LINKED STREAMS</div>
+            <div class="stream-links">
+              {#each linkedStreams as v}
+                <a class="stream-card" href={`/archive/${v.slug}`}>
+                  <span class="mono stream-id">📺 #{String(v.vol).padStart(3, '0')} · {v.date}</span>
+                  <span class="stream-title">{v.title}</span>
+                </a>
+              {/each}
+            </div>
+          </div>
+        {/if}
 
         {#if piece.excerpt}
           <div class="meta-rule"></div>
@@ -168,6 +188,9 @@
         <div class="meta-actions">
           {#if piece.sourceUrl}
             <a class="action primary" href={piece.sourceUrl} target="_blank" rel="noopener">↗ VIEW SOURCE</a>
+          {/if}
+          {#if piece.pixivUrl}
+            <a class="action" href={piece.pixivUrl} target="_blank" rel="noopener">↗ PIXIV</a>
           {/if}
           <a class="action" href={piece.thumbnail} target="_blank" rel="noopener">↗ FULL IMAGE</a>
         </div>
@@ -340,6 +363,36 @@
     line-height: 1.7;
     color: #A8B3C7;
     margin: 0;
+  }
+  .stream-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stream-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    background: rgba(124, 196, 255, 0.06);
+    border: 1px solid rgba(124, 196, 255, 0.2);
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .stream-card:hover {
+    border-color: rgba(124, 196, 255, 0.55);
+    background: rgba(124, 196, 255, 0.12);
+  }
+  .stream-id {
+    font-size: 10px;
+    color: #7CC4FF;
+    letter-spacing: 0.12em;
+  }
+  .stream-title {
+    font-size: 12.5px;
+    color: #D8E0EE;
+    line-height: 1.45;
+    word-break: break-word;
   }
   .body {
     font-size: 12px;

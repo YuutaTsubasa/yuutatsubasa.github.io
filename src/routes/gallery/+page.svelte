@@ -1,10 +1,10 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { GALLERY } from '$lib/data/gallery.js';
+  import { GALLERY, GALLERY_CATEGORIES, findGalleryCategory } from '$lib/data/gallery.js';
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
-  import { galleryPageYear } from '$lib/stores/filters.js';
+  import { galleryPageYear, galleryPageCategory } from '$lib/stores/filters.js';
   import { reveal } from '$lib/utils/reveal.js';
   let cols = 3;
 
@@ -23,10 +23,22 @@
     if (typeof window !== 'undefined') window.removeEventListener('resize', updateCols);
   });
 
-  // 從資料動態生出年份 chip
-  $: years = (() => {
-    const map = new Map();
+  // 每個分類的件數，提供 chip 標註
+  $: categoryCounts = (() => {
+    const m = Object.fromEntries(GALLERY_CATEGORIES.map((c) => [c.id, 0]));
     for (const g of GALLERY) {
+      if (m[g.category] != null) m[g.category] += 1;
+    }
+    return m;
+  })();
+
+  // 從資料動態生出年份 chip（依目前分類過濾）
+  $: years = (() => {
+    const pool = $galleryPageCategory === 'all'
+      ? GALLERY
+      : GALLERY.filter((g) => g.category === $galleryPageCategory);
+    const map = new Map();
+    for (const g of pool) {
       const y = g.date.slice(0, 4);
       if (!y) continue;
       map.set(y, (map.get(y) ?? 0) + 1);
@@ -34,9 +46,15 @@
     return [...map.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1));
   })();
 
-  $: list = $galleryPageYear === 'all'
-    ? GALLERY
-    : GALLERY.filter((g) => g.date.startsWith($galleryPageYear));
+  $: list = (() => {
+    let out = $galleryPageCategory === 'all'
+      ? GALLERY
+      : GALLERY.filter((g) => g.category === $galleryPageCategory);
+    if ($galleryPageYear !== 'all') {
+      out = out.filter((g) => g.date.startsWith($galleryPageYear));
+    }
+    return out;
+  })();
 
   // 手動把 list round-robin 分到 N 欄。避免 CSS column-count 在動態 hover/reveal 時重排
   $: distributed = (() => {
@@ -59,18 +77,33 @@
       en="GALLERY"
       zh="作品・画廊コーデックス"
       level={1}
-      deco={`ENTRIES :: ${String(GALLERY.length).padStart(3, '0')} PIECES\nSORT :: NEWEST\nFILTER :: ${$galleryPageYear === 'all' ? 'ALL YEARS' : $galleryPageYear}`}
+      deco={`ENTRIES :: ${String(GALLERY.length).padStart(3, '0')} PIECES\nSORT :: NEWEST\nFILTER :: ${$galleryPageCategory === 'all' ? 'ALL' : findGalleryCategory($galleryPageCategory)?.enLabel ?? $galleryPageCategory} · ${$galleryPageYear === 'all' ? 'ALL YEARS' : $galleryPageYear}`}
     />
 
     <div class="filter-row">
-      <span class="mono filter-label">VIEW ▸</span>
-      <span class="chip on tech">WALL</span>
-      <span class="sep"></span>
+      <span class="mono filter-label">CATEGORY ▸</span>
+      <button
+        class="chip tech"
+        class:on={$galleryPageCategory === 'all'}
+        on:click={() => { galleryPageCategory.set('all'); galleryPageYear.set('all'); }}
+      >ALL · {String(GALLERY.length).padStart(2, '0')}</button>
+      {#each GALLERY_CATEGORIES as c}
+        <button
+          class="chip tech"
+          class:on={$galleryPageCategory === c.id}
+          style:--cat={c.color}
+          on:click={() => { galleryPageCategory.set(c.id); galleryPageYear.set('all'); }}
+        >{c.label} · {String(categoryCounts[c.id]).padStart(2, '0')}</button>
+      {/each}
+    </div>
+
+    <div class="filter-row">
+      <span class="mono filter-label">YEAR ▸</span>
       <button
         class="chip tech"
         class:on={$galleryPageYear === 'all'}
         on:click={() => galleryPageYear.set('all')}
-      >ALL · {String(GALLERY.length).padStart(2, '0')}</button>
+      >ALL</button>
       {#each years as [y, count]}
         <button
           class="chip tech"
@@ -167,6 +200,12 @@
     border-color: var(--blue-bright);
     color: var(--blue-bright);
   }
+  .chip[style*='--cat'].on {
+    background: color-mix(in srgb, var(--cat) 12%, transparent);
+    border-color: var(--cat);
+    color: var(--cat);
+  }
+  .filter-row + .filter-row { margin-top: -12px; }
   .spacer { flex: 1; }
   .showing {
     font-size: 10px;
