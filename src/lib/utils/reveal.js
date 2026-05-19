@@ -3,7 +3,7 @@
 //
 // 支援 prefers-reduced-motion：使用者偏好減少動態時不執行 reveal。
 export function reveal(node, options = {}) {
-  const { delay = 0, threshold = 0.12, distance = 16, duration = 500 } = options;
+  const { delay = 0, threshold = 0, distance = 16, duration = 500 } = options;
 
   if (typeof window === 'undefined') return {};
 
@@ -31,7 +31,7 @@ export function reveal(node, options = {}) {
         }
       }
     },
-    { threshold, rootMargin: '0px 0px -10% 0px' }
+    { threshold, rootMargin: '0px' }
   );
 
   obs.observe(node);

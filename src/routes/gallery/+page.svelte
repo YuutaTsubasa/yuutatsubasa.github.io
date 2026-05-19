@@ -1,27 +1,10 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
   import { GALLERY, GALLERY_CATEGORIES, findGalleryCategory } from '$lib/data/gallery.js';
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
   import { galleryPageYear, galleryPageCategory } from '$lib/stores/filters.js';
   import { reveal } from '$lib/utils/reveal.js';
-  let cols = 3;
-
-  function updateCols() {
-    if (typeof window === 'undefined') return;
-    if (window.matchMedia('(max-width: 600px)').matches) cols = 1;
-    else if (window.matchMedia('(max-width: 900px)').matches) cols = 2;
-    else cols = 3;
-  }
-
-  onMount(() => {
-    updateCols();
-    window.addEventListener('resize', updateCols);
-  });
-  onDestroy(() => {
-    if (typeof window !== 'undefined') window.removeEventListener('resize', updateCols);
-  });
 
   // 每個分類的件數，提供 chip 標註
   $: categoryCounts = (() => {
@@ -53,13 +36,6 @@
     if ($galleryPageYear !== 'all') {
       out = out.filter((g) => g.date.startsWith($galleryPageYear));
     }
-    return out;
-  })();
-
-  // 手動把 list round-robin 分到 N 欄。避免 CSS column-count 在動態 hover/reveal 時重排
-  $: distributed = (() => {
-    const out = Array.from({ length: cols }, () => []);
-    list.forEach((g, i) => out[i % cols].push(g));
     return out;
   })();
 </script>
@@ -118,23 +94,19 @@
     {#if list.length === 0}
       <div class="empty mono">// NO PIECES IN THIS YEAR</div>
     {:else}
-      <div class="masonry" style="--cols: {cols};">
-        {#each distributed as col, ci}
-          <div class="col">
-            {#each col as g, i (g.id)}
-              <a class="tile" href={`/gallery/${g.slug}`} use:reveal={{ delay: Math.min((i * cols + ci) * 50, 600), distance: 18 }}>
-                <Corners color="var(--line-strong)" size={10} />
-                <img class="tile-img" src={g.thumbnail} alt={g.title} loading="lazy" />
-                <div class="bottom-fade" aria-hidden></div>
-                <span class="mono tile-id">#{String(g.num ?? i + 1).padStart(3, '0')}</span>
-                <span class="mono tile-date">{g.date}</span>
-                <div class="tile-foot">
-                  <div class="mono by">BY</div>
-                  <div class="tech artist">{g.artist}</div>
-                </div>
-              </a>
-            {/each}
-          </div>
+      <div class="masonry">
+        {#each list as g, i (g.id)}
+          <a class="tile" href={`/gallery/${g.slug}`} use:reveal={{ delay: Math.min(i * 30, 600), distance: 18 }}>
+            <Corners color="var(--line-strong)" size={10} />
+            <img class="tile-img" src={g.thumbnail} alt={g.title} loading="lazy" />
+            <div class="bottom-fade" aria-hidden></div>
+            <span class="mono tile-id">#{String(g.num ?? i + 1).padStart(3, '0')}</span>
+            <span class="mono tile-date">{g.date}</span>
+            <div class="tile-foot">
+              <div class="mono by">BY</div>
+              <div class="tech artist">{g.artist}</div>
+            </div>
+          </a>
         {/each}
       </div>
     {/if}
@@ -214,17 +186,11 @@
   }
 
   .masonry {
-    display: grid;
-    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
-    gap: 16px;
-    align-items: start;
+    column-count: 3;
+    column-gap: 16px;
   }
-  .col {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    min-width: 0;
-  }
+  @media (max-width: 900px) { .masonry { column-count: 2; } }
+  @media (max-width: 600px) { .masonry { column-count: 1; } }
   .tile {
     position: relative;
     display: block;
@@ -234,6 +200,8 @@
     color: inherit;
     text-decoration: none;
     transition: transform 0.25s, border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 16px;
+    break-inside: avoid;
   }
   .tile:hover {
     transform: translateY(-4px) scale(1.01);
