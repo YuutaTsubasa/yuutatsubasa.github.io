@@ -267,10 +267,7 @@
               </div>
             </div>
           {/if}
-        </aside>
 
-        <!-- SIDEBAR (BOTTOM): under top sidebar on desktop, below article on mobile -->
-        <aside class="side side-bottom">
           {#if (entry.category === 'project' || entry.category === 'workshop') && entry.links?.length}
             <div class="panel" use:reveal={{ delay: 220 }}>
               <Corners color="var(--line-strong)" size={9} />
@@ -288,7 +285,10 @@
               </div>
             </div>
           {/if}
+        </aside>
 
+        <!-- SIDEBAR (BOTTOM): under top sidebar on desktop, below article on mobile -->
+        <aside class="side side-bottom">
           {#if related.length > 0}
             <div class="panel" use:reveal={{ delay: 260 }} style:--accent={cat?.color ?? 'var(--blue-bright)'}>
               <Corners color="var(--line-strong)" size={9} />
