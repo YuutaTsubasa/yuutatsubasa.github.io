@@ -96,15 +96,21 @@
     {:else}
       <div class="masonry">
         {#each list as g, i (g.id)}
+          {@const c = findGalleryCategory(g.category)}
           <a class="tile" href={`/gallery/${g.slug}`} use:reveal={{ delay: Math.min(i * 30, 600), distance: 18 }}>
             <Corners color="var(--line-strong)" size={10} />
             <img class="tile-img" src={g.thumbnail} alt={g.title} loading="lazy" />
             <div class="bottom-fade" aria-hidden></div>
             <span class="mono tile-id">#{String(g.num ?? i + 1).padStart(3, '0')}</span>
-            <span class="mono tile-date">{g.date}</span>
+            {#if c}
+              <span class="tech tile-tag" style:--tag={c.color}>{c.label}</span>
+            {/if}
             <div class="tile-foot">
-              <div class="mono by">BY</div>
-              <div class="tech artist">{g.artist}</div>
+              <div class="tile-foot-left">
+                <div class="mono by">BY</div>
+                <div class="tech artist">{g.artist}</div>
+              </div>
+              <span class="mono tile-date">{g.date}</span>
             </div>
           </a>
         {/each}
@@ -231,21 +237,39 @@
     letter-spacing: 0.18em;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
   }
-  .tile-date {
+  .tile-tag {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 10px;
+    right: 10px;
+    padding: 3px 8px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--tag, #FFF);
+    background: color-mix(in srgb, var(--tag, #FFF) 18%, rgba(5, 10, 25, 0.55));
+    border: 1px solid color-mix(in srgb, var(--tag, #FFF) 55%, transparent);
+    border-radius: 2px;
+    backdrop-filter: blur(4px);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  }
+  .tile-date {
     font-size: 10px;
     color: rgba(255, 255, 255, 0.72);
     letter-spacing: 0.15em;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+    flex-shrink: 0;
+    align-self: flex-end;
   }
   .tile-foot {
     position: absolute;
     left: 14px;
     right: 14px;
     bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
   }
+  .tile-foot-left { min-width: 0; }
   .by {
     font-size: 10px;
     color: rgba(255, 255, 255, 0.65);
