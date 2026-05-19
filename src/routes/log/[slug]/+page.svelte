@@ -549,6 +549,7 @@
     font-size: 15px;
     line-height: 1.85;
     color: var(--silver-1);
+    overflow-wrap: anywhere;
   }
   .body :global(h2) {
     display: flex;

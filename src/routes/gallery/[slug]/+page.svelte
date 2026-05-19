@@ -398,6 +398,7 @@
     font-size: 12px;
     line-height: 1.75;
     color: #A8B3C7;
+    overflow-wrap: anywhere;
   }
   .body :global(p) { margin: 0 0 10px; }
   .body :global(ul),
