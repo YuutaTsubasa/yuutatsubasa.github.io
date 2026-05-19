@@ -1,9 +1,13 @@
 <script>
   import { PROFILE } from '$lib/data/profile.js';
+  import { NAV } from '$lib/data/nav.js';
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Panel from '$lib/components/atoms/Panel.svelte';
   import Tag from '$lib/components/atoms/Tag.svelte';
   import { reveal } from '$lib/utils/reveal.js';
+
+  const aboutNum = NAV.find((n) => n.id === 'about')?.num ?? '01';
+  const totalNum = NAV[NAV.length - 1].num;
 
   const stats = [
     { label: 'DEBUT',    value: PROFILE.debut },
@@ -41,7 +45,7 @@ yuuta.Topics
       <!-- LEFT: three-view + likes/dislikes -->
       <div class="col-left" use:reveal={{ delay: 80 }}>
         <div class="num-mark display">
-          <span class="num-fill">01</span><span class="tech num-total">/06</span>
+          <span class="num-fill">{aboutNum}</span><span class="tech num-total">/{totalNum}</span>
         </div>
 
         <Panel padding={32} glow minHeight={520}>
