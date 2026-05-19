@@ -1,7 +1,7 @@
 import yaml from 'js-yaml';
 
 // build-time 將 src/posts/{fan_drawing,self_drawing,commission,skeb}_*.md 全部撈出來
-// 圖片路徑、繪師、日期、分類等資料都來自 markdown 的 YAML frontmatter
+// 新檔名格式：{category}_{YYYY-MM-DD}[_{hash4}].md，編號不再依檔名固定，由排序位置算
 const files = import.meta.glob(
   [
     '/src/posts/fan_drawing_*.md',
@@ -29,10 +29,10 @@ export function findGalleryCategory(id) {
 }
 
 const PREFIX_MAP = [
-  { prefix: 'fan_drawing_',  category: 'fan',        slugPrefix: '' },
-  { prefix: 'self_drawing_', category: 'self',       slugPrefix: 'self-' },
-  { prefix: 'commission_',   category: 'commission', slugPrefix: 'commission-' },
-  { prefix: 'skeb_',         category: 'skeb',       slugPrefix: 'skeb-' }
+  { prefix: 'fan_drawing_',  category: 'fan' },
+  { prefix: 'self_drawing_', category: 'self' },
+  { prefix: 'commission_',   category: 'commission' },
+  { prefix: 'skeb_',         category: 'skeb' }
 ];
 
 function derivePrefixMatch(filename) {
@@ -45,13 +45,11 @@ function splitFrontmatter(raw) {
   return { meta: yaml.load(m[1]) ?? {}, body: raw.slice(m[0].length) };
 }
 
-// 從 markdown 內文撈第一個外部連結（多為原推文 / Twitter）
 function extractSourceUrl(body) {
   const m = body.match(/https?:\/\/[^\s)\]]+/);
   return m ? m[0] : null;
 }
 
-// 從 markdown 撈所有 ![](url) 的圖片
 function extractImages(body) {
   const out = [];
   const re = /!\[[^\]]*\]\(([^)]+)\)/g;
@@ -60,15 +58,17 @@ function extractImages(body) {
   return out;
 }
 
+// filename → URL-safe slug：底線轉連字號
+function filenameToSlug(filename) {
+  return filename.replace(/_/g, '-');
+}
+
 const ENTRIES = Object.entries(files).map(([path, raw]) => {
   const { meta, body } = splitFrontmatter(raw);
   const filename = path.split('/').pop().replace('.md', '');
   const prefix = derivePrefixMatch(filename);
   const category = meta.category || prefix?.category || 'fan';
-  const numMatch = prefix ? filename.slice(prefix.prefix.length).match(/^(\d+)/) : null;
-  const num = numMatch ? parseInt(numMatch[1], 10) : null;
-  const slugPrefix = prefix?.slugPrefix ?? '';
-  const slug = num != null ? `${slugPrefix}${num}` : filename;
+  const slug = filenameToSlug(filename);
   const extras = extractImages(body);
   const streams = Array.isArray(meta.streams)
     ? meta.streams.map((v) => Number(v)).filter(Number.isFinite)
@@ -76,7 +76,6 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
   return {
     id: filename,
     slug,
-    num,
     category,
     artist: meta.author,
     title: meta.title,
@@ -91,9 +90,16 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
   };
 });
 
-export const GALLERY = ENTRIES
+// 排序：新到舊
+const SORTED = ENTRIES
   .filter((g) => g.thumbnail)
   .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+// num 純裝飾：oldest = #1，由 GALLERY 全長扣減而得。新增舊圖時整體編號會自動 reflow
+const TOTAL = SORTED.length;
+SORTED.forEach((g, i) => { g.num = TOTAL - i; });
+
+export const GALLERY = SORTED;
 
 export function findGallery(slug) {
   return GALLERY.find((g) => g.slug === slug);
