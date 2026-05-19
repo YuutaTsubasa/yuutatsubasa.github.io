@@ -4,9 +4,9 @@ date: "2022-01-03"
 author: "诗婷"
 thumbnail: "/images/posts/fan_drawing_2022-01-03.webp"
 tags: ["翼友作品"]
-excerpt: "【诗婷】繪製的粉絲繪"
+excerpt: "_诗婷_ 繪製的粉絲繪"
 ---
-【诗婷】繪製的粉絲繪。
+_诗婷_ 繪製的粉絲繪。
 
 感謝诗婷畫的狐狸版本的我，這樣是不是就會變成跟 Tails 同個種族了呢～XD
 

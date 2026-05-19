@@ -4,9 +4,9 @@ date: "2022-04-06"
 author: "猫島羽依"
 thumbnail: "/images/posts/fan_drawing_2022-04-06.webp"
 tags: ["翼友作品"]
-excerpt: "【猫島羽依】繪製的粉絲繪"
+excerpt: "_猫島羽依_ 繪製的粉絲繪"
 ---
-【猫島羽依】繪製的粉絲繪。
+_猫島羽依_ 繪製的粉絲繪。
 
 感謝猫島媽媽繪製的貓女僕版本的我，很害羞的可愛感！XD
 
