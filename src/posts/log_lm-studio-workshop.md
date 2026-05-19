@@ -181,4 +181,4 @@ Continue 已經內建 LM Studio provider，全程點選就行：
 ## 延伸資源
 
 - [LM Studio 官網](https://lmstudio.ai) — 下載與官方文件
-- [別再小看本地 AI！Gemma 4 + LM Studio 讓你的電腦變成超級離線 AI 工作站](https://youtu.be/r5M0W66xcGc?si=Pq9arLWp-kfb3Ozl) — 本場 Workshop 參考來源
+- [別再小看本地 AI！Gemma 4 + LM Studio 讓你的電腦變成超級離線 AI 工作站](https://youtu.be/r5M0W66xcGc?si=Pq9arLWp-kfb3Ozl) · PAPAYA 電腦教室 — 本場 Workshop 參考來源

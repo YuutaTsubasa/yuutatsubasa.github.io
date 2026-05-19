@@ -234,8 +234,8 @@
           {/if}
         </div>
 
-        <!-- SIDEBAR -->
-        <aside class="side">
+        <!-- SIDEBAR (TOP): pinned in right column on desktop, above article on mobile -->
+        <aside class="side side-top">
           {#if toc.length > 0}
             <div class="panel" use:reveal={{ delay: 180 }}>
               <Corners color="var(--line-strong)" size={9} />
@@ -267,7 +267,10 @@
               </div>
             </div>
           {/if}
+        </aside>
 
+        <!-- SIDEBAR (BOTTOM): under top sidebar on desktop, below article on mobile -->
+        <aside class="side side-bottom">
           {#if (entry.category === 'project' || entry.category === 'workshop') && entry.links?.length}
             <div class="panel" use:reveal={{ delay: 220 }}>
               <Corners color="var(--line-strong)" size={9} />
@@ -472,14 +475,29 @@
   .grid {
     display: grid;
     grid-template-columns: minmax(0, 760px) 280px;
+    grid-template-areas:
+      "article side-top"
+      "article side-bottom";
+    grid-template-rows: auto 1fr;
     gap: 36px;
     justify-content: start;
     align-items: start;
     position: relative;
     z-index: 1;
   }
+  .article { grid-area: article; }
+  .side-top { grid-area: side-top; }
+  .side-bottom { grid-area: side-bottom; }
   @media (max-width: 1000px) {
-    .grid { grid-template-columns: 1fr; gap: 24px; }
+    .grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "side-top"
+        "article"
+        "side-bottom";
+      grid-template-rows: auto auto auto;
+      gap: 24px;
+    }
   }
 
   /* main content sits above the background deco */
@@ -663,14 +681,16 @@
   }
 
   .side {
-    position: sticky;
-    top: 110px;
     display: flex;
     flex-direction: column;
     gap: 16px;
   }
+  .side-top {
+    position: sticky;
+    top: 110px;
+  }
   @media (max-width: 1000px) {
-    .side { position: static; }
+    .side-top { position: static; }
   }
   .panel {
     position: relative;
