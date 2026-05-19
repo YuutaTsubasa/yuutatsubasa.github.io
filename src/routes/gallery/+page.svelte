@@ -244,10 +244,9 @@
     font-size: 10px;
     letter-spacing: 0.12em;
     color: var(--tag, #FFF);
-    background: color-mix(in srgb, var(--tag, #FFF) 18%, rgba(5, 10, 25, 0.55));
+    background: color-mix(in srgb, var(--tag, #FFF) 22%, rgba(5, 10, 25, 0.72));
     border: 1px solid color-mix(in srgb, var(--tag, #FFF) 55%, transparent);
     border-radius: 2px;
-    backdrop-filter: blur(4px);
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
   }
   .tile-date {
