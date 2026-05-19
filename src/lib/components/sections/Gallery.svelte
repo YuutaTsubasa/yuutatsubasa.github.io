@@ -50,7 +50,7 @@
         >
           <Corners color={isHover ? 'var(--blue-bright)' : 'var(--line-strong)'} size={10} />
 
-          <img class="tile-img" src={g.thumbnail} alt={g.title} loading="lazy" />
+          <img class="tile-img" src={g.thumb || g.thumbnail} alt={g.title} loading="lazy" decoding="async" />
           <div class="bottom-fade" aria-hidden></div>
 
           <div class="display idx">

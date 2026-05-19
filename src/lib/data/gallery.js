@@ -63,6 +63,17 @@ function filenameToSlug(filename) {
   return filename.replace(/_/g, '-');
 }
 
+// /images/posts/X.webp → /images/posts/thumbs/X.webp（build 時生成的縮圖）
+// /images/posts/X.gif  → /images/posts/thumbs/X.webp（thumb 一律 webp）
+// 其他路徑（例如 /images/yuuta-figure-1-1920.webp）回原圖
+function thumbFor(thumbnail) {
+  if (!thumbnail) return null;
+  if (!thumbnail.startsWith('/images/posts/')) return thumbnail;
+  return thumbnail
+    .replace('/images/posts/', '/images/posts/thumbs/')
+    .replace(/\.[^./]+$/, '.webp');
+}
+
 const ENTRIES = Object.entries(files).map(([path, raw]) => {
   const { meta, body } = splitFrontmatter(raw);
   const filename = path.split('/').pop().replace('.md', '');
@@ -81,6 +92,7 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
     title: meta.title,
     date: (meta.date ?? '').replace(/-/g, '.'),
     thumbnail: meta.thumbnail,
+    thumb: thumbFor(meta.thumbnail),
     extras,
     excerpt: meta.excerpt,
     sourceUrl: extractSourceUrl(body),

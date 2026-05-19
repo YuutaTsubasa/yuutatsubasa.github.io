@@ -99,7 +99,7 @@
           {@const c = findGalleryCategory(g.category)}
           <a class="tile" href={`/gallery/${g.slug}`} use:reveal={{ delay: Math.min(i * 30, 600), distance: 18 }}>
             <Corners color="var(--line-strong)" size={10} />
-            <img class="tile-img" src={g.thumbnail} alt={g.title} loading="lazy" />
+            <img class="tile-img" src={g.thumb || g.thumbnail} alt={g.title} loading="lazy" decoding="async" />
             <div class="bottom-fade" aria-hidden></div>
             <span class="mono tile-id">#{String(g.num ?? i + 1).padStart(3, '0')}</span>
             {#if c}
