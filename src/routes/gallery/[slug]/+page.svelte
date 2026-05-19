@@ -34,7 +34,7 @@
             ? piece.thumbnail
             : `${SITE_URL}${piece.thumbnail}`,
           name: piece.title,
-          description: piece.excerpt || `${cat?.label ?? '作品'} · 繪師：${piece.artist}`,
+          description: (piece.excerpt || '').replace(/<[^>]+>/g, '').trim() || `${cat?.label ?? '作品'} · 繪師：${piece.artist}`,
           datePublished: piece.date ? piece.date.replace(/\./g, '-') : undefined,
           creator: {
             '@type': 'Person',
@@ -172,7 +172,7 @@
           <div class="meta-rule"></div>
           <div>
             <div class="mono mn-cap">// NOTE</div>
-            <p class="mn-text">{piece.excerpt}</p>
+            <p class="mn-text">{@html piece.excerpt}</p>
           </div>
         {/if}
 

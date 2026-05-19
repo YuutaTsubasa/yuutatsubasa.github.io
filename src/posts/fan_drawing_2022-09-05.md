@@ -4,9 +4,9 @@ date: "2022-09-05"
 author: "CC"
 thumbnail: "/images/posts/fan_drawing_2022-09-05.webp"
 tags: ["翼友作品"]
-excerpt: "CC 繪製的粉絲繪"
+excerpt: "<u>CC</u>繪製的粉絲繪"
 ---
-<u>CC</u> 繪製的粉絲繪。
+<u>CC</u>繪製的粉絲繪。
 
 感謝 CC 畫的我，吃章魚燒的感覺好日常好讚！
 

@@ -4,9 +4,9 @@ date: "2021-10-08"
 author: "篁"
 thumbnail: "/images/posts/fan_drawing_2021-10-08_1df1.webp"
 tags: ["翼友作品"]
-excerpt: "篁 繪製的粉絲繪"
+excerpt: "<u>篁</u>繪製的粉絲繪"
 ---
-<u>篁</u> 繪製的粉絲繪。
+<u>篁</u>繪製的粉絲繪。
 
 感謝篁老師畫的 Q 版圖，真的很可愛！
 

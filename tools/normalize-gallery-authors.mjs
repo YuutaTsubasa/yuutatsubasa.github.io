@@ -24,18 +24,23 @@ for (const file of files) {
   let fm = raw.slice(0, fmEnd);
   let body = raw.slice(fmEnd);
 
-  // Frontmatter：保持純文字（避免 SEO description / JSON-LD 出現原始 tag）
-  //   - 把【author】、_author_、<u>author</u> 都壓回純 author
-  fm = fm.replaceAll(`【${author}】`, author);
-  fm = fm.replaceAll(`_${author}_`, author);
-  fm = fm.replaceAll(wrapped, author);
+  // Frontmatter：作者也用 <u> 包（顯示時走 @html、JSON-LD 那邊 strip）
+  fm = fm.replaceAll(`【${author}】`, wrapped);
+  fm = fm.replaceAll(`_${author}_`, wrapped);
+  fm = fm.replaceAll(`${wrapped} 繪製`, `${wrapped}繪製`);
+  // bare 'author 繪製' in excerpt (commission style) → '<u>author</u>繪製'
+  const fmBare = new RegExp(`(?<![>】])${esc}(?=\\s*繪製)`, 'g');
+  fm = fm.replace(fmBare, wrapped);
+  fm = fm.replaceAll(`${wrapped} 繪製`, `${wrapped}繪製`);
 
-  // Body：作者名統一包 <u>...</u>
+  // Body：作者名統一包 <u>...</u>，並貼合下一個字（無空白）
   body = body.replaceAll(`【${author}】`, wrapped);
   body = body.replaceAll(`_${author}_`, wrapped);
-  // bare 'author 繪製' → '<u>author</u> 繪製'（前面不是 > 或 】 才包）
-  const bare = new RegExp(`(?<![>】])${esc}(?=\\s+繪製)`, 'g');
+  // bare 'author 繪製' → '<u>author</u>繪製'（前面不是 > 或 】 才包，後接 繪製）
+  const bare = new RegExp(`(?<![>】])${esc}(?=\\s*繪製)`, 'g');
   body = body.replace(bare, wrapped);
+  // 收掉 </u> 後面緊跟 ' 繪製' 的單個空白
+  body = body.replaceAll(`${wrapped} 繪製`, `${wrapped}繪製`);
 
   const next = fm + body;
 
