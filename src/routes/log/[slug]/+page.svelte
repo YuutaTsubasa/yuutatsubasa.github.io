@@ -63,6 +63,19 @@
     ? entry.streams.map((vol) => VIDEOS.find((v) => v.vol === Number(vol))).filter(Boolean)
     : [];
 
+  // Lightbox state for body images
+  let lightboxSrc = '';
+  let lightboxAlt = '';
+  function handleBodyClick(e) {
+    const t = e.target;
+    if (t && t.tagName === 'IMG') {
+      lightboxSrc = t.getAttribute('src') || '';
+      lightboxAlt = t.getAttribute('alt') || '';
+    }
+  }
+  function closeLightbox() { lightboxSrc = ''; }
+  function handleKey(e) { if (e.key === 'Escape') closeLightbox(); }
+
   const SITE_URL = 'https://yuuta-tsubasa.studio';
   $: jsonLd = entry
     ? {
@@ -89,6 +102,8 @@
 {:else}
   <Seo title="LOG · 悠太翼 YUUTA TSUBASA" />
 {/if}
+
+<svelte:window on:keydown={handleKey} />
 
 <section id="main" class="detail">
   <div class="wrap">
@@ -186,7 +201,7 @@
           {/if}
 
           {#if entry.bodyRaw}
-            <div class="body" use:reveal={{ delay: 200 }}>
+            <div class="body" use:reveal={{ delay: 200, threshold: 0 }} on:click={handleBodyClick} on:keydown role="presentation">
               {@html bodyHtml}
             </div>
           {/if}
@@ -295,6 +310,14 @@
     {/if}
   </div>
 </section>
+
+{#if lightboxSrc}
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="圖片放大檢視">
+    <button type="button" class="lb-backdrop" on:click={closeLightbox} aria-label="關閉放大檢視"></button>
+    <img class="lb-img" src={lightboxSrc} alt={lightboxAlt} />
+    <button type="button" class="lb-close mono" on:click={closeLightbox} aria-label="關閉">CLOSE  ✕</button>
+  </div>
+{/if}
 
 <style>
   .detail {
@@ -546,7 +569,23 @@
     margin: 0 0 18px;
     padding-left: 24px;
   }
+  .body :global(ul) { list-style: disc outside; }
+  .body :global(ol) { list-style: decimal outside; }
   .body :global(li) { margin-bottom: 6px; }
+  .body :global(img) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 16px auto;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    cursor: zoom-in;
+    transition: filter 0.15s ease, transform 0.15s ease;
+  }
+  .body :global(img:hover) {
+    filter: brightness(1.04);
+    transform: translateY(-1px);
+  }
   .body :global(code) {
     font-family: var(--font-mono);
     font-size: 0.9em;
@@ -852,5 +891,53 @@
     }
     .deco-watermark { font-size: 56px; -webkit-text-stroke-width: 1px; text-stroke-width: 1px; }
     .deco-num { font-size: 22px; }
+  }
+
+  /* ===== Lightbox ===== */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    animation: lb-fade 0.18s ease;
+  }
+  .lb-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 12, 24, 0.88);
+    backdrop-filter: blur(6px);
+    border: 0;
+    padding: 0;
+    cursor: zoom-out;
+  }
+  .lb-img {
+    position: relative;
+    max-width: min(100%, 1600px);
+    max-height: calc(100vh - 64px);
+    width: auto;
+    height: auto;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+  }
+  .lb-close {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #E5EBF6;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 6px 12px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .lb-close:hover { background: rgba(255, 255, 255, 0.16); }
+  @keyframes lb-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 </style>

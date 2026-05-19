@@ -54,7 +54,7 @@ export const LOG_CATEGORIES = [
   { id: 'project',  enLabel: 'PROJECT',  label: '作品', color: '#22D3EE', glyph: '▣' },
   { id: 'review',   enLabel: 'REVIEW',   label: '心得', color: '#F472B6', glyph: '★' },
   { id: 'solve',    enLabel: 'SOLVE',    label: '解題', color: '#A78BFA', glyph: '◆' },
-  { id: 'workshop', enLabel: 'WORKSHOP', label: '講義', color: '#FBBF24', glyph: '📘' }
+  { id: 'workshop', enLabel: 'WORKSHOP', label: '講義', color: '#FBBF24', glyph: '▤' }
 ];
 
 // LOG_TYPES：以 enLabel 為 key，方便 terminal-row 用

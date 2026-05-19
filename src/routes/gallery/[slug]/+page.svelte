@@ -347,6 +347,14 @@
     color: #A8B3C7;
   }
   .body :global(p) { margin: 0 0 10px; }
+  .body :global(ul),
+  .body :global(ol) {
+    margin: 0 0 10px;
+    padding-left: 22px;
+  }
+  .body :global(ul) { list-style: disc outside; }
+  .body :global(ol) { list-style: decimal outside; }
+  .body :global(li) { margin: 2px 0; }
   .body :global(a) {
     color: #7CC4FF;
     text-decoration: none;

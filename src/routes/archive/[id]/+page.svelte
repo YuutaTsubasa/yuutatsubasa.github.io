@@ -262,7 +262,7 @@
 
       <!-- briefing -->
       {#if video.bodyRaw}
-        <div class="briefing" use:reveal={{ delay: 80 }}>
+        <div class="briefing" use:reveal={{ delay: 80, threshold: 0 }}>
           <Corners />
           <div class="brief-head">
             <span class="mono bh-cap">// BRIEFING</span>
@@ -665,6 +665,8 @@
     margin: 0 0 14px;
     padding-left: 22px;
   }
+  .brief-body :global(ul) { list-style: disc outside; }
+  .brief-body :global(ol) { list-style: decimal outside; }
   .brief-body :global(li) { margin: 2px 0; }
   .brief-body :global(a) {
     color: var(--blue-bright);
