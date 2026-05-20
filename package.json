@@ -2,13 +2,12 @@
 	"name": "website-v4",
 	"version": "0.0.1",
 	"scripts": {
-		"predev": "node tools/build-thumbnails.mjs",
 		"dev": "vite dev",
 		"preview": "vite preview",
-		"prebuild": "node tools/build-thumbnails.mjs",
 		"build": "vite build",
 		"predeploy": "npm run build",
-		"deploy": "gh-pages -d dist -t true"
+		"deploy": "gh-pages -d dist -t true",
+		"thumbs": "node tools/build-thumbnails.mjs"
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^5.0.0",
