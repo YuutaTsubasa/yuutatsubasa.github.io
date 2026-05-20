@@ -1,5 +1,5 @@
 <script>
-  import { GALLERY } from '$lib/data/gallery.js';
+  import { GALLERY, findGalleryCategory } from '$lib/data/gallery.js';
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import { reveal } from '$lib/utils/reveal.js';
@@ -38,6 +38,7 @@
       {#each preview as g, i}
         {@const sz = sizes[i % sizes.length]}
         {@const isHover = hover === g.id}
+        {@const cat = findGalleryCategory(g.category)}
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <a
           class="tile"
@@ -57,6 +58,10 @@
             {String(g.num ?? i + 1).padStart(2, '0')}
             <span class="tech idx-total">/{String(GALLERY.length).padStart(2, '0')}</span>
           </div>
+
+          {#if cat}
+            <span class="tech tile-tag" style:--tag={cat.color}>{cat.label}</span>
+          {/if}
 
           <div class="info-bar">
             <div>
@@ -137,6 +142,19 @@
     font-size: 11px;
     color: rgba(255, 255, 255, 0.7);
     margin-left: 6px;
+  }
+  .tile-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 3px 8px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--tag, #FFF);
+    background: color-mix(in srgb, var(--tag, #FFF) 22%, rgba(5, 10, 25, 0.72));
+    border: 1px solid color-mix(in srgb, var(--tag, #FFF) 55%, transparent);
+    border-radius: 2px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
   }
   .info-bar {
     position: absolute;
