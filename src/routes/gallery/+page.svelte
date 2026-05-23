@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import { GALLERY, GALLERY_CATEGORIES, findGalleryCategory } from '$lib/data/gallery.js';
   import SectionHead from '$lib/components/atoms/SectionHead.svelte';
   import Corners from '$lib/components/atoms/Corners.svelte';
@@ -38,6 +39,90 @@
     }
     return out;
   })();
+
+  // ── JS masonry：用 Image() 預載拿圖片 natural dimensions，直接算 tile
+  // 高度，分配到「累積最矮」column。完全不靠 DOM 量測，避開 CSS column-count
+  // 在 Safari 的所有 multicol bug，且沒有量測時序 race。 ────────────────────
+  let cols = 3;
+  let columns = [[], [], []];
+  let containerEl;
+  let mounted = false;
+  const dimCache = new Map(); // src -> {w, h}
+  let layoutToken = 0;
+
+  function getColCount() {
+    if (typeof window === 'undefined') return 3;
+    if (window.matchMedia('(max-width: 600px)').matches) return 1;
+    if (window.matchMedia('(max-width: 900px)').matches) return 2;
+    return 3;
+  }
+
+  function roundRobin(items, n) {
+    const out = Array.from({ length: n }, () => []);
+    items.forEach((g, i) => out[i % n].push(g));
+    return out;
+  }
+
+  function getDims(src) {
+    if (dimCache.has(src)) return Promise.resolve(dimCache.get(src));
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const d = { w: img.naturalWidth || 4, h: img.naturalHeight || 3 };
+        dimCache.set(src, d);
+        resolve(d);
+      };
+      img.onerror = () => {
+        const d = { w: 4, h: 3 };
+        dimCache.set(src, d);
+        resolve(d);
+      };
+      img.src = src;
+    });
+  }
+
+  // SSR / 第一幀：round-robin（layout() 跑完會覆蓋）
+  $: columns = roundRobin(list, cols);
+
+  async function layout() {
+    if (!mounted) return;
+    const token = ++layoutToken;
+    const currentList = list;
+    const currentCols = cols;
+    const dims = await Promise.all(
+      currentList.map((g) => getDims(g.thumb || g.thumbnail))
+    );
+    if (token !== layoutToken) return; // 已被新的 layout 取代
+    const containerW = containerEl?.clientWidth ?? 1200;
+    const colW = (containerW - (currentCols - 1) * 16) / currentCols;
+    // tile 高度 ≈ image 高度（tile-foot / tile-tag 是 absolute，不額外加）
+    const heights = dims.map(({ w, h }) => (colW * h) / w);
+    const colHeights = Array(currentCols).fill(0);
+    const next = Array.from({ length: currentCols }, () => []);
+    currentList.forEach((g, i) => {
+      const k = colHeights.indexOf(Math.min(...colHeights));
+      next[k].push(g);
+      colHeights[k] += heights[i] + 16;
+    });
+    columns = next;
+  }
+
+  $: if (mounted) {
+    list; cols;
+    layout();
+  }
+
+  onMount(() => {
+    mounted = true;
+    cols = getColCount();
+    layout();
+    const onResize = () => {
+      const c = getColCount();
+      if (c !== cols) cols = c;
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  });
 </script>
 
 <Seo
@@ -94,25 +179,30 @@
     {#if list.length === 0}
       <div class="empty mono">// NO PIECES IN THIS YEAR</div>
     {:else}
-      <div class="masonry">
-        {#each list as g, i (g.id)}
-          {@const c = findGalleryCategory(g.category)}
-          <a class="tile" href={`/gallery/${g.slug}`} use:reveal={{ delay: Math.min(i * 30, 600), distance: 18 }}>
-            <Corners color="var(--line-strong)" size={10} />
-            <img class="tile-img" src={g.thumb || g.thumbnail} alt={g.title} loading="lazy" decoding="async" />
-            <div class="bottom-fade" aria-hidden></div>
-            <span class="mono tile-id">#{String(g.num ?? i + 1).padStart(3, '0')}</span>
-            {#if c}
-              <span class="tech tile-tag" style:--tag={c.color}>{c.label}</span>
-            {/if}
-            <div class="tile-foot">
-              <div class="tile-foot-left">
-                <div class="mono by">BY</div>
-                <div class="tech artist">{g.artist}</div>
-              </div>
-              <span class="mono tile-date">{g.date}</span>
-            </div>
-          </a>
+      <div class="masonry" bind:this={containerEl}>
+        {#each columns as col, ci}
+          <div class="col">
+            {#each col as g (g.id)}
+              {@const c = findGalleryCategory(g.category)}
+              {@const i = list.indexOf(g)}
+              <a class="tile" href={`/gallery/${g.slug}`} use:reveal={{ delay: Math.min(i * 30, 600), distance: 18 }}>
+                <Corners color="var(--line-strong)" size={10} />
+                <img class="tile-img" src={g.thumb || g.thumbnail} alt={g.title} loading="lazy" decoding="async" />
+                <div class="bottom-fade" aria-hidden></div>
+                <span class="mono tile-id">#{String(g.num ?? i + 1).padStart(3, '0')}</span>
+                {#if c}
+                  <span class="tech tile-tag" style:--tag={c.color}>{c.label}</span>
+                {/if}
+                <div class="tile-foot">
+                  <div class="tile-foot-left">
+                    <div class="mono by">BY</div>
+                    <div class="tech artist">{g.artist}</div>
+                  </div>
+                  <span class="mono tile-date">{g.date}</span>
+                </div>
+              </a>
+            {/each}
+          </div>
         {/each}
       </div>
     {/if}
@@ -191,12 +281,21 @@
     letter-spacing: 0.15em;
   }
 
+  /* JS masonry：flex columns，每欄 flex 1 1 0；tile 之間用 gap，不再用
+     margin-bottom + column-count（避開 Safari multicol 全部 bug）。
+     欄數由 JS 依視窗寬度動態切換（onMount + resize listener）。 */
   .masonry {
-    column-count: 3;
-    column-gap: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
   }
-  @media (max-width: 900px) { .masonry { column-count: 2; } }
-  @media (max-width: 600px) { .masonry { column-count: 1; } }
+  .col {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
   .tile {
     position: relative;
     display: block;
@@ -206,8 +305,6 @@
     color: inherit;
     text-decoration: none;
     transition: border-color 0.2s, box-shadow 0.2s;
-    margin-bottom: 16px;
-    break-inside: avoid;
     contain: layout paint;
     isolation: isolate;
   }
