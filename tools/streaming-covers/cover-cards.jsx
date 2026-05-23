@@ -355,6 +355,9 @@ function CardB({ d }) {
 // Left: terminal window. Right: character + game logo
 // ============================================================
 function CardC({ d }) {
+  const cats = parseCategoryList(d.categories);
+  const primaryCat = cats[0];
+  const hasEpisode = d.episode != null && d.episode !== "";
   return (
     <div className={`cover ${d.mode === "light" ? "light" : ""}`}>
       <div style={{ position:"absolute", inset:0,
@@ -387,6 +390,8 @@ function CardC({ d }) {
         </span>
         <span style={{ marginLeft:18, color:"var(--silver-2)" }}>~/yuuta/streams/vol_{d.vol} — zsh — 132×40</span>
         <span style={{ flex:1 }}/>
+        {d.streamTime && <span style={{ color:"var(--silver-3)" }}>{d.streamTime}</span>}
+        <span style={{ width:1, height:14, background:"var(--line-strong)" }}/>
         <Dot color="#EF4444"/>
         <span style={{ color:"var(--c-live-text)", fontWeight:600 }}>LIVE</span>
       </div>
@@ -404,16 +409,24 @@ function CardC({ d }) {
 <span style={{ color:"var(--silver-3)" }}>{"// boot sequence …"}</span>{"\n"}
 <span style={{ color:"var(--blue-bright)" }}>knight@azure</span><span style={{ color:"var(--silver-3)" }}>:</span><span style={{ color:"var(--accent-cyan)" }}>~</span>{" $ "}
 <span style={{ color:"var(--silver-0)" }}>./mission --start</span>{"\n"}
-<span style={{ color:"var(--silver-3)" }}>{"▸ loading callsign...  "}</span><span style={{ color:"#22D3EE" }}>{d.callsign}</span>{"\n"}
-<span style={{ color:"var(--silver-3)" }}>{"▸ archive id    ......  "}</span><span style={{ color:"var(--blue-bright)" }}>VOL.{d.vol} · EP·{String(d.episode).padStart(2,"0")}</span>{"\n"}
-<span style={{ color:"var(--silver-3)" }}>{"▸ category      ......  "}</span><span style={{ color:"var(--accent-amber)" }}>{d.category} / {d.categoryZh}</span>{"\n\n"}
+<span style={{ color:"var(--silver-3)" }}>{"▸ archive id    ......  "}</span><span style={{ color:"var(--blue-bright)" }}>VOL.{d.vol}{hasEpisode ? ` · EP·${String(d.episode).padStart(2,"0")}` : ""}</span>{"\n"}
+{primaryCat && (<>
+<span style={{ color:"var(--silver-3)" }}>{"▸ category      ......  "}</span><span style={{ color:"var(--accent-amber)" }}>{primaryCat.enLabel} / {primaryCat.label}</span>{"\n"}
+</>)}
+{d.artist && (<>
+<span style={{ color:"var(--silver-3)" }}>{"▸ artist        ......  "}</span><span style={{ color:"#22D3EE" }}>{d.artist}</span>{"\n"}
+</>)}
+{"\n"}
 <span style={{ color:"var(--blue-bright)" }}>knight@azure</span><span style={{ color:"var(--silver-3)" }}>:</span><span style={{ color:"var(--accent-cyan)" }}>~</span>{" $ "}
 <span style={{ color:"var(--silver-0)" }}>cat ./brief.json</span>{"\n"}
 {"{\n"}
 {"  "}<span style={{ color:"#A78BFA" }}>"target_zh"</span>{": "}<span style={{ color:"var(--silver-0)", fontWeight:700 }}>"{d.titleMain}"</span>{",\n"}
+{d.titleSub && (<>
 {"  "}<span style={{ color:"#A78BFA" }}>"target_en"</span>{": "}<span style={{ color:"var(--silver-0)", fontWeight:700 }}>"{d.titleSub}"</span>{",\n"}
+</>)}
+{hasEpisode && (<>
 {"  "}<span style={{ color:"#A78BFA" }}>"episode"</span>{":   "}<span style={{ color:"var(--accent-cyan)" }}>{d.episode}</span>{",\n"}
-{"  "}<span style={{ color:"#A78BFA" }}>"objective"</span>{": "}<span style={{ color:"var(--silver-1)" }}>"{d.subtitle}"</span>{",\n"}
+</>)}
 {"  "}<span style={{ color:"#A78BFA" }}>"status"</span>{":    "}<span style={{ color:"#EF4444", fontWeight:700 }}>"LIVE_NOW"</span>{"\n"}
 {"}\n\n"}
 <span style={{ color:"var(--blue-bright)" }}>knight@azure</span><span style={{ color:"var(--silver-3)" }}>:</span><span style={{ color:"var(--accent-cyan)" }}>~</span>{" $ "}
@@ -422,12 +435,21 @@ function CardC({ d }) {
         </pre>
       </div>
 
-      {/* Game logo hex floating */}
-      <div style={{ position:"absolute", right:50, top:100 }}>
-        <HexFrame size={260}>
-          <GameLogoPlaceholder ch={d.logoCh} en={d.logoEn}/>
-        </HexFrame>
-      </div>
+      {/* Theme logo block (image-based, replaces hex placeholder) */}
+      {d.logoSrc && (
+        <div style={{ position:"absolute", right:30, top:90,
+          padding:"14px 18px",
+          background:"var(--c-surface)", border:"1px solid var(--line-strong)",
+          backdropFilter:"blur(6px)", WebkitBackdropFilter:"blur(6px)",
+          display:"flex", flexDirection:"column", alignItems:"flex-end", gap:8,
+          maxWidth:280
+        }}>
+          <span className="mono" style={{ fontSize:10, color:"var(--blue-bright)", letterSpacing:".25em" }}>▸ THEME</span>
+          <img src={d.logoSrc} alt="theme logo" style={{
+            maxHeight:120, maxWidth:240, objectFit:"contain", display:"block"
+          }}/>
+        </div>
+      )}
 
       {/* Right character HUD labels */}
       <div style={{ position:"absolute", right:30, top:400, fontFamily:"var(--font-mono)", fontSize:10, color:"var(--accent-cyan)", textAlign:"right" }}>
@@ -441,16 +463,23 @@ function CardC({ d }) {
       {/* BOTTOM */}
       <div style={{
         position:"absolute", left:0, right:0, bottom:0, height:60,
-        display:"flex", alignItems:"center", padding:"0 32px", gap:24,
+        display:"flex", alignItems:"center", padding:"0 32px", gap:14,
         borderTop:"1px solid var(--line)",
         background:"var(--c-strip-solid-2)"
       }}>
         <YuutaMark size={22} showEn={true}/>
         <span style={{ flex:1 }}/>
-        <Tag color="var(--blue-bright)" solid>{d.category}</Tag>
+        {cats.slice(0,3).map((t) => (
+          <Tag key={t.id} color={t.color} solid>{t.enLabel}</Tag>
+        ))}
         <span className="mono" style={{ fontSize:11, color:"var(--silver-3)", letterSpacing:".22em" }}>
           ::FPS / 60 ::ENC / RSA-4096 ::HQ / 4K
         </span>
+        {d.vtuberLogoSrc && (
+          <img src={d.vtuberLogoSrc} alt="VTuber logo" style={{
+            height:32, width:"auto", display:"block", objectFit:"contain"
+          }}/>
+        )}
       </div>
     </div>
   );
@@ -461,20 +490,34 @@ function CardC({ d }) {
 // Game scene full-bleed, info anchored bottom — like video card
 // ============================================================
 function CardD({ d }) {
+  const cats = parseCategoryList(d.categories);
+  const bgStyle = d.bgSrc
+    ? {
+        backgroundImage: `url('${d.bgSrc}')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center"
+      }
+    : {};
   return (
     <div className={`cover ${d.mode === "light" ? "light" : ""}`}>
-      <div className={`game-bg theme-${d.theme}`}/>
+      <div
+        className={`game-bg theme-${d.theme}${d.bgSrc ? "" : " game-bg-blur"}${d.bgSrc && d.bgEffect ? ` bg-${d.bgEffect}` : ""}`}
+        style={d.bgSrc && d.bgEffect === "soft"
+          ? { ...bgStyle, filter: "blur(4px) saturate(.85)", transform: "scale(1.02)" }
+          : bgStyle}
+      />
+      {d.bgSrc && d.bgEffect === "soft" && (
+        <div className="bg-soft-tint" style={typeof d.bgTint === "number" ? { background: `rgba(8,16,32,${d.bgTint})` } : undefined}/>
+      )}
       <div className="fx-noise"/>
 
-      {/* HERO character right */}
+      {/* HERO character — fits right half (640×720), bottom-aligned, full body */}
       <Hero src={d.heroSrc} style={{
-        right:-60, top:-40, width:780, height:780,
-        opacity:1,
-        maskImage:"linear-gradient(90deg, transparent 0%, rgba(0,0,0,.4) 12%, black 30%, black 90%, transparent 100%)",
-        WebkitMaskImage:"linear-gradient(90deg, transparent 0%, rgba(0,0,0,.4) 12%, black 30%, black 90%, transparent 100%)"
-      }} position="48% 28%" size="195%"/>
+        right:0, bottom:0, width:640, height:720,
+        opacity:.98
+      }} position="center bottom" size="contain"/>
 
-      {/* Heavy bottom-up vignette for text legibility */}
+      {/* Bottom-up vignette for text legibility */}
       <div style={{ position:"absolute", inset:0, pointerEvents:"none",
         background:"var(--c-d-vignette)"
       }}/>
@@ -485,32 +528,50 @@ function CardD({ d }) {
 
       <div className="fx-grid"/>
 
-      {/* TOP-LEFT — archive entry mono */}
+      {/* TOP HEADER STRIP (A-style frame, D content) */}
       <div style={{
-        position:"absolute", left:40, top:32,
-        display:"flex", alignItems:"center", gap:14,
+        position:"absolute", left:0, right:0, top:0, height:48,
+        display:"flex", alignItems:"center", padding:"0 32px", gap:24,
+        background:"var(--c-strip-top)",
+        borderBottom:"1px solid var(--line)",
         fontFamily:"var(--font-mono)", fontSize:11, letterSpacing:".22em", color:"var(--silver-2)"
       }}>
         <span style={{ color:"var(--blue-bright)" }}>▸ ARCHIVE ENTRY</span>
         <span style={{ color:"var(--silver-3)" }}>//</span>
-        <span>{String(d.vol).padStart(4,"0")} · {String(d.episode).padStart(2,"0")}</span>
-      </div>
-
-      {/* TOP-RIGHT — LIVE */}
-      <div style={{
-        position:"absolute", right:40, top:24, display:"flex", alignItems:"center", gap:10,
-        padding:"8px 14px", border:"1px solid var(--c-live-border)", background:"var(--c-live-bg)"
-      }}>
+        <span>
+          {String(d.vol).padStart(4,"0")}
+          {d.episode != null && d.episode !== "" && ` · ${String(d.episode).padStart(2,"0")}`}
+        </span>
+        {d.streamTime && (<>
+          <span style={{ color:"var(--silver-3)" }}>//</span>
+          <span>{d.streamTime}</span>
+        </>)}
+        {d.artist && (<>
+          <span style={{ color:"var(--silver-3)" }}>//</span>
+          <span>ARTIST / {d.artist}</span>
+        </>)}
+        <span style={{ flex:1 }}/>
+        <span style={{ width:1, height:14, background:"var(--line-strong)" }}/>
         <Dot color="#EF4444"/>
-        <span className="tech" style={{ color:"var(--c-live-text)", fontSize:12, letterSpacing:".18em", fontWeight:600 }}>LIVE NOW</span>
+        <span style={{ color:"var(--c-live-text)", fontFamily:"var(--font-tech)", fontWeight:600, fontSize:12, letterSpacing:".18em" }}>LIVE NOW</span>
       </div>
 
-      {/* Big game logo hex centered-right behind character */}
-      <div style={{ position:"absolute", right:480, top:140, opacity:.95 }}>
-        <HexFrame size={300}>
-          <GameLogoPlaceholder ch={d.logoCh} en={d.logoEn}/>
-        </HexFrame>
-      </div>
+      {/* Theme logo block (top-left, below archive meta) */}
+      {d.logoSrc && (
+        <div style={{
+          position:"absolute", left:40, top:64,
+          padding:"14px 18px",
+          background:"var(--c-surface)", border:"1px solid var(--line-strong)",
+          backdropFilter:"blur(6px)", WebkitBackdropFilter:"blur(6px)",
+          display:"flex", flexDirection:"column", alignItems:"flex-start", gap:8,
+          maxWidth:320
+        }}>
+          <span className="mono" style={{ fontSize:10, color:"var(--blue-bright)", letterSpacing:".25em" }}>▸ THEME</span>
+          <img src={d.logoSrc} alt="theme logo" style={{
+            maxHeight:150, maxWidth:280, objectFit:"contain", display:"block"
+          }}/>
+        </div>
+      )}
 
       {/* HUD reticle over character */}
       <Reticle size={120} color="var(--blue-bright)" opacity={.7}/>
@@ -520,20 +581,21 @@ function CardD({ d }) {
 
       <div className="fx-vignette"/>
 
-      {/* BOTTOM info bar (like video card) */}
-      <div style={{ position:"absolute", left:0, right:0, bottom:0, padding:"24px 40px 28px" }}>
+      {/* BOTTOM info bar (sits above the bottom strip) */}
+      <div style={{ position:"absolute", left:0, right:0, bottom:60, padding:"24px 40px 20px" }}>
         {/* meta row */}
-        <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:18 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:18, flexWrap:"wrap" }}>
           <div style={{
-            display:"flex", alignItems:"baseline", gap:8,
-            padding:"8px 18px",
+            display:"flex", alignItems:"baseline", gap:10,
+            padding:"10px 22px",
             background:"var(--c-vol-pill)", border:"1px solid var(--line-strong)"
           }}>
-            <span className="mono" style={{ fontSize:11, color:"var(--blue-bright)", letterSpacing:".25em" }}>VOL</span>
-            <span className="display" style={{ fontSize:32, fontWeight:900, color:"var(--silver-0)", lineHeight:.9 }}>{d.vol}</span>
+            <span className="mono" style={{ fontSize:13, color:"var(--blue-bright)", letterSpacing:".25em" }}>VOL.</span>
+            <span className="display" style={{ fontSize:44, fontWeight:900, color:"var(--silver-0)", lineHeight:.9 }}>{d.vol}</span>
           </div>
-          <Tag color="var(--blue-bright)" solid>{d.category}</Tag>
-          <Tag color="var(--accent-cyan)">EP · {String(d.episode).padStart(2,"0")}</Tag>
+          {cats.map((t) => (
+            <Tag key={t.id} color={t.color} size="lg">{t.enLabel}</Tag>
+          ))}
           <span style={{ flex:1, height:1, background:"var(--line)" }}/>
           <span className="mono" style={{ fontSize:11, color:"var(--silver-3)", letterSpacing:".22em" }}>
             ::REC / 4K60   ::FPS / 60 LOCK
@@ -547,27 +609,41 @@ function CardD({ d }) {
           textShadow:"var(--c-shadow-text)"
         }}>
           {d.titleMain}
-          <span style={{
-            fontFamily:"var(--font-display)", fontStyle:"italic", fontSize:48,
-            color:"var(--blue-bright)", marginLeft:18
-          }}>
-            #{d.episode}
-          </span>
+          {d.episode != null && d.episode !== "" && (
+            <span style={{
+              fontFamily:"var(--font-display)", fontStyle:"italic", fontSize:48,
+              color:"var(--blue-bright)", marginLeft:18,
+              textShadow:"var(--c-shadow-text)"
+            }}>
+              #{d.episode}
+            </span>
+          )}
         </h1>
-        <div className="tech" style={{
-          marginTop:10, fontSize:30, fontWeight:600, color:"var(--silver-2)",
-          letterSpacing:".04em",
-          textShadow:"0 2px 12px rgba(0,0,0,.7)"
-        }}>
-          {d.titleSub}
-        </div>
-
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginTop:16 }}>
-          <div className="mono" style={{ fontSize:13, color:"var(--blue-glow)", letterSpacing:".06em" }}>
-            ▸ {d.subtitle}
+        {d.titleSub && (
+          <div className="tech" style={{
+            marginTop:10, fontSize:30, fontWeight:700, color:"var(--silver-1)",
+            letterSpacing:".04em",
+            textShadow:"var(--c-shadow-text)"
+          }}>
+            {d.titleSub}
           </div>
-          <YuutaMark size={22} showEn={true}/>
-        </div>
+        )}
+      </div>
+
+      {/* BOTTOM STRIP (A-style frame, D content: YuutaMark + VTuber logo) */}
+      <div style={{
+        position:"absolute", left:0, right:0, bottom:0, height:60,
+        display:"flex", alignItems:"center", padding:"0 32px", gap:24,
+        background:"var(--c-strip-bot)",
+        borderTop:"1px solid var(--line)"
+      }}>
+        <YuutaMark size={22} showEn={true}/>
+        <span style={{ flex:1 }}/>
+        {d.vtuberLogoSrc && (
+          <img src={d.vtuberLogoSrc} alt="VTuber logo" style={{
+            height:32, width:"auto", display:"block", objectFit:"contain"
+          }}/>
+        )}
       </div>
     </div>
   );

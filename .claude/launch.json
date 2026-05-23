@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "streaming-covers",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "tools/streaming-covers", "-l", "4321"],
+      "port": 4321
+    }
+  ]
+}

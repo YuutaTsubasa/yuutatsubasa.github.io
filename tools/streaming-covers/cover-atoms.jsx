@@ -71,17 +71,25 @@ const ScanBar = ({ progress = 75, label = "SCANNING", color = "var(--blue-electr
     </div>
   </div>
 );
-const Tag = ({ children, color = "var(--blue-bright)", solid = false }) => (
-  <span className="tech" style={{
-    display:"inline-flex", alignItems:"center", gap:6,
-    padding:"5px 11px", fontSize:11, letterSpacing:".16em", textTransform:"uppercase",
-    background: color,
-    color:"#FFFFFF",
-    border:`1px solid ${color}`,
-    fontWeight:700,
-    textShadow:"0 1px 2px rgba(0,0,0,.35)"
-  }}>{children}</span>
-);
+const Tag = ({ children, color = "var(--blue-bright)", solid = false, size = "sm" }) => {
+  const sizes = {
+    sm: { padding:"5px 11px", fontSize:11 },
+    md: { padding:"6px 13px", fontSize:13 },
+    lg: { padding:"8px 16px", fontSize:15 }
+  };
+  const s = sizes[size] || sizes.sm;
+  return (
+    <span className="tech" style={{
+      display:"inline-flex", alignItems:"center", gap:6,
+      padding:s.padding, fontSize:s.fontSize, letterSpacing:".16em", textTransform:"uppercase",
+      background: color,
+      color:"#FFFFFF",
+      border:`1px solid ${color}`,
+      fontWeight:700,
+      textShadow:"0 1px 2px rgba(0,0,0,.35)"
+    }}>{children}</span>
+  );
+};
 const Panel = ({ children, style, glow = false }) => (
   <div style={{
     position:"relative", padding:18,
@@ -140,9 +148,13 @@ const YuutaMark = ({ size = 36, showEn = true }) => (
       }}>TSUBASA</div>
     )}
     <div style={{
+      alignSelf:"stretch",
+      display:"flex", justifyContent:"space-between",
       fontFamily:"var(--font-mono)", fontSize:size*.22, color:"var(--silver-3)",
-      letterSpacing:".3em", marginTop:4
-    }}>悠 ・ 太 ・ 翼</div>
+      marginTop:4
+    }}>
+      <span>悠</span><span>・</span><span>太</span><span>・</span><span>翼</span>
+    </div>
   </div>
 );
 

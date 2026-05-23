@@ -40,7 +40,7 @@
     --c-vol-pill: rgba(96,165,250,.12);
     --c-d-vignette: linear-gradient(180deg, rgba(5,8,15,.5) 0%, rgba(5,8,15,0) 25%, rgba(5,8,15,0) 50%, rgba(5,8,15,.85) 100%);
     --c-d-fade: linear-gradient(90deg, rgba(5,8,15,.7) 0%, rgba(5,8,15,.2) 35%, transparent 55%);
-    --c-shadow-text: 0 4px 30px rgba(0,0,0,.85), 0 0 40px rgba(96,165,250,.2);
+    --c-shadow-text: 2px 0 0 rgba(8,16,32,.92), -2px 0 0 rgba(8,16,32,.92), 0 2px 0 rgba(8,16,32,.92), 0 -2px 0 rgba(8,16,32,.92), 1px 1px 0 rgba(8,16,32,.92), -1px -1px 0 rgba(8,16,32,.92), 1px -1px 0 rgba(8,16,32,.92), -1px 1px 0 rgba(8,16,32,.92), 0 0 30px rgba(96,165,250,.35);
     --c-shadow-title: 0 0 24px rgba(96,165,250,.25);
     --c-shadow-vol: 0 0 30px rgba(96,165,250,.4);
     --c-watermark: linear-gradient(180deg, rgba(96,165,250,.10), rgba(96,165,250,0));
@@ -73,7 +73,7 @@
     --c-vol-pill: rgba(37,99,235,.10);
     --c-d-vignette: linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 25%, rgba(255,255,255,0) 45%, rgba(255,255,255,.9) 100%);
     --c-d-fade: linear-gradient(90deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,.25) 35%, transparent 55%);
-    --c-shadow-text: 0 2px 10px rgba(255,255,255,.7), 0 0 0 rgba(0,0,0,0);
+    --c-shadow-text: 2px 0 0 rgba(255,255,255,.95), -2px 0 0 rgba(255,255,255,.95), 0 2px 0 rgba(255,255,255,.95), 0 -2px 0 rgba(255,255,255,.95), 1px 1px 0 rgba(255,255,255,.95), -1px -1px 0 rgba(255,255,255,.95), 1px -1px 0 rgba(255,255,255,.95), -1px 1px 0 rgba(255,255,255,.95), 0 6px 20px rgba(15,45,120,.35);
     --c-shadow-title: 0 0 24px rgba(37,99,235,.12);
     --c-shadow-vol: 0 0 30px rgba(37,99,235,.18);
     --c-watermark: linear-gradient(180deg, rgba(37,99,235,.18), rgba(37,99,235,0));
@@ -124,6 +124,8 @@
     position:absolute; inset:0; pointer-events:none;
     background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,.5) 100%);
   }
+  .cover.light .fx-noise{ opacity:.02; mix-blend-mode:multiply; }
+  .cover.light .fx-vignette{ background: radial-gradient(ellipse at center, transparent 55%, rgba(15,45,120,.10) 100%); }
 
   /* Faux game backgrounds — for placeholder use, replace .game-bg
      background-image with actual key art */
