@@ -26,5 +26,10 @@ export const SCHEDULE = [
   { id: 'v910',      startsAt: '2026-05-18T23:00:00+08:00', durationMinutes: 90,  title: '索尼克 英雄 Sonic Heroes #2',                platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/910' },
   { id: 'v911',      startsAt: '2026-05-19T23:00:00+08:00', durationMinutes: 120, title: 'LM Studio Workshop',                          platforms: ['YouTube', 'Twitch'], tags: ['code'], url: 'https://yutaii.run/v/911' },
   // 週三~週六 05-20~05-23 休息日
-  { id: 'v912',      startsAt: '2026-05-24T00:10:00+08:00', durationMinutes: 90,  title: '索尼克賽車 交叉世界',                        platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/912' }
+  { id: 'v912',      startsAt: '2026-05-24T00:10:00+08:00', durationMinutes: 90,  title: '索尼克賽車 交叉世界',                        platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/912' },
+  // 週日 05-24 休息日
+  { id: 'v913',      startsAt: '2026-05-25T23:00:00+08:00', durationMinutes: 90,  title: '索尼克 英雄 Sonic Heroes #3',                platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/913' },
+  { id: 'v914',      startsAt: '2026-05-26T23:00:00+08:00', durationMinutes: 90,  title: '死深 Die Deep',                              platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/914' },
+  // 週三~週五 05-27~05-29 休息日
+  { id: 'v915',      startsAt: '2026-05-30T23:00:00+08:00', durationMinutes: 90,  title: '索尼克賽車 交叉世界 #59',                    platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/915' }
 ];
