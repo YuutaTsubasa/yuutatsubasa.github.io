@@ -511,13 +511,55 @@ function CardD({ d }) {
       )}
       <div className="fx-noise"/>
 
-      {/* HERO character — fits right half (640×720), bottom-aligned, full body */}
-      <Hero src={d.heroSrc} style={{
-        right:0, bottom:0, width:640, height:720,
-        opacity:.98
-      }} position="center bottom" size="contain"/>
+      {/* OnlyBackground tint overlay — blue stripe texture at 30% */}
+      <div style={{ position:"absolute", inset:0, pointerEvents:"none",
+        backgroundImage:"url('assets/only-background.webp')",
+        backgroundSize:"cover", backgroundPosition:"center",
+        opacity:0.3
+      }}/>
 
-      {/* Bottom-up vignette for text legibility */}
+      {/* Outline-title watermark — fill-minus-fill SVG mask trick (clean CJK).
+          Whitespace in titleMain is stripped (decorative only); row text
+          repeats until reaching a target char count. Rows stack tight (no gap). */}
+      {(() => {
+        const TARGET_CHARS = 28;
+        const base = d.titleMain.replace(/\s+/g, "");
+        let rowText = base;
+        while (rowText.length < TARGET_CHARS) rowText += base;
+        const offsets = [0, -200, -80, -260, -140];
+        return (
+          <div style={{ position:"absolute", inset:0, pointerEvents:"none",
+            display:"flex", flexDirection:"column", justifyContent:"flex-start",
+            overflow:"hidden"
+          }}>
+            {offsets.map((offset, i) => {
+              const maskId = `outline-mask-${d.vol}-${i}`;
+              return (
+                <svg key={i} width="3600" height="144" viewBox="0 -15 3600 144"
+                  style={{ transform:`translateX(${offset}px)`, display:"block", overflow:"visible" }}>
+                  <defs>
+                    <mask id={maskId}>
+                      {/* Expanded glyph (white = visible region) */}
+                      <text x="0" y="115" fill="#fff" stroke="#fff" strokeWidth="3"
+                        fontFamily="var(--font-body)" fontWeight="900" fontSize="140" letterSpacing="-2">
+                        {rowText}
+                      </text>
+                      {/* Inner glyph (black = hide) */}
+                      <text x="0" y="115" fill="#000"
+                        fontFamily="var(--font-body)" fontWeight="900" fontSize="140" letterSpacing="-2">
+                        {rowText}
+                      </text>
+                    </mask>
+                  </defs>
+                  <rect x="-100" y="-30" width="3800" height="180" fill="rgba(255,255,255,0.22)" mask={`url(#${maskId})`}/>
+                </svg>
+              );
+            })}
+          </div>
+        );
+      })()}
+
+      {/* Halftone dot overlay */}
       <div style={{ position:"absolute", inset:0, pointerEvents:"none",
         background:"var(--c-d-vignette)"
       }}/>
@@ -525,6 +567,12 @@ function CardD({ d }) {
       <div style={{ position:"absolute", inset:0, pointerEvents:"none",
         background:"var(--c-d-fade)"
       }}/>
+
+      {/* HERO character — fits right half (640×720), bottom-aligned, full body */}
+      <Hero src={d.heroSrc} style={{
+        right:0, bottom:0, width:640, height:720,
+        opacity:.98
+      }} position="center bottom" size="contain"/>
 
       <div className="fx-grid"/>
 
@@ -575,9 +623,6 @@ function CardD({ d }) {
 
       {/* HUD reticle over character */}
       <Reticle size={120} color="var(--blue-bright)" opacity={.7}/>
-      <div style={{ position:"absolute", right:120, top:120 }}>
-        <Reticle size={100} color="var(--blue-bright)"/>
-      </div>
 
       <div className="fx-vignette"/>
 
@@ -588,7 +633,7 @@ function CardD({ d }) {
           <div style={{
             display:"flex", alignItems:"baseline", gap:10,
             padding:"10px 22px",
-            background:"var(--c-vol-pill)", border:"1px solid var(--line-strong)"
+            background:"rgba(255,255,255,.92)", border:"1px solid var(--line-strong)"
           }}>
             <span className="mono" style={{ fontSize:13, color:"var(--blue-bright)", letterSpacing:".25em" }}>VOL.</span>
             <span className="display" style={{ fontSize:44, fontWeight:900, color:"var(--silver-0)", lineHeight:.9 }}>{d.vol}</span>

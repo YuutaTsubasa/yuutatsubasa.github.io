@@ -71,8 +71,8 @@
     --c-track: rgba(30,58,138,.08);
     --c-sub-panel: rgba(37,99,235,.06);
     --c-vol-pill: rgba(37,99,235,.10);
-    --c-d-vignette: linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 25%, rgba(255,255,255,0) 45%, rgba(255,255,255,.9) 100%);
-    --c-d-fade: linear-gradient(90deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,.25) 35%, transparent 55%);
+    --c-d-vignette: radial-gradient(circle, rgba(0,0,0,1) 0.5px, transparent 0.5px) 0 0 / 3px 3px;
+    --c-d-fade: none;
     --c-shadow-text: 2px 0 0 rgba(255,255,255,.95), -2px 0 0 rgba(255,255,255,.95), 0 2px 0 rgba(255,255,255,.95), 0 -2px 0 rgba(255,255,255,.95), 1px 1px 0 rgba(255,255,255,.95), -1px -1px 0 rgba(255,255,255,.95), 1px -1px 0 rgba(255,255,255,.95), -1px 1px 0 rgba(255,255,255,.95), 0 6px 20px rgba(15,45,120,.35);
     --c-shadow-title: 0 0 24px rgba(37,99,235,.12);
     --c-shadow-vol: 0 0 30px rgba(37,99,235,.18);
