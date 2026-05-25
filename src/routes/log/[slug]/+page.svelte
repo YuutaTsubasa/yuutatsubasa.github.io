@@ -234,8 +234,9 @@
           {/if}
         </div>
 
-        <!-- SIDEBAR (TOP): pinned in right column on desktop, above article on mobile -->
-        <aside class="side side-top">
+        <!-- SIDEBAR: 整欄 sticky；所有 panel 跟 ALL ENTRIES 一起黏住，避免
+             之前上半 sticky 下半隨頁面滾動造成的不一致觀感。 -->
+        <aside class="side">
           {#if toc.length > 0}
             <div class="panel" use:reveal={{ delay: 180 }}>
               <Corners color="var(--line-strong)" size={9} />
@@ -285,10 +286,7 @@
               </div>
             </div>
           {/if}
-        </aside>
 
-        <!-- SIDEBAR (BOTTOM): under top sidebar on desktop, below article on mobile -->
-        <aside class="side side-bottom">
           {#if related.length > 0}
             <div class="panel" use:reveal={{ delay: 260 }} style:--accent={cat?.color ?? 'var(--blue-bright)'}>
               <Corners color="var(--line-strong)" size={9} />
@@ -475,10 +473,7 @@
   .grid {
     display: grid;
     grid-template-columns: minmax(0, 760px) 280px;
-    grid-template-areas:
-      "article side-top"
-      "article side-bottom";
-    grid-template-rows: auto 1fr;
+    grid-template-areas: "article side";
     gap: 36px;
     justify-content: start;
     align-items: start;
@@ -486,16 +481,14 @@
     z-index: 1;
   }
   .article { grid-area: article; }
-  .side-top { grid-area: side-top; }
-  .side-bottom { grid-area: side-bottom; }
+  .side { grid-area: side; }
   @media (max-width: 1000px) {
     .grid {
       grid-template-columns: 1fr;
       grid-template-areas:
-        "side-top"
-        "article"
-        "side-bottom";
-      grid-template-rows: auto auto auto;
+        "side"
+        "article";
+      grid-template-rows: auto auto;
       gap: 24px;
     }
   }
@@ -685,13 +678,11 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-  }
-  .side-top {
     position: sticky;
     top: 110px;
   }
   @media (max-width: 1000px) {
-    .side-top { position: static; }
+    .side { position: static; }
   }
   .panel {
     position: relative;
