@@ -12,7 +12,7 @@ links:
   - label: "LM Studio 官網"
     url: "https://lmstudio.ai"
 meta:
-  status: "DRAFT"
+  status: "PUBLISHED"
   phase: "v1.0"
 ---
 
