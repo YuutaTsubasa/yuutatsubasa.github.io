@@ -647,11 +647,11 @@ function CardD({ d }) {
           </span>
         </div>
 
-        {/* Title */}
+        {/* Title — white fill, black outline */}
         <h1 style={{
           margin:0, fontFamily:"var(--font-body)", fontWeight:900,
-          fontSize:72, lineHeight:1, color:"var(--silver-0)", letterSpacing:"-.01em",
-          textShadow:"var(--c-shadow-text)"
+          fontSize:72, lineHeight:1, color:"#FFFFFF", letterSpacing:"-.01em",
+          textShadow:"2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 4px 14px rgba(0,0,0,.45)"
         }}>
           {d.titleMain}
           {d.episode != null && d.episode !== "" && (
@@ -666,9 +666,9 @@ function CardD({ d }) {
         </h1>
         {d.titleSub && (
           <div className="tech" style={{
-            marginTop:10, fontSize:30, fontWeight:700, color:"var(--silver-1)",
+            marginTop:10, fontSize:30, fontWeight:700, color:"#FFFFFF",
             letterSpacing:".04em",
-            textShadow:"var(--c-shadow-text)"
+            textShadow:"1.5px 0 0 #000, -1.5px 0 0 #000, 0 1.5px 0 #000, 0 -1.5px 0 #000, 1.5px 1.5px 0 #000, -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 0 3px 10px rgba(0,0,0,.45)"
           }}>
             {d.titleSub}
           </div>
