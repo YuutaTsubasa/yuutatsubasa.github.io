@@ -44,7 +44,9 @@
 <style>
   .row {
     display: grid;
-    grid-template-columns: 14px 138px auto minmax(0, 2.2fr) minmax(0, 1fr) 18px;
+    /* chip 欄改成固定 110px（從 auto），讓所有 row 的 LABEL 等寬對齊；
+       搭配 .chip 內部 justify-content: center 達成文字置中。 */
+    grid-template-columns: 14px 138px 110px minmax(0, 2.2fr) minmax(0, 1fr) 18px;
     align-items: center;
     gap: 14px;
     padding: 14px 16px;
@@ -84,9 +86,11 @@
   }
 
   .chip {
-    display: inline-flex;
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 6px;
     padding: 3px 8px;
     font-size: 10px;
@@ -149,7 +153,7 @@
   /* Compact: hide meta col on narrow screens / inside grouped views */
   @media (max-width: 880px) {
     .row {
-      grid-template-columns: 14px 130px auto minmax(0, 1fr) 18px;
+      grid-template-columns: 14px 130px 110px minmax(0, 1fr) 18px;
       gap: 14px;
     }
     .meta { display: none; }
