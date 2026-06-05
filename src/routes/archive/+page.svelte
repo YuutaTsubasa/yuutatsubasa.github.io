@@ -111,11 +111,6 @@
     padding: 140px 0 120px;
     min-height: 100vh;
   }
-  .wrap {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 32px;
-  }
 
   .filter-row {
     display: flex;
@@ -162,10 +157,18 @@
 
   .table {
     margin-top: 8px;
+    /* .table 須明確 width: 100%：data row 是 <a>（inline-level），
+       inline 父子組合會讓 .table 收縮到內容寬度而非填滿 .wrap，ARCH 之後
+       右側留空。顯式 width: 100% 讓 .table 撐到 .wrap 全寬，row 跟著對齊。 */
+    width: 100%;
   }
   .row {
     display: grid;
-    grid-template-columns: 64px 110px 100px 200px 1fr 70px;
+    /* 每個 .row 是各自獨立的 grid container — 1fr 預設 minmax(auto, 1fr)，
+       會被內容（title nowrap）撐開，造成每列 title 欄寬不一致、其他欄位橫向
+       對不齊。改成 minmax(0, 1fr) 讓 title 欄走 ellipsis 縮起來、所有列欄位
+       對齊。 */
+    grid-template-columns: 64px 110px 100px 200px minmax(0, 1fr) 70px;
     gap: 16px;
     padding: 14px 8px;
     align-items: center;
@@ -273,7 +276,7 @@
 
   @media (max-width: 900px) {
     .row {
-      grid-template-columns: 56px 90px 80px 120px 1fr 56px;
+      grid-template-columns: 56px 90px 80px 120px minmax(0, 1fr) 56px;
       gap: 10px;
       font-size: 12px;
     }
@@ -281,7 +284,7 @@
   }
   @media (max-width: 700px) {
     .row {
-      grid-template-columns: 50px 90px auto 1fr 56px;
+      grid-template-columns: 50px 90px auto minmax(0, 1fr) 56px;
       gap: 10px;
     }
     .row .dur { display: none; }
