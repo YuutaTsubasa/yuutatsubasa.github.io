@@ -18,11 +18,25 @@ const findStreamTag = (id) => STREAM_TAGS.find((t) => t.id === id);
 const parseCategoryList = (s) =>
   (s || '').split(',').map((x) => x.trim()).filter(Boolean).map(findStreamTag).filter(Boolean);
 
+// Return normalized themes array. New format has `themes: [{ level, title, sub?, episode? }]`.
+// Old flat format ({ titleMain, titleSub, episode }) gets wrapped into a single main-level theme.
+const getThemes = (d) => {
+  if (Array.isArray(d.themes) && d.themes.length > 0) return d.themes;
+  const t = { level: 'main', title: d.titleMain || '' };
+  if (d.titleSub) t.sub = d.titleSub;
+  if (d.episode != null && d.episode !== '') t.episode = d.episode;
+  return [t];
+};
+
 const DEFAULTS = /*EDITMODE-BEGIN*/{
   "vol": 0,
-  "titleMain": "初配信",
-  "titleSub": "來做點自我介紹吧！",
-  "episode": null,
+  "themes": [
+    {
+      "level": "main",
+      "title": "初配信",
+      "sub": "來做點自我介紹吧！"
+    }
+  ],
   "categories": "karaoke, chat",
   "artist": "",
   "streamTime": "2021.07.31 · 20:00",
@@ -196,5 +210,5 @@ const Reticle = ({ size = 110, color = "var(--blue-bright)", opacity = .75 }) =>
 Object.assign(window, {
   Corners, Dot, Tele, ScanBar, Tag, Panel, HexFrame,
   GameLogoPlaceholder, YuutaMark, RadarRing, Reticle, DEFAULTS,
-  STREAM_TAGS, findStreamTag, parseCategoryList
+  STREAM_TAGS, findStreamTag, parseCategoryList, getThemes
 });

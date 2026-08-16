@@ -1,8 +1,12 @@
 {
   "vol": 921,
-  "titleMain": "音速小子索尼克歌回",
-  "titleSub": "2026.07.07",
-  "episode": null,
+  "themes": [
+    {
+      "level": "main",
+      "title": "音速小子索尼克歌回",
+      "sub": "2026.07.07"
+    }
+  ],
   "categories": "karaoke",
   "artist": "たつあき(龍翠) @equal_aq",
   "streamTime": "2026.07.07 · 23:30",

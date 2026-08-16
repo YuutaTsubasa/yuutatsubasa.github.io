@@ -22,9 +22,7 @@ vol（必填）+ titleMain 是底線，其他缺哪個追問哪個（用 AskUser
 | 欄位 | 必填? | 說明 | 範例 |
 |---|---|---|---|
 | **vol** | ✅ | 直播編號（整數） | `912` |
-| **titleMain** | ✅ | 主標題（中文或英文） | `索尼克 英雄` |
-| **titleSub** |  | 副標題 / 英文標題 | `Sonic Heroes` |
-| **episode** |  | 集數 (int, null 代表單集無集數) | `3` |
+| **themes** | ✅ | 主題陣列（**單/多主題都用同一 schema**，見下方「主題結構」） | `[{level:"main", title:"索尼克 英雄", sub:"Sonic Heroes", episode:3}]` |
 | **categories** |  | 分類 id，逗號分隔。可選 `game / code / karaoke / chat / art / 3d / music` | `"game"` |
 | **artist** |  | 繪師名（背景或立繪作者，會顯示在上條） | `たつあき(龍翠) @equal_aq` |
 | **streamTime** |  | 直播時間「YYYY.MM.DD · HH:MM」 | `2026.05.22 · 21:00` |
@@ -39,6 +37,37 @@ vol（必填）+ titleMain 是底線，其他缺哪個追問哪個（用 AskUser
 | **card** |  | 版型，**預設 `d`** | `d` |
 
 「今天」用 `currentDate`（每次以實際值為準）。
+
+## 主題結構（themes 陣列）
+
+每個 theme：`{ level, title, sub?, episode? }`
+- **`level`**：`"main"` 或 `"sub"`。渲染字級不同：main=大（72px on Card D），sub=中（48px）
+- **`title`**：該主題的顯示標題（必填）
+- **`sub`**：英文副標題／輔助說明。**僅單主題（themes.length === 1）時顯示**，多主題會被忽略
+- **`episode`**：集數。可省略、null、或整數
+
+### 單主題（99% 的 case）
+
+```json
+"themes": [
+  { "level": "main", "title": "索尼克 英雄", "sub": "Sonic Heroes", "episode": 3 }
+]
+```
+
+渲染：`索尼克 英雄 #3`（大）+ `Sonic Heroes`（小副標）。跟改結構前一模一樣。
+
+### 多主題（一場直播含多個節目）
+
+```json
+"themes": [
+  { "level": "main", "title": "索尼克 英雄", "episode": 4 },
+  { "level": "sub",  "title": "死深 Die Deep", "episode": 1 }
+]
+```
+
+渲染：`索尼克 英雄 #4`（大）+ `死深 Die Deep #1`（中）堆疊，**不顯示任何 sub 副標題**。
+
+判斷：使用者一次講兩個主題（例「Vol.X 索尼克英雄 #4 + 死深 #1」）就用多主題。level 依重要性分：先玩比較久的、系列本篇的 = main；短時段結尾 / bonus / 雜談 = sub。若使用者沒指定，兩個都 main 也可以（都用大字堆疊）。
 
 ## STREAM_TAGS 對照（categories 的合法 id）
 
@@ -116,9 +145,9 @@ JSON 一定要有的欄位（如果使用者沒給，按下面補）：
 ```json
 {
   "vol": <user>,
-  "titleMain": <user>,
-  "titleSub": "",
-  "episode": null,
+  "themes": [
+    { "level": "main", "title": <user>, "sub": <optional>, "episode": <optional> }
+  ],
   "categories": "",
   "artist": "",
   "streamTime": "",
@@ -133,10 +162,26 @@ JSON 一定要有的欄位（如果使用者沒給，按下面補）：
 }
 ```
 
+- `themes[0]` 是預設主題（level=main）。多主題就 push 更多 `{level, title, sub?, episode?}`。
+- `theme.sub` / `theme.episode` 空就直接省略 key，別留空字串。
 - `heroSrc` 預設用 `vtuber4.0-0.webp`（最新版本），但**最好問一次**確認立繪是哪一版
 - `vtuberLogoSrc` 幾乎永遠是 `assets/vtuber-logo.png`，不用問
 - `bgEffect` 通常 `"soft"`（當 bgSrc 是遊戲畫面截圖時很適合）；如果 bg 已經是處理好的封面背景，留 `""`
 - 不要寫 `bgTint`、`logoSrc:""` 等空欄位除非必要
+
+## macOS 剪貼簿貼圖存檔（bgSrc 常用）
+
+使用者說「背景圖在剪貼簿」時，用 `osascript` 直接把剪貼簿 PNG 存到 /tmp，不用要求他們另存新檔：
+
+```bash
+osascript -e 'set png to (the clipboard as «class PNGf»)' \
+          -e 'set f to open for access POSIX file "/tmp/clipboard-bg.png" with write permission' \
+          -e 'set eof f to 0' \
+          -e 'write png to f' \
+          -e 'close access f'
+```
+
+成功會產出 `/tmp/clipboard-bg.png`。剪貼簿若不是圖（是文字）會 error，這時候還是得問使用者本機路徑。
 
 ## 完整執行步驟
 

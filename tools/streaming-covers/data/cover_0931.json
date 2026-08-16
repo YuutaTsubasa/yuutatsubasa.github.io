@@ -1,8 +1,13 @@
 {
   "vol": 931,
-  "titleMain": "索尼克賽車 交叉世界",
-  "titleSub": "Sonic Racing: CrossWorlds",
-  "episode": 66,
+  "themes": [
+    {
+      "level": "main",
+      "title": "索尼克賽車 交叉世界",
+      "sub": "Sonic Racing: CrossWorlds",
+      "episode": 66
+    }
+  ],
   "categories": "game",
   "artist": "たつあき(龍翠) @equal_aq",
   "streamTime": "2026.08.11 · 23:30",

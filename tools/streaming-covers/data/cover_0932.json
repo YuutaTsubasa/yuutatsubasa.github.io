@@ -1,8 +1,11 @@
 {
   "vol": 932,
-  "titleMain": "Sonic Project Hero Rewired",
-  "titleSub": "",
-  "episode": null,
+  "themes": [
+    {
+      "level": "main",
+      "title": "Sonic Project Hero Rewired"
+    }
+  ],
   "categories": "game",
   "artist": "たつあき(龍翠) @equal_aq",
   "streamTime": "2026.08.15 · 23:30",

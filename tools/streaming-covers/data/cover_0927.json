@@ -1,8 +1,12 @@
 {
   "vol": 927,
-  "titleMain": "明日方舟：終末地",
-  "titleSub": "2026.07.28",
-  "episode": null,
+  "themes": [
+    {
+      "level": "main",
+      "title": "明日方舟：終末地",
+      "sub": "2026.07.28"
+    }
+  ],
   "categories": "game",
   "artist": "たつあき(龍翠) @equal_aq",
   "streamTime": "2026.07.28 · 23:30",

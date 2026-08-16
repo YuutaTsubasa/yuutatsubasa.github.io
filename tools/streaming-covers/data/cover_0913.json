@@ -1,8 +1,13 @@
 {
   "vol": 913,
-  "titleMain": "索尼克 英雄",
-  "titleSub": "Sonic Heroes",
-  "episode": 3,
+  "themes": [
+    {
+      "level": "main",
+      "title": "索尼克 英雄",
+      "sub": "Sonic Heroes",
+      "episode": 3
+    }
+  ],
   "categories": "game",
   "artist": "たつあき(龍翠) @equal_aq",
   "streamTime": "2026.05.25 · 23:00",

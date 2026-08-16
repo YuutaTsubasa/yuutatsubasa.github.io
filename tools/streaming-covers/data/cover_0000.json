@@ -1,8 +1,12 @@
 {
   "vol": 0,
-  "titleMain": "初配信",
-  "titleSub": "來做點自我介紹吧！",
-  "episode": null,
+  "themes": [
+    {
+      "level": "main",
+      "title": "初配信",
+      "sub": "來做點自我介紹吧！"
+    }
+  ],
   "categories": "karaoke, chat",
   "artist": "",
   "streamTime": "2021.07.31 · 20:00",

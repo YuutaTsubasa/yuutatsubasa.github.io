@@ -15,6 +15,16 @@ function CoverTweaks({ d, set }) {
     { value:"light", label:"Light" },
   ];
   const tagHint = STREAM_TAGS.map((t) => `${t.id}=${t.label}`).join(' / ');
+  // 只編輯 themes[0]。多主題請直接編 cover_NNNN.json（見 add-streaming-cover skill）。
+  const firstTheme = (d.themes && d.themes[0]) || { level: 'main', title: '' };
+  const setFirstTheme = (patch) => {
+    const themes = [...(d.themes || [])];
+    themes[0] = { ...(themes[0] || { level: 'main' }), ...patch };
+    if (themes[0].sub == null || themes[0].sub === '') delete themes[0].sub;
+    if (themes[0].episode == null || themes[0].episode === '') delete themes[0].episode;
+    if (!themes[0].level) themes[0].level = 'main';
+    set('themes', themes);
+  };
   return (
     <TweaksPanel title="封面內容">
       <TweakSection label="模式">
@@ -23,7 +33,6 @@ function CoverTweaks({ d, set }) {
       </TweakSection>
       <TweakSection label="編號 & 分類">
         <TweakNumber label="Vol." value={d.vol} min={0} max={9999} onChange={v => set("vol", v)}/>
-        <TweakText   label="Episode #（可空）" value={d.episode ?? ""} onChange={v => set("episode", v === "" ? null : v)}/>
         <TweakText
           label="分類 ids"
           value={d.categories}
@@ -31,9 +40,10 @@ function CoverTweaks({ d, set }) {
           placeholder={tagHint}
         />
       </TweakSection>
-      <TweakSection label="標題">
-        <TweakText label="主標題" value={d.titleMain} onChange={v => set("titleMain", v)}/>
-        <TweakText label="副標題" value={d.titleSub}  onChange={v => set("titleSub", v)}/>
+      <TweakSection label="標題（themes[0]，多主題請編 JSON）">
+        <TweakText label="主標題"           value={firstTheme.title || ""} onChange={v => setFirstTheme({title: v})}/>
+        <TweakText label="副標題（單主題）" value={firstTheme.sub   || ""} onChange={v => setFirstTheme({sub: v})}/>
+        <TweakText label="Episode #（可空）" value={firstTheme.episode ?? ""} onChange={v => setFirstTheme({episode: v === "" ? null : (isNaN(+v) ? v : +v)})}/>
       </TweakSection>
       <TweakSection label="其他資訊">
         <TweakText label="繪師（可空）" value={d.artist} onChange={v => set("artist", v)}/>

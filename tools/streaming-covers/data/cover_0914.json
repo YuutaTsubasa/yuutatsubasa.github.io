@@ -1,8 +1,11 @@
 {
   "vol": 914,
-  "titleMain": "死深 Die Deep",
-  "titleSub": "",
-  "episode": null,
+  "themes": [
+    {
+      "level": "main",
+      "title": "死深 Die Deep"
+    }
+  ],
   "categories": "game",
   "artist": "たつあき(龍翠) @equal_aq",
   "streamTime": "2026.05.26 · 23:30",

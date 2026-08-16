@@ -1,4 +1,4 @@
-/* global React, Corners, Dot, Tele, ScanBar, Tag, Panel, HexFrame, GameLogoPlaceholder, YuutaMark, RadarRing, Reticle, parseCategoryList */
+/* global React, Corners, Dot, Tele, ScanBar, Tag, Panel, HexFrame, GameLogoPlaceholder, YuutaMark, RadarRing, Reticle, parseCategoryList, getThemes */
 
 // ============================================================
 // Hero character — crop centered on character's face/torso
@@ -113,29 +113,50 @@ function CardA({ d }) {
 
           <div style={{ height:1, background:"var(--line)", margin:"12px 0 16px" }}/>
 
-          {/* Title block: main + #ep + sub */}
-          <h1 style={{
-            margin:0, fontFamily:"var(--font-body)", fontWeight:900,
-            fontSize:46, lineHeight:1.08, color:"var(--silver-0)",
-            textShadow:"var(--c-shadow-title)", letterSpacing:"-.01em",
-            fontSynthesis:"none"
-          }}>
-            {d.titleMain}
-            {d.episode != null && d.episode !== "" && (
-              <span style={{
-                marginLeft:10, fontSize:28, color:"var(--blue-bright)",
-                fontStyle:"italic", fontWeight:700, whiteSpace:"nowrap"
-              }}>#{d.episode}</span>
-            )}
-          </h1>
-          {d.titleSub && (
-            <div className="tech" style={{
-              marginTop:8, fontSize:22, fontWeight:600, color:"var(--blue-bright)",
-              letterSpacing:".06em"
-            }}>
-              {d.titleSub}
-            </div>
-          )}
+          {/* Title block: iterate themes（main=大, sub=小），單主題附 sub 副標題。 */}
+          {(() => {
+            const themes = getThemes(d);
+            const isSingle = themes.length === 1;
+            return (
+              <>
+                {themes.map((t, i) => {
+                  const isMain = t.level !== 'sub';
+                  const gap = i === 0 ? 0 : (isMain ? 10 : 6);
+                  const ep = t.episode != null && t.episode !== "" && (
+                    <span style={{
+                      marginLeft: isMain ? 10 : 8,
+                      fontSize: isMain ? 28 : 18,
+                      color:"var(--blue-bright)",
+                      fontStyle:"italic", fontWeight:700, whiteSpace:"nowrap"
+                    }}>#{t.episode}</span>
+                  );
+                  if (isMain) {
+                    return (
+                      <h1 key={i} style={{
+                        margin:0, marginTop:gap,
+                        fontFamily:"var(--font-body)", fontWeight:900,
+                        fontSize:46, lineHeight:1.08, color:"var(--silver-0)",
+                        textShadow:"var(--c-shadow-title)", letterSpacing:"-.01em",
+                        fontSynthesis:"none"
+                      }}>{t.title}{ep}</h1>
+                    );
+                  }
+                  return (
+                    <div key={i} className="tech" style={{
+                      marginTop:gap, fontSize:22, fontWeight:700, color:"var(--silver-0)",
+                      letterSpacing:".02em"
+                    }}>{t.title}{ep}</div>
+                  );
+                })}
+                {isSingle && themes[0].sub && (
+                  <div className="tech" style={{
+                    marginTop:8, fontSize:22, fontWeight:600, color:"var(--blue-bright)",
+                    letterSpacing:".06em"
+                  }}>{themes[0].sub}</div>
+                )}
+              </>
+            );
+          })()}
         </Panel>
       </div>
 
@@ -278,26 +299,53 @@ function CardB({ d }) {
 
         <div style={{ height:1, background:"var(--line)", margin:"16px 0" }}/>
 
-        {/* Title */}
-        <h1 style={{
-          margin:0, fontFamily:"var(--font-body)", fontWeight:900,
-          fontSize:54, lineHeight:1.05, color:"var(--silver-0)", letterSpacing:"-.01em",
-          textShadow:"var(--c-shadow-title)",
-          display:"flex", alignItems:"baseline", gap:12, flexWrap:"wrap"
-        }}>
-          <span>{d.titleMain}</span>
-          {d.episode != null && d.episode !== "" && (
-            <span style={{ fontSize:32, color:"var(--blue-bright)", fontStyle:"italic", fontWeight:700 }}>#{d.episode}</span>
-          )}
-        </h1>
-        {d.titleSub && (
-          <div className="tech" style={{
-            marginTop:10, fontSize:22, fontWeight:600, color:"var(--blue-bright)",
-            letterSpacing:".04em"
-          }}>
-            {d.titleSub}
-          </div>
-        )}
+        {/* Title block: iterate themes（main=大, sub=小），單主題附 sub 副標題。 */}
+        {(() => {
+          const themes = getThemes(d);
+          const isSingle = themes.length === 1;
+          return (
+            <>
+              {themes.map((t, i) => {
+                const isMain = t.level !== 'sub';
+                const gap = i === 0 ? 0 : (isMain ? 12 : 8);
+                const ep = t.episode != null && t.episode !== "" && (
+                  <span style={{
+                    fontSize: isMain ? 32 : 18,
+                    color:"var(--blue-bright)", fontStyle:"italic", fontWeight:700
+                  }}>#{t.episode}</span>
+                );
+                if (isMain) {
+                  return (
+                    <h1 key={i} style={{
+                      margin:0, marginTop:gap,
+                      fontFamily:"var(--font-body)", fontWeight:900,
+                      fontSize:54, lineHeight:1.05, color:"var(--silver-0)", letterSpacing:"-.01em",
+                      textShadow:"var(--c-shadow-title)",
+                      display:"flex", alignItems:"baseline", gap:12, flexWrap:"wrap"
+                    }}>
+                      <span>{t.title}</span>{ep}
+                    </h1>
+                  );
+                }
+                return (
+                  <div key={i} className="tech" style={{
+                    marginTop:gap, fontSize:22, fontWeight:700, color:"var(--silver-0)",
+                    letterSpacing:".02em",
+                    display:"flex", alignItems:"baseline", gap:8, flexWrap:"wrap"
+                  }}>
+                    <span>{t.title}</span>{ep}
+                  </div>
+                );
+              })}
+              {isSingle && themes[0].sub && (
+                <div className="tech" style={{
+                  marginTop:10, fontSize:22, fontWeight:600, color:"var(--blue-bright)",
+                  letterSpacing:".04em"
+                }}>{themes[0].sub}</div>
+              )}
+            </>
+          );
+        })()}
       </div>
 
       {/* Stream-theme logo — image only, hidden when not set */}
@@ -357,7 +405,10 @@ function CardB({ d }) {
 function CardC({ d }) {
   const cats = parseCategoryList(d.categories);
   const primaryCat = cats[0];
-  const hasEpisode = d.episode != null && d.episode !== "";
+  const themes = getThemes(d);
+  const firstEp = themes[0]?.episode;
+  const hasEpisode = firstEp != null && firstEp !== "";
+  const isSingleTheme = themes.length === 1;
   return (
     <div className={`cover ${d.mode === "light" ? "light" : ""}`}>
       <div style={{ position:"absolute", inset:0,
@@ -409,7 +460,7 @@ function CardC({ d }) {
 <span style={{ color:"var(--silver-3)" }}>{"// boot sequence …"}</span>{"\n"}
 <span style={{ color:"var(--blue-bright)" }}>knight@azure</span><span style={{ color:"var(--silver-3)" }}>:</span><span style={{ color:"var(--accent-cyan)" }}>~</span>{" $ "}
 <span style={{ color:"var(--silver-0)" }}>./mission --start</span>{"\n"}
-<span style={{ color:"var(--silver-3)" }}>{"▸ archive id    ......  "}</span><span style={{ color:"var(--blue-bright)" }}>VOL.{d.vol}{hasEpisode ? ` · EP·${String(d.episode).padStart(2,"0")}` : ""}</span>{"\n"}
+<span style={{ color:"var(--silver-3)" }}>{"▸ archive id    ......  "}</span><span style={{ color:"var(--blue-bright)" }}>VOL.{d.vol}{hasEpisode ? ` · EP·${String(firstEp).padStart(2,"0")}` : ""}</span>{"\n"}
 {primaryCat && (<>
 <span style={{ color:"var(--silver-3)" }}>{"▸ category      ......  "}</span><span style={{ color:"var(--accent-amber)" }}>{primaryCat.enLabel} / {primaryCat.label}</span>{"\n"}
 </>)}
@@ -420,12 +471,22 @@ function CardC({ d }) {
 <span style={{ color:"var(--blue-bright)" }}>knight@azure</span><span style={{ color:"var(--silver-3)" }}>:</span><span style={{ color:"var(--accent-cyan)" }}>~</span>{" $ "}
 <span style={{ color:"var(--silver-0)" }}>cat ./brief.json</span>{"\n"}
 {"{\n"}
-{"  "}<span style={{ color:"#A78BFA" }}>"target_zh"</span>{": "}<span style={{ color:"var(--silver-0)", fontWeight:700 }}>"{d.titleMain}"</span>{",\n"}
-{d.titleSub && (<>
-{"  "}<span style={{ color:"#A78BFA" }}>"target_en"</span>{": "}<span style={{ color:"var(--silver-0)", fontWeight:700 }}>"{d.titleSub}"</span>{",\n"}
+{isSingleTheme ? (<>
+{"  "}<span style={{ color:"#A78BFA" }}>"target_zh"</span>{": "}<span style={{ color:"var(--silver-0)", fontWeight:700 }}>"{themes[0].title}"</span>{",\n"}
+{themes[0].sub && (<>
+{"  "}<span style={{ color:"#A78BFA" }}>"target_en"</span>{": "}<span style={{ color:"var(--silver-0)", fontWeight:700 }}>"{themes[0].sub}"</span>{",\n"}
 </>)}
 {hasEpisode && (<>
-{"  "}<span style={{ color:"#A78BFA" }}>"episode"</span>{":   "}<span style={{ color:"var(--accent-cyan)" }}>{d.episode}</span>{",\n"}
+{"  "}<span style={{ color:"#A78BFA" }}>"episode"</span>{":   "}<span style={{ color:"var(--accent-cyan)" }}>{firstEp}</span>{",\n"}
+</>)}
+</>) : (<>
+{"  "}<span style={{ color:"#A78BFA" }}>"targets"</span>{":   ["}{"\n"}
+{themes.map((t, i) => (
+  <React.Fragment key={i}>
+{"    { "}<span style={{ color:"#A78BFA" }}>"title"</span>{": "}<span style={{ color:"var(--silver-0)", fontWeight:700 }}>"{t.title}"</span>{t.episode != null && t.episode !== "" && (<>{", "}<span style={{ color:"#A78BFA" }}>"ep"</span>{": "}<span style={{ color:"var(--accent-cyan)" }}>{t.episode}</span></>)}{" }"}{i < themes.length - 1 ? "," : ""}{"\n"}
+  </React.Fragment>
+))}
+{"  ],\n"}
 </>)}
 {"  "}<span style={{ color:"#A78BFA" }}>"status"</span>{":    "}<span style={{ color:"#EF4444", fontWeight:700 }}>"LIVE_NOW"</span>{"\n"}
 {"}\n\n"}
@@ -519,11 +580,11 @@ function CardD({ d }) {
       }}/>
 
       {/* Outline-title watermark — fill-minus-fill SVG mask trick (clean CJK).
-          Whitespace in titleMain is stripped (decorative only); row text
-          repeats until reaching a target char count. Rows stack tight (no gap). */}
+          用第一個主題 (themes[0].title) 當底；whitespace 拿掉。 */}
       {(() => {
         const TARGET_CHARS = 28;
-        const base = d.titleMain.replace(/\s+/g, "");
+        const firstTitle = (getThemes(d)[0]?.title || "");
+        const base = firstTitle.replace(/\s+/g, "");
         let rowText = base;
         while (rowText.length < TARGET_CHARS) rowText += base;
         const offsets = [0, -200, -80, -260, -140];
@@ -588,7 +649,10 @@ function CardD({ d }) {
         <span style={{ color:"var(--silver-3)" }}>//</span>
         <span>
           {String(d.vol).padStart(4,"0")}
-          {d.episode != null && d.episode !== "" && ` · ${String(d.episode).padStart(2,"0")}`}
+          {(() => {
+            const ep = getThemes(d)[0]?.episode;
+            return ep != null && ep !== "" && ` · ${String(ep).padStart(2,"0")}`;
+          })()}
         </span>
         {d.streamTime && (<>
           <span style={{ color:"var(--silver-3)" }}>//</span>
@@ -647,32 +711,59 @@ function CardD({ d }) {
           </span>
         </div>
 
-        {/* Title — white fill, black outline */}
-        <h1 style={{
-          margin:0, fontFamily:"var(--font-body)", fontWeight:900,
-          fontSize:72, lineHeight:1, color:"#FFFFFF", letterSpacing:"-.01em",
-          textShadow:"2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 4px 14px rgba(0,0,0,.45)"
-        }}>
-          {d.titleMain}
-          {d.episode != null && d.episode !== "" && (
-            <span style={{
-              fontFamily:"var(--font-display)", fontStyle:"italic", fontSize:48,
-              color:"var(--blue-bright)", marginLeft:18,
-              textShadow:"var(--c-shadow-text)"
-            }}>
-              #{d.episode}
-            </span>
-          )}
-        </h1>
-        {d.titleSub && (
-          <div className="tech" style={{
-            marginTop:10, fontSize:30, fontWeight:700, color:"#FFFFFF",
-            letterSpacing:".04em",
-            textShadow:"1.5px 0 0 #000, -1.5px 0 0 #000, 0 1.5px 0 #000, 0 -1.5px 0 #000, 1.5px 1.5px 0 #000, -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 0 3px 10px rgba(0,0,0,.45)"
-          }}>
-            {d.titleSub}
-          </div>
-        )}
+        {/* Title block — iterates themes: main-level big + optional sub-level small.
+            單主題還會顯示 theme.sub（英文副標題）；多主題不顯示 sub。 */}
+        {(() => {
+          const themes = getThemes(d);
+          const isSingle = themes.length === 1;
+          const MAIN_TEXT_SHADOW = "2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 4px 14px rgba(0,0,0,.45)";
+          const SUB_TEXT_SHADOW = "1.5px 0 0 #000, -1.5px 0 0 #000, 0 1.5px 0 #000, 0 -1.5px 0 #000, 1.5px 1.5px 0 #000, -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 0 3px 10px rgba(0,0,0,.45)";
+          return (
+            <>
+              {themes.map((t, i) => {
+                const isMain = t.level !== 'sub';
+                const gap = i === 0 ? 0 : (isMain ? 12 : 10);
+                const ep = t.episode != null && t.episode !== "" && (
+                  <span style={{
+                    fontFamily:"var(--font-display)", fontStyle:"italic",
+                    fontSize: isMain ? 48 : 32,
+                    color:"var(--blue-bright)",
+                    marginLeft: isMain ? 18 : 12,
+                    textShadow:"var(--c-shadow-text)"
+                  }}>#{t.episode}</span>
+                );
+                if (isMain) {
+                  return (
+                    <h1 key={i} style={{
+                      margin:0, marginTop:gap,
+                      fontFamily:"var(--font-body)", fontWeight:900,
+                      fontSize:72, lineHeight:1, color:"#FFFFFF", letterSpacing:"-.01em",
+                      textShadow: MAIN_TEXT_SHADOW
+                    }}>{t.title}{ep}</h1>
+                  );
+                }
+                // 多主題的 sub-level：字級介於 main(72) 跟 englishSub(30) 之間，
+                // 讓副主題像「次要標題」而非「小字副標」，仍然清楚可讀。
+                return (
+                  <div key={i} style={{
+                    marginTop:gap,
+                    fontFamily:"var(--font-body)", fontWeight:900,
+                    fontSize:48, lineHeight:1.05, color:"#FFFFFF",
+                    letterSpacing:"-.005em",
+                    textShadow: MAIN_TEXT_SHADOW
+                  }}>{t.title}{ep}</div>
+                );
+              })}
+              {isSingle && themes[0].sub && (
+                <div className="tech" style={{
+                  marginTop:10, fontSize:30, fontWeight:700, color:"#FFFFFF",
+                  letterSpacing:".04em",
+                  textShadow: SUB_TEXT_SHADOW
+                }}>{themes[0].sub}</div>
+              )}
+            </>
+          );
+        })()}
       </div>
 
       {/* BOTTOM STRIP (A-style frame, D content: YuutaMark + VTuber logo) */}
