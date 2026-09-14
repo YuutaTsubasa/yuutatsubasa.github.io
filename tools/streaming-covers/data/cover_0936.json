@@ -1,0 +1,21 @@
+{
+  "vol": 936,
+  "themes": [
+    {
+      "level": "main",
+      "title": "明日方舟：終末地",
+      "sub": "2026.09.14"
+    }
+  ],
+  "categories": "game",
+  "artist": "たつあき(龍翠) @equal_aq",
+  "streamTime": "2026.09.14 · 23:30",
+  "logoSrc": "assets/game_arknights_endfield_logo.webp",
+  "theme": "azure",
+  "mode": "light",
+  "heroSrc": "assets/vtuber4.0-0.webp",
+  "bgSrc": "assets/936.webp",
+  "bgEffect": "soft",
+  "vtuberLogoSrc": "assets/vtuber-logo.png",
+  "card": "d"
+}
