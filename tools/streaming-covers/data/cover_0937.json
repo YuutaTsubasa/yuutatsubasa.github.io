@@ -1,0 +1,21 @@
+{
+  "vol": 937,
+  "themes": [
+    {
+      "level": "main",
+      "title": "彩地雷",
+      "sub": "ColorSweeper"
+    }
+  ],
+  "categories": "game",
+  "artist": "たつあき(龍翠) @equal_aq",
+  "streamTime": "2026.09.29 · 23:30",
+  "logoSrc": "assets/game_colorsweeper_logo.webp",
+  "theme": "azure",
+  "mode": "light",
+  "heroSrc": "assets/vtuber4.0-0.webp",
+  "bgSrc": "assets/937.webp",
+  "bgEffect": "",
+  "vtuberLogoSrc": "assets/vtuber-logo.png",
+  "card": "d"
+}
