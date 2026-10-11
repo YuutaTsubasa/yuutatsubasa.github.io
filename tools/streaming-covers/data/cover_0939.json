@@ -1,0 +1,21 @@
+{
+  "vol": 939,
+  "themes": [
+    {
+      "level": "main",
+      "title": "ワンワンバトル",
+      "sub": "Bow-wow Battle"
+    }
+  ],
+  "categories": "game",
+  "artist": "たつあき(龍翠) @equal_aq",
+  "streamTime": "2026.10.11 · 21:00",
+  "logoSrc": "assets/game_bow_wow_battle_logo.webp",
+  "theme": "azure",
+  "mode": "light",
+  "heroSrc": "assets/vtuber4.0-0.webp",
+  "bgSrc": "assets/939.webp",
+  "bgEffect": "",
+  "vtuberLogoSrc": "assets/vtuber-logo.png",
+  "card": "d"
+}
