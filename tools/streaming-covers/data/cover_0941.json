@@ -1,0 +1,22 @@
+{
+  "vol": 941,
+  "themes": [
+    {
+      "level": "main",
+      "title": "索尼克賽車 交叉世界",
+      "sub": "Sonic Racing: CrossWorlds",
+      "episode": 71
+    }
+  ],
+  "categories": "game",
+  "artist": "たつあき(龍翠) @equal_aq",
+  "streamTime": "2026.10.24 · 22:30",
+  "logoSrc": "assets/game_sonic_racing_crossworlds_logo.webp",
+  "theme": "azure",
+  "mode": "light",
+  "heroSrc": "assets/vtuber4.0-0.webp",
+  "bgSrc": "assets/941.webp",
+  "bgEffect": "soft",
+  "vtuberLogoSrc": "assets/vtuber-logo.png",
+  "card": "d"
+}
