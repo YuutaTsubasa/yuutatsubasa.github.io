@@ -14,8 +14,10 @@ const MAX_WIDTH = 600;
 const QUALITY = 80;
 
 // 找可用的 ImageMagick CLI（macOS 通常是 magick，Ubuntu/IM6 是 convert）
+// Windows 的 convert.exe 是系統內建的磁碟格式轉換工具（FAT → NTFS），絕對不能拿來試
+const CANDIDATES = process.platform === 'win32' ? ['magick'] : ['magick', 'convert'];
 const CMD = (() => {
-  for (const c of ['magick', 'convert']) {
+  for (const c of CANDIDATES) {
     const r = spawnSync(c, ['-version'], { stdio: 'ignore' });
     if (r.status === 0) return c;
   }
