@@ -292,16 +292,15 @@
             </div>
           {/if}
 
-          <!-- 作品的第一個連結（DEMO）是主按鈕；講義的連結是同等的參考資料，全部用次要樣式 -->
+          <!-- 連結都用外框樣式，滑上去變實心藍 -->
           {#if (entry.category === 'project' || entry.category === 'workshop') && entry.links?.length}
             <div class="panel" use:reveal={{ delay: 220 }}>
               <Corners color="var(--line-strong)" size={9} />
               <div class="mono panel-cap">// ACCESS</div>
               <div class="links">
-                {#each entry.links as l, li}
+                {#each entry.links as l}
                   <a
-                    class="btn btn-primary"
-                    class:secondary={entry.category !== 'project' || li > 0}
+                    class="btn btn-primary secondary"
                     href={l.url}
                     target="_blank"
                     rel="noopener"
