@@ -1,23 +1,23 @@
 ---
-title: "【#遊戲】Vol. 1: 雙人成行 #01 feat. 貓耳未來"
+title: "【#連動/#遊戲】Vol. 1: 雙人成行 It Takes Two #1 feat. 貓耳未來"
 date: "2021-08-02"
 author: "悠太翼 feat. 貓耳未來"
 thumbnail: "/images/posts/streamings/1.webp"
 tags: ["遊戲實況", "活動合作", "直播影片"]
-excerpt: "與貓耳未來一起來玩雙人成行。"
+excerpt: "與貓耳未來一起來玩雙人成行這個遊戲，不知道能不能順利合作破關呢？"
 duration: "2:43:35"
 ---
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Bb5PbxXB7lQ?si=MbyrFGxSPVb-IRwJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Bb5PbxXB7lQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 這是我與貓耳未來首次合作的遊戲實況。我們選擇了《雙人成行》這款遊戲，但在遊玩過程中發現我的電腦配置不足，導致遊戲經常出現卡頓。為了改善這個問題，事後我在下次合作直播前趕緊去原價屋買了一台新的電腦。
 
 ## 🛡️遊戲資訊🛡️
-- 雙人成行: https://store.steampowered.com/app/1426210/_/?l=tchinese
+- 雙人成行 (It Takes Two): https://store.steampowered.com/app/1426210/_/?l=tchinese
 
 ## 🛡️連動夥伴🛡️
 - ☆ Nekomix Ch. 貓耳未來 ☆
     - ➥Twitter: https://x.com/NekomixNx
-    - ➥Youtube: https://www.youtube.com/channel/UCJyUJuz8L-mu1Ted8W-QR_Q
+    - ➥YouTube: https://www.youtube.com/channel/UCJyUJuz8L-mu1Ted8W-QR_Q
     - ➥貓耳側的實況: https://youtu.be/XC1ffeKncHM
 
 ## 🛡️直播與影片連結🛡️

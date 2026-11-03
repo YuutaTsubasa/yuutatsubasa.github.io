@@ -1,15 +1,15 @@
 ---
-title: "【#歌回/#雜談】Vol. 0: 初配信，來做點自我介紹吧！"
+title: "【#雜談/#歌回】Vol. 0: 初配信: 來做點自我介紹吧！"
 date: "2021-07-31"
 author: "悠太翼"
 thumbnail: "/images/posts/streamings/0.webp"
-tags: ["歌回實況", "雜談實況", "直播影片"]
-excerpt: "初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）。"
+tags: ["雜談實況", "歌回實況", "直播影片"]
+excerpt: "初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）"
 duration: "1:50:54"
 ---
-<iframe width="560" height="315" src="https://www.youtube.com/embed/zbyvgQOZu8E?si=P9MpdFVNvwLierrg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zbyvgQOZu8E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）。
+初配信，來做點自我介紹吧！（怎麼有點令人害羞😳）
 
 ## 🛡️直播與影片連結🛡️
 - 原直播：[https://yutaii.run/v/0](https://yutaii.run/v/0)
@@ -32,7 +32,7 @@ duration: "1:50:54"
 - 00:50:52 歌回時間 (3) - ベノム
 - 00:55:34 歌回時間 (4) - 不毛!
 - 01:03:08 歌回時間 (5) - 歡喜就好
-- 01:07:12 歌回時間 (6) - 共感覚おばけ
+- 01:07:12 歌回時間 (6) - 共感覚おばけ
 - 01:11:50 歌回時間 (7) - 踊
 - 01:15:58 歌回時間 (8) - シャルル
 - 01:21:36 棉花糖時間 (1) - 人設很可愛、唱歌也好聽 期待初配信 加油💪
@@ -48,12 +48,12 @@ duration: "1:50:54"
 - 01:46:41 結尾
 - 01:49:55 Ending
 
-## 🛡️音源來源🛡️
-1. KING: [https://www.youtube.com/watch?v=LMQIlMbC4N8&t=0s](https://www.youtube.com/watch?v=LMQIlMbC4N8&t=0s)
-2. Bad Apple!: [https://www.youtube.com/watch?v=GfTNCUG-7U8&t=0s](https://www.youtube.com/watch?v=GfTNCUG-7U8&t=0s)
-3. ベノム: [https://www.youtube.com/watch?v=duvJFyF3fGI&t=0s](https://www.youtube.com/watch?v=duvJFyF3fGI&t=0s)
-4. 不毛!: [https://piapro.jp/t/Tbxe](https://piapro.jp/t/Tbxe)
-5. 歡喜就好: [https://www.youtube.com/watch?v=G5izg5SHmbU&t=0s](https://www.youtube.com/watch?v=G5izg5SHmbU&t=0s)
-6. 共感覚おばけ: [https://www.youtube.com/watch?v=ocMGqYM8i5M&t=0s](https://www.youtube.com/watch?v=ocMGqYM8i5M&t=0s)  
-7. 踊: [https://www.youtube.com/watch?v=Rg7yCnB7Zfo&t=0s](https://www.youtube.com/watch?v=Rg7yCnB7Zfo&t=0s)
-8. シャルル: [https://www.youtube.com/watch?v=x7WQMdUP9Ko&t=0s](https://www.youtube.com/watch?v=x7WQMdUP9Ko&t=0s)
+## 🛡️歌曲來源🛡️
+1. KING: https://youtu.be/LMQIlMbC4N8?si=x0bY-gmnH1pDCN0V
+2. Bad Apple!: https://www.youtube.com/watch?v=GfTNCUG-7U8
+3. ベノム: https://www.youtube.com/watch?v=duvJFyF3fGI
+4. 不毛!: https://piapro.jp/t/Tbxe
+5. 歡喜就好: https://www.youtube.com/watch?v=G5izg5SHmbU
+6. 共感覚おばけ: https://www.youtube.com/watch?v=ocMGqYM8i5M
+7. 踊: https://youtu.be/Rg7yCnB7Zfo?si=jN3y1VRZFEgo82qO
+8. シャルル: https://www.youtube.com/watch?v=x7WQMdUP9Ko
