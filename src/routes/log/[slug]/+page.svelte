@@ -1,12 +1,35 @@
 <script>
   import { page } from '$app/stores';
-  import { marked } from 'marked';
+  import { Marked } from 'marked';
+  import { markedHighlight } from 'marked-highlight';
+  import hljs from 'highlight.js/lib/core';
+  import css from 'highlight.js/lib/languages/css';
+  import xml from 'highlight.js/lib/languages/xml';
+  import javascript from 'highlight.js/lib/languages/javascript';
+  import json from 'highlight.js/lib/languages/json';
+  import bash from 'highlight.js/lib/languages/bash';
+  import powershell from 'highlight.js/lib/languages/powershell';
+  import python from 'highlight.js/lib/languages/python';
+  import csharp from 'highlight.js/lib/languages/csharp';
   import { LOG_ENTRIES, findLog, findLogCategory } from '$lib/data/log.js';
   import { VIDEOS } from '$lib/data/videos.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Dot from '$lib/components/atoms/Dot.svelte';
   import Seo from '$lib/components/Seo.svelte';
   import { reveal } from '$lib/utils/reveal.js';
+
+  // 程式碼區塊上色：只註冊講義會用到的語言；沒標語言或沒註冊的就照原樣輸出
+  for (const [name, lang] of Object.entries({ css, xml, javascript, json, bash, powershell, python, csharp })) {
+    hljs.registerLanguage(name, lang);
+  }
+  const marked = new Marked(
+    markedHighlight({
+      langPrefix: 'hljs language-',
+      highlight(code, lang) {
+        return lang && hljs.getLanguage(lang) ? hljs.highlight(code, { language: lang }).value : code;
+      }
+    })
+  );
 
   $: entry = findLog($page.params.slug);
   $: idx = entry ? LOG_ENTRIES.indexOf(entry) : -1;
@@ -269,6 +292,7 @@
             </div>
           {/if}
 
+          <!-- 作品的第一個連結（DEMO）是主按鈕；講義的連結是同等的參考資料，全部用次要樣式 -->
           {#if (entry.category === 'project' || entry.category === 'workshop') && entry.links?.length}
             <div class="panel" use:reveal={{ delay: 220 }}>
               <Corners color="var(--line-strong)" size={9} />
@@ -277,7 +301,7 @@
                 {#each entry.links as l, li}
                   <a
                     class="btn btn-primary"
-                    class:secondary={li > 0}
+                    class:secondary={entry.category !== 'project' || li > 0}
                     href={l.url}
                     target="_blank"
                     rel="noopener"
@@ -620,6 +644,50 @@
     background: transparent;
     padding: 0;
   }
+  /* highlight.js 語法上色（淺色底，沿用站上的藍／青／琥珀色票） */
+  .body :global(.hljs-comment),
+  .body :global(.hljs-quote) { color: var(--silver-3); font-style: italic; }
+  .body :global(.hljs-keyword),
+  .body :global(.hljs-selector-tag),
+  .body :global(.hljs-built_in),
+  .body :global(.hljs-literal) { color: var(--blue-bright); }
+  .body :global(.hljs-selector-class),
+  .body :global(.hljs-selector-id),
+  .body :global(.hljs-selector-pseudo),
+  .body :global(.hljs-selector-attr),
+  .body :global(.hljs-title),
+  .body :global(.hljs-name) { color: #7C3AED; }
+  .body :global(.hljs-attribute),
+  .body :global(.hljs-attr),
+  .body :global(.hljs-property),
+  .body :global(.hljs-variable),
+  .body :global(.hljs-params) { color: var(--accent-cyan); }
+  .body :global(.hljs-string),
+  .body :global(.hljs-regexp) { color: #15803D; }
+  .body :global(.hljs-number),
+  .body :global(.hljs-meta) { color: var(--accent-amber); }
+  .body :global(.hljs-tag) { color: var(--silver-2); }
+
+  .body :global(table) {
+    width: 100%;
+    margin: 0 0 18px;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .body :global(th),
+  .body :global(td) {
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+  .body :global(th) {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--silver-0);
+    font-weight: 700;
+  }
+  .body :global(tbody tr:nth-child(even) td) { background: rgba(255, 255, 255, 0.5); }
+  .body :global(td code) { white-space: nowrap; }
   .body :global(blockquote) {
     margin: 0 0 16px;
     padding: 10px 16px;
@@ -734,6 +802,9 @@
     background: transparent;
     color: var(--blue-bright);
     border-color: var(--blue-bright);
+  }
+  .links .btn-primary.secondary:hover {
+    background: rgba(37, 99, 235, 0.08);
   }
 
   .streams-panel {
