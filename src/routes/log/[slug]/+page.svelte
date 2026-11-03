@@ -687,7 +687,7 @@
     font-weight: 700;
   }
   .body :global(tbody tr:nth-child(even) td) { background: rgba(255, 255, 255, 0.5); }
-  .body :global(td code) { white-space: nowrap; }
+  .body :global(td) { overflow-wrap: anywhere; }
   .body :global(blockquote) {
     margin: 0 0 16px;
     padding: 10px 16px;
