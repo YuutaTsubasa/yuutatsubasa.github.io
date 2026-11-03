@@ -803,8 +803,10 @@
     color: var(--blue-bright);
     border-color: var(--blue-bright);
   }
+  /* 滑上去變回實心主按鈕的樣子 */
   .links .btn-primary.secondary:hover {
-    background: rgba(37, 99, 235, 0.08);
+    background: linear-gradient(135deg, var(--blue-electric), var(--blue-deep));
+    color: #FFFFFF;
   }
 
   .streams-panel {
