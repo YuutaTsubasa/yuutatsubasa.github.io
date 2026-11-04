@@ -29,6 +29,7 @@ export async function load({ params }) {
       const parsedContent = marked(markdownContent);
 
       post = {
+        filename: params.filename,
         title: frontMatter.title,
         date: new Date(frontMatter.date),
         author: frontMatter.author,

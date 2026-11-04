@@ -8,7 +8,7 @@ VTuber 悠太翼的個人網站原始碼，使用 SvelteKit + static adapter，�
 - **Vite** 開發伺服器
 - 內容：`src/posts/*.md` （markdown frontmatter）+ `src/lib/data/*.js`（資料定義）
 - 樣式：原生 CSS 變數 + scoped styles，無 UI framework
-- 部署：`gh-pages` 推到 `gh-pages` 分支
+- 部署：GitHub Actions（`.github/workflows/deploy.yml`）在 push 到 `main` 時 build 並發佈到 GitHub Pages
 
 ## 開發
 
@@ -22,10 +22,10 @@ npm run dev          # http://localhost:5173
 ```bash
 npm run build        # 產生 dist/
 npm run preview      # 本地預覽 production build
-npm run deploy       # build + 推到 gh-pages 分支（GitHub Pages 自動上線）
 ```
 
-> 推到 `main` **不會**自動部署，需要手動跑 `npm run deploy`。
+> 推到 `main` 會**自動部署**：GitHub Actions 跑 `npm ci` + `npm run build`，把 `dist/` 發佈到 GitHub Pages（Pages 的來源設定是 GitHub Actions）。
+> `npm run deploy`（推到 `gh-pages` 分支）是舊做法，Pages 已不再讀那個分支。
 
 ## 區塊架構
 
