@@ -120,8 +120,9 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
   };
 });
 
+// 同一天有多場時，Vol. 大的排前面
 export const VIDEOS = ENTRIES.sort((a, b) =>
-  a.date < b.date ? 1 : a.date > b.date ? -1 : 0
+  a.date < b.date ? 1 : a.date > b.date ? -1 : (b.vol ?? -1) - (a.vol ?? -1)
 );
 
 // 篩選 tab 用：第一項 ALL 是「全部」
