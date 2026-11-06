@@ -24,6 +24,11 @@ function SoloApp() {
       .then((data) => {
         const merged = { ...DEFAULTS, ...data };
         const card = (cardOverride || data.card || "a").toLowerCase();
+        // HUD 版是獨立的頁面，不走 React 版型
+        if (card === "hud") {
+          window.location.replace(window.location.pathname.replace("template", "hud") + window.location.search);
+          return;
+        }
         setState({ data: merged, card });
       })
       .catch((e) => setErr(e.message));

@@ -1,0 +1,20 @@
+{
+  "vol": 9,
+  "card": "hud",
+  "types": [
+    "game"
+  ],
+  "title": "雙人成行",
+  "sub": "It Takes Two　feat. 貓耳未來",
+  "ep": 3,
+  "flags": [
+    "連動"
+  ],
+  "date": "2021.08.16",
+  "weekday": "MON",
+  "time": "21:30",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_9.jpg",
+  "heroSrc": "assets/vtuber1.0-6.png",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}

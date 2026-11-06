@@ -15,6 +15,12 @@ description: 新增一集直播封面到 yuutatsubasa.github.io。觸發條件�
 
 主目錄：`/Users/maplewing/Documents/Current/Repos/yuutatsubasa.github.io`
 
+## 版型：先判斷是不是 HUD 版
+
+Vol. 0–11 用 `card: "hud"`（`hud.html`），欄位和輸出位置都跟下面的 Card A–D 不同：
+輸出 `static/images/posts/streamings/N.webp`（1280×720），文章直接引用。欄位見 `tools/streaming-covers/README.md` 的「`card: "hud"` 的欄位」，素材用 `assets/frame_<vol>.jpg` 和 `assets/vtuber1.0-<idx>.png`。
+要補直播存檔的舊集數、或使用者說要跟 Vol. 0–11 同一款，就照 HUD 版做；其他情況走下面的流程。
+
 ## 需要從使用者收集的資訊
 
 vol（必填）+ titleMain 是底線，其他缺哪個追問哪個（用 AskUserQuestion 或單句問句）。**不要為了問齊全部欄位連發 4 個問題**——必要欄位先到位、其他用合理 defaults 補。
@@ -203,10 +209,10 @@ osascript -e 'set png to (the clipboard as «class PNGf»)' \
    ```bash
    node tools/streaming-covers/render.mjs <vol>
    ```
-   等到看到 `✓ vol N → static/images/streaming/streaming_NNNN.webp` 才算 OK。
+   等到看到 `✓ vol N → static/images/streaming/streaming_NNNN.webp`（HUD 版是 `static/images/posts/streamings/N.webp`）才算 OK。
    失敗訊息常見：
-   - `Chrome 找不到` → 提示使用者裝 Chrome 或設 `CHROME_BIN`
-   - `cwebp 沒裝` → 會 fallback PNG，但建議 `brew install webp`
+   - `Chrome 找不到` → 提示使用者裝 Chrome 或設 `CHROME_BIN`（Windows 會自動找 Chrome 或 Edge）
+   - `cwebp 和 Pillow 都沒有` → 會 fallback PNG，建議 `brew install webp` 或 `pip install pillow`
 
 6. **回報**：簡潔列出：
    - JSON：`tools/streaming-covers/data/cover_NNNN.json`
@@ -231,7 +237,7 @@ osascript -e 'set png to (the clipboard as «class PNGf»)' \
 
 ## 常見錯誤排查
 
-- `cwebp: command not found` → 改用 `magick`；都沒有時請使用者裝（`brew install webp` / `brew install imagemagick`）。
+- `cwebp: command not found` → render.mjs 會改用 Pillow；搬素材時改用 `magick`；都沒有時請使用者裝（`brew install webp` / `brew install imagemagick`）。
 - `magick: command not found`（跑 trim.mjs 失敗）→ 提示裝 ImageMagick（`brew install imagemagick`）；或跟使用者確認檔案已預先 trim 過，跳過該步。
 - 立繪縮得超小 / 只佔角落 → 很可能是 hero 沒 trim、外圍透明 padding 沒裁掉，重新 trim 一次即可。
 - 立繪不見了 / 跑掉位置 → 確認 heroSrc 路徑正確且檔案存在（`ls -la tools/streaming-covers/<path>`）。

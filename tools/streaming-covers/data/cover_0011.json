@@ -1,0 +1,16 @@
+{
+  "vol": 11,
+  "card": "hud",
+  "types": [
+    "song"
+  ],
+  "title": "練歌歌枠",
+  "sub": "夜晚的羞恥練歌直播時間",
+  "date": "2021.08.20",
+  "weekday": "FRI",
+  "time": "22:40",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_11.jpg",
+  "heroSrc": "assets/vtuber1.0-7.png",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}

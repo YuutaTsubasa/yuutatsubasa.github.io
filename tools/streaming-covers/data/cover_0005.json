@@ -1,0 +1,17 @@
+{
+  "vol": 5,
+  "card": "hud",
+  "types": [
+    "game"
+  ],
+  "title": "第七史詩",
+  "sub": "Epic Seven",
+  "ep": 1,
+  "date": "2021.08.09",
+  "weekday": "MON",
+  "time": "08:30",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_5.jpg",
+  "heroSrc": "assets/vtuber1.0-2.png",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}

@@ -1,0 +1,22 @@
+{
+  "vol": 2,
+  "card": "hud",
+  "types": [
+    "code"
+  ],
+  "title": "YouTube 聊天室 CSS",
+  "sub": "從零開始的語法設定教學",
+  "date": "2021.08.03",
+  "weekday": "TUE",
+  "time": "21:30",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_2.jpg",
+  "heroSrc": "assets/vtuber1.0-3.png",
+  "heroBox": {
+    "right": "-10px",
+    "bottom": "-70px",
+    "width": "560px",
+    "height": "800px"
+  },
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}

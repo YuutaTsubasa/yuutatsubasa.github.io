@@ -8,18 +8,22 @@
 tools/streaming-covers/
   index.html            # 多卡預覽 + Tweaks（手動調設計用）
   template.html         # 單卡 solo 渲染（?vol=N 載 data/cover_NNNN.json）
+  hud.html              # HUD 版封面（card: "hud"，Vol. 0–11），獨立頁面，不用 React
+  fonts/                # hud.html 用的字型與 OFL 授權
   lib/
     covers.css          # 共用 CSS（兩個 html 都 link 這支）
     design-canvas.jsx   # Claude Design 共用畫布框架
     tweaks-panel.jsx    # Claude Design 共用控制面板
   assets/               # 封面素材
     vtuber<ver>-<idx>.png  # 立繪（跟 VTuber 模型版本走）
-    <vol>.webp             # 背景圖（跟 Vol 走，例 0.webp = Vol 0）
+    <vol>.webp             # 背景圖（跟 Vol 走，例 910.webp = Vol 910）
+    frame_<vol>.jpg        # HUD 版斜框裡的直播畫面（Vol. 10 共用 frame_7.jpg）
     vtuber-logo.png        # 右下 VTuber Logo
   data/
     cover_NNNN.json     # 每集一個檔，覆寫 DEFAULTS 的欄位
   cover-atoms.jsx       # 共用小元件 + DEFAULTS + STREAM_TAGS
   cover-cards.jsx       # 四個 Card 版型（A 為主）
+  render.mjs            # 批次渲染（見下面 C）
   streaming-covers.jsx  # index.html 的 App（多卡預覽）
   solo-cover.jsx        # template.html 的 App（單卡）
   README.md
@@ -49,6 +53,8 @@ URL 參數：
 
 JSON 沒寫的欄位會 fallback 到 `cover-atoms.jsx` 裡的 `DEFAULTS`。
 
+`card: "hud"` 的 JSON 開 `template` 會自動轉到 `hud`。`npx serve` 會把 `.html` 網址轉址並弄丟參數，所以用它預覽時網址要寫 `/template?vol=N`、`/hud?vol=N`，不加 `.html`。
+
 ### C. 截圖匯出
 
 **單張，DevTools 手動**
@@ -56,22 +62,22 @@ JSON 沒寫的欄位會 fallback 到 `cover-atoms.jsx` 裡的 `DEFAULTS`。
 2. DevTools 找到 `<div class="cover light">` → 右鍵 **Capture node screenshot**
 3. PNG 1280×720 直接下載
 
-**批次，Chrome headless**
+**批次，`render.mjs`**
 ```bash
-"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
-  --headless --disable-gpu --hide-scrollbars \
-  --window-size=1280,720 \
-  --screenshot=out.png \
-  "http://localhost:3000/template.html?vol=0"
+node tools/streaming-covers/render.mjs 941 942     # 指定 Vol
+node tools/streaming-covers/render.mjs --all       # data/cover_*.json 全部
+node tools/streaming-covers/render.mjs --png-dir out 3  # 只輸出原始 PNG，不動 static/（比對用）
 ```
 
-之後可以包一個 `render-covers.mjs` 把 `data/cover_*.json` 全跑一遍。
+- 瀏覽器：`CHROME_BIN` 優先，沒設就找 macOS 的 Chrome、Windows 的 Chrome 或 Edge。
+- 轉 webp（品質 88）：`cwebp` 優先，沒裝就用 Python 的 Pillow；都沒有時輸出 PNG 並警告。
 
-### D. 轉 webp + 入 repo
+### D. 輸出位置
 
-```bash
-cwebp -q 88 out.png -o static/images/streaming/streaming_0000.webp
-```
+| `card` | 輸出 | 尺寸 |
+|---|---|---|
+| `a`–`d` | `static/images/streaming/streaming_NNNN.webp` | 1920×1080 |
+| `hud` | `static/images/posts/streamings/N.webp`（文章 `thumbnail` 指的路徑） | 1280×720 |
 
 ## 欄位說明（`cover_NNNN.json` 可填）
 
@@ -89,7 +95,28 @@ cwebp -q 88 out.png -o static/images/streaming/streaming_0000.webp
 | `bgSrc` | 全背景圖（相對路徑，空字串用主題漸層） |
 | `logoSrc` | 主題 Logo 圖（左下角，空字串不顯示） |
 | `vtuberLogoSrc` | 右下角 VTuber Logo |
-| `card` | 版型 `a` / `b` / `c` / `d`，預設 `a` |
+| `card` | 版型 `a` / `b` / `c` / `d` / `hud`，預設 `a` |
+
+### `card: "hud"` 的欄位
+
+HUD 版是另一套 schema，上面的 `themes`、`categories`、`bgSrc` 等欄位不適用：
+
+| 欄位 | 說明 |
+|---|---|
+| `vol` | 直播編號（數字） |
+| `types` | 類型陣列，第一個是主色：`game` / `song` / `talk` / `code` / `art` |
+| `kind` | 左上中文類型，省略時用類型的中文名（多類型一律自動） |
+| `title` / `sub` | 標題 / 副標題；標題太長會自動縮字 |
+| `ep` | 集數，顯示 `#N`；沒有就省略 |
+| `flags` | 黃色小旗標，例 `["連動"]` |
+| `date` / `weekday` / `time` | `2021.08.02`、`MON`、`21:30`（只有開始時間） |
+| `artist` | 右上繪師署名，省略就不顯示 |
+| `frameSrc` | 斜框裡的畫面 |
+| `heroSrc` | 右側立繪 |
+| `heroBox` | 立繪框覆寫：`{ "right": "-10px", "bottom": "-70px", "width": "560px", "height": "800px" }` |
+| `vtuberLogoSrc` | 右下 Logo |
+
+中文、日文用系統字型（`Noto Sans TC`、`Noto Serif TC`，沒有時退回微軟正黑體與新細明體），所以要在裝了 Noto 的電腦上渲染，才會跟現有封面一模一樣。拉丁字母用 `fonts/` 裡的字型，不受影響。
 
 ## 為什麼放 `tools/`
 

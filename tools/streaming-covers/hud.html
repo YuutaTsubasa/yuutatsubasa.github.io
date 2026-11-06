@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>Stream Cover</title>
+<!--
+  悠太翼 HUD 版直播封面（1280×720，card: "hud"）。資料放在 data/cover_NNNN.json，用 ?vol=N 載入，欄位見 README。
+  由 render.mjs 用 Chrome／Edge headless 截圖，也可以 npx serve 之後開 /hud?vol=N 預覽。
+  視覺語言取自 bluebolt-ui v0.3（ScreenTitle 外框大數字＋斜切標籤、DateCard、SectionBar、HazardStripe、
+  Barcode、角色卡的明朝大字）；類型色沿用頻道現有縮圖的 GAME 紅／KARAOKE 藍／雜談綠／CODE 橘／繪圖洋紅。
+-->
+<style>
+@font-face { font-family: "Anton"; src: url(fonts/anton-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Montserrat"; font-weight: 600; src: url(fonts/montserrat-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family: "Montserrat"; font-weight: 700; src: url(fonts/montserrat-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "Montserrat"; font-weight: 600; font-style: italic; src: url(fonts/montserrat-latin-600-italic.woff2) format("woff2"); }
+@font-face { font-family: "Montserrat"; font-weight: 700; font-style: italic; src: url(fonts/montserrat-latin-700-italic.woff2) format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 100 800; src: url(fonts/jetbrains-mono-latin-wght-normal.woff2) format("woff2"); }
+
+:root {
+  --paper: #f3f6fd; --ink: #0b0f1a; --ink-2: #3a4252; --ink-3: #5f6878;
+  --blue: #183dd6; --yellow: #ffd21f;
+  --hud-line: rgb(11 15 26 / .22);
+  --zh: "Noto Sans TC", "Microsoft JhengHei UI", sans-serif;
+  --serif: "Noto Serif TC", "PMingLiU", serif;
+  --display: "Anton", Impact, var(--zh);
+  --cond: "Montserrat", var(--zh);  /* English labels; chosen by the user 2026-10-29 */
+  --mono: "JetBrains Mono", Consolas, monospace;
+  /* per-type accent: the channel's existing thumbnail colours, sampled from Vol. 682–941 */
+  --accent: #ec4444; --accent-2: #f6a3a3;
+}
+body[data-type="song"] { --accent: #3c80f4; --accent-2: #a9c7fb; }
+body[data-type="talk"] { --accent: #4cbc40; --accent-2: #a8dea2; }
+body[data-type="code"] { --accent: #f87014; --accent-2: #fbbd93; }
+body[data-type="art"]  { --accent: #b0329e; --accent-2: #dc9ad2; }
+
+* { box-sizing: border-box; margin: 0; }
+html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--paper); }
+body { position: relative; font-family: var(--zh); color: var(--ink); }
+.abs { position: absolute; }
+
+/* ---- background: HUD dots + rules, a soft accent ribbon ---- */
+.dots { inset: 0;
+  background-image: radial-gradient(rgb(11 15 26 / .12) 1.4px, transparent 1.6px);
+  background-size: 22px 22px; }
+.rule-h { left: 0; right: 0; height: 1px; background: var(--hud-line); }
+.rule-v { top: 0; bottom: 0; width: 1px; background: var(--hud-line); }
+.ribbon { inset: 0; width: 1280px; height: 720px; }
+
+/* giant serif kanji, like the roster unit cards */
+.kanji { right: 46px; top: -10px; writing-mode: vertical-rl; font-family: var(--serif); font-weight: 900; font-size: 330px; line-height: 1; letter-spacing: -.04em;
+  color: var(--accent); opacity: .22; }
+/* several types: one column per type (vertical-rl puts the first on the right), each in its own colour */
+.kanji.multi { font-size: 300px; }
+.kanji.multi span { display: block; }
+
+/* ---- ScreenTitle: outlined Vol. number + stacked tags ---- */
+.st { left: 36px; top: 26px; display: flex; align-items: flex-end; gap: 14px; z-index: 5; }
+.st .big { font-family: var(--display); font-size: 128px; line-height: .82; letter-spacing: -.02em;
+  color: transparent; -webkit-text-stroke: 2.5px var(--ink); }
+.st .txt { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding-bottom: 4px; }
+/* black tag; the type colour is lifted toward white so it stays readable on ink */
+.tagwrap { display: block; }
+.tag { display: block; padding: 2px 16px 2px 9px; background: var(--ink);
+  color: color-mix(in srgb, var(--accent) 70%, #fff);
+  font: italic 700 22px var(--cond); letter-spacing: .14em; text-transform: uppercase;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+.tag .flag { color: var(--yellow); margin-left: 8px; }
+.st .kind { font-weight: 900; font-size: 46px; line-height: 1; color: var(--accent); }
+.st .vol-l { position: absolute; left: 4px; top: -16px; font: 700 14px var(--cond); letter-spacing: .3em; color: var(--ink-3); }
+
+/* ---- DateCard ---- */
+.datecard { left: 470px; top: 36px; z-index: 5; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.datecard .row { display: flex; align-items: baseline; font-family: var(--display); line-height: .9; transform: skewX(-8deg); }
+.datecard .y { font-size: 30px; }
+.datecard .md { font-size: 54px; }
+.datecard .sl { margin: 0 3px; font-size: 38px; color: var(--accent); }
+.datecard .dow { align-self: flex-start; margin-left: 8px; padding: 1px 8px; background: var(--ink); color: var(--yellow);
+  font: italic 700 18px var(--cond); letter-spacing: .06em; }
+.datecard .time { font: 600 16px var(--mono); color: var(--ink-3); letter-spacing: .08em; margin-left: 2px; }
+
+/* ---- screen: a frame from the stream, slanted, with a section bar ---- */
+.screen, .screen-edge, .screen-shadow { clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%); }
+.screen { left: 40px; top: 176px; width: 760px; height: 420px; background: var(--ink) center / cover no-repeat; z-index: 3; }
+.screen-edge { left: 34px; top: 170px; width: 772px; height: 432px; background: #fff; z-index: 3; }
+.screen-shadow { left: 34px; top: 170px; width: 772px; height: 432px; background: var(--ink); transform: translate(12px, 12px); z-index: 2; }
+.screen::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgb(11 15 26 / .45)); }
+.corner { width: 26px; height: 26px; border: 3px solid var(--ink); z-index: 4; }
+
+/* ---- title plate with a SectionBar subtitle ---- */
+.plate { left: 24px; bottom: 44px; z-index: 6; max-width: 790px; padding: 16px 32px 18px 30px; background: #fff;
+  box-shadow: inset 10px 0 0 var(--accent); }
+/* several types: the left edge is split into one stripe per type, the subtitle bar blends them */
+body.multi .plate { box-shadow: none; background: var(--stripes) left / 10px 100% no-repeat, #fff; }
+body.multi .bar { background: linear-gradient(90deg, var(--blend), transparent); }
+.plate .t { font-weight: 900; font-size: 62px; line-height: 1.05; letter-spacing: 1px; white-space: nowrap; }
+.plate .t .ep { font-family: var(--display); font-weight: 400; font-size: 68px; color: var(--accent); margin-left: 14px; vertical-align: -2px; }
+.bar { display: inline-flex; align-items: center; gap: 10px; margin-top: 10px; padding: 3px 60px 3px 0;
+  /* solid behind the text, fade only in the empty tail (padding-right) so white text stays readable */
+  background: linear-gradient(90deg, var(--accent) 0 calc(100% - 64px), transparent);
+  color: #fff; font: 700 24px var(--cond); letter-spacing: .04em; white-space: nowrap; }
+.bar .badge { display: grid; place-items: center; width: 30px; height: 30px; background: var(--yellow); color: var(--ink);
+  font: 700 18px var(--display); }
+.bar .badge svg { width: 20px; height: 20px; fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.pshadow { left: 24px; bottom: 44px; z-index: 5; transform: translate(10px, 10px); background: var(--ink); }
+
+/* ---- character ---- */
+.avatar { right: -50px; bottom: -40px; width: 650px; height: 650px; z-index: 4; background: center / contain no-repeat;
+  filter: drop-shadow(4px 0 0 #fff) drop-shadow(-4px 0 0 #fff) drop-shadow(0 -4px 0 #fff) drop-shadow(12px 12px 0 rgb(11 15 26 / .85)); }
+
+/* ---- HUD edges ---- */
+/* channel logo (the knight-shield one; the blue logo.webp is retired), small in the bottom-right corner over the character */
+.logo { right: 22px; bottom: 18px; height: 62px; z-index: 7; filter: drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff); }
+.credit { right: 40px; top: 9px; font: 600 11px var(--cond); letter-spacing: .12em; color: var(--ink-3); z-index: 7; white-space: nowrap; }
+.credit b { font-weight: 700; color: var(--ink); letter-spacing: .04em; }
+.vtext { right: 14px; top: 30px; writing-mode: vertical-rl; font: 700 12px var(--cond); letter-spacing: .2em; color: var(--ink-3); z-index: 1; }
+.footer { left: 0; bottom: 10px; display: flex; align-items: center; gap: 12px; z-index: 7; }
+.hazard { width: 88px; height: 18px; background: repeating-linear-gradient(-45deg, var(--yellow) 0 8px, var(--ink) 8px 16px); }
+.footer .ft { font: 700 13px var(--cond); letter-spacing: .3em; color: var(--ink-2); }
+.barcode { display: flex; gap: 0; height: 18px; align-items: stretch; }
+.barcode i { display: block; background: var(--ink); }
+</style>
+</head>
+<body>
+<div class="abs dots"></div>
+<div class="abs rule-h" style="top:158px"></div>
+<div class="abs rule-v" style="left:22px"></div>
+<svg class="abs ribbon" viewBox="0 0 1280 720" aria-hidden="true">
+  <defs>
+    <linearGradient id="rg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="var(--accent)" stop-opacity=".0"/>
+      <stop offset=".35" stop-color="var(--accent)" stop-opacity=".55"/>
+      <stop offset="1" stop-color="var(--accent-2)" stop-opacity=".9"/>
+    </linearGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="1.2"/></filter>
+  </defs>
+  <path d="M -80 760 C 260 520, 520 760, 820 470 S 1180 120, 1380 40" fill="none" stroke="url(#rg)" stroke-width="150" stroke-linecap="round" filter="url(#soft)"/>
+  <path d="M -80 700 C 260 470, 520 700, 820 420 S 1180 80, 1380 0" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="5"/>
+  <path d="M -80 830 C 260 590, 520 830, 820 540 S 1180 190, 1380 110" fill="none" stroke="var(--accent)" stroke-opacity=".5" stroke-width="2"/>
+</svg>
+<div class="abs kanji" id="kanji"></div>
+<div class="abs vtext" id="vtext"></div>
+<div class="abs credit" id="credit"></div>
+<img class="abs logo" id="logo" alt="">
+
+<header class="abs st">
+  <span class="vol-l">VOL.</span>
+  <span class="big" id="vn"></span>
+  <div class="txt"><span class="tagwrap"><span class="tag" id="tag"></span></span><span class="kind" id="kind"></span></div>
+</header>
+<div class="abs datecard">
+  <div class="row"><span class="y" id="dy"></span><span class="sl">/</span><span class="md" id="dm"></span><span class="sl">/</span><span class="md" id="dd"></span><span class="dow" id="dw"></span></div>
+  <div class="time" id="tm"></div>
+</div>
+
+<div class="abs screen-shadow"></div><div class="abs screen-edge"></div>
+<div class="abs screen" id="screen"></div>
+<div class="abs corner" style="left:56px;top:162px;border-right:0;border-bottom:0"></div>
+
+
+<div class="abs avatar" id="avatar"></div>
+<div class="abs pshadow" id="pshadow"></div>
+<div class="abs plate" id="plate"><div class="t" id="t"></div><div class="bar" id="bar"><span class="badge" id="badge"></span><span id="s"></span></div></div>
+
+<div class="abs footer"><div class="hazard"></div><span class="ft" id="ft"></span><div class="barcode" id="bc"></div></div>
+<script type="module">
+const padded = (new URLSearchParams(location.search).get("vol") ?? "").padStart(4, "0");
+const d = await fetch(`data/cover_${padded}.json`).then((r) => r.json());
+const $ = (id) => document.getElementById(id);
+const TYPE = { game: ["GAME", "遊戲"], song: ["KARAOKE", "歌回"], talk: ["TALK", "雜談"], code: ["CODE", "程式"], art: ["ART", "繪圖"] };
+// same values as the body[data-type] rules, needed per span when a stream has several types
+const ACCENT = { game: "#ec4444", song: "#3c80f4", talk: "#4cbc40", code: "#f87014", art: "#b0329e" };
+const types = d.types?.length ? d.types : ["game"];
+document.body.dataset.type = types[0];
+const lift = (t) => `color-mix(in srgb, ${ACCENT[t]} 70%, #fff)`;
+const vol = d.vol ?? "";
+$("vn").textContent = vol;
+$("tag").innerHTML = types.map((t) => `<span style="color:${lift(t)}">${TYPE[t][0]}</span>`).join(" / ")
+  + (d.flags || []).map((f) => `<span class="flag">${f}</span>`).join("");
+if (types.length > 1) {
+  // ribbon fades from the main type into the second one
+  document.body.style.setProperty("--accent-2", ACCENT[types[1]]);
+  document.body.classList.add("multi");
+  const step = 100 / types.length;
+  document.body.style.setProperty("--stripes", `linear-gradient(180deg, ${types.map((t, i) => `${ACCENT[t]} ${i * step}% ${(i + 1) * step}%`).join(", ")})`);
+  document.body.style.setProperty("--blend", types.map((t, i) => `${ACCENT[t]} ${Math.round(i * 70 / Math.max(1, types.length - 1))}%`).join(", ") + ", transparent 100%");
+  $("kind").innerHTML = types.map((t) => `<span style="color:${ACCENT[t]}">${TYPE[t][1]}</span>`).join("／");
+  $("kanji").classList.add("multi");
+  $("kanji").innerHTML = types.slice(0, 2).map((t) => `<span style="color:${ACCENT[t]}">${TYPE[t][1]}</span>`).join("");
+} else {
+  $("kind").textContent = d.kind || TYPE[types[0]][1];
+  $("kanji").textContent = TYPE[types[0]][1];
+}
+const [y, m, dd] = (d.date || "").split(".");
+$("dy").textContent = y || ""; $("dm").textContent = m || ""; $("dd").textContent = dd || "";
+$("dw").textContent = d.weekday || "";
+$("tm").textContent = d.time ? `${d.time} START` : "";
+$("t").innerHTML = `${d.title || ""}` + (d.ep ? `<span class="ep">#${d.ep}</span>` : "");
+$("s").textContent = d.sub || "";
+// per-type icon in the yellow badge (24×24 stroke icons)
+const ICON = {
+  game: '<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.5" r=".9"/><circle cx="18" cy="14" r=".9"/>',
+  song: '<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
+  talk: '<path d="M4 5h16v11H10l-5 4v-4H4z"/>',
+  code: '<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/>',
+  art: '<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/>',
+};
+$("badge").innerHTML = `<svg viewBox="0 0 24 24">${ICON[types[0]]}</svg>`;
+if (!d.sub) $("bar").style.display = "none";
+$("vtext").textContent = `YUUTA TSUBASA — LIVE ARCHIVE — VOL.${String(vol).padStart(4, "0")}`;
+$("ft").textContent = `YUUTA TSUBASA / LIVE ARCHIVE — ${d.date || ""}`;
+if (d.frameSrc) $("screen").style.backgroundImage = `url("${d.frameSrc}")`;
+if (d.vtuberLogoSrc) $("logo").src = d.vtuberLogoSrc; else $("logo").style.display = "none";
+if (d.heroSrc) $("avatar").style.backgroundImage = `url("${d.heroSrc}")`;
+// a drawn illustration has a different silhouette than the 3D avatar renders, so the box can be overridden per spec
+if (d.heroBox) Object.assign($("avatar").style, d.heroBox);
+if (d.artist) $("credit").innerHTML = `ILLUSTRATION <b></b>`, $("credit").querySelector("b").textContent = d.artist;
+else $("credit").style.display = "none";
+// barcode from the Vol. number (same idea as bluebolt Barcode: hash -> bar widths)
+let h = 2166136261, bars = "", key = `VOL-${vol}`;
+for (let i = 0; i < 26; i++) {
+  h ^= key.charCodeAt(i % key.length) + i; h = Math.imul(h, 16777619) >>> 0;
+  bars += `<i style="width:${1 + (h % 3)}px;margin-right:${1 + ((h >>> 3) % 2)}px"></i>`;
+}
+$("bc").innerHTML = bars;
+// shrink the title until it fits, then size the hard shadow to the plate.
+// The published covers were measured before Anton (#N) and Montserrat (subtitle) had loaded, which was
+// a race. Measure in their fallback fonts on purpose: the shadow matches those covers on every render.
+await document.fonts.ready;
+const ep = $("t").querySelector(".ep");
+if (ep) ep.style.fontFamily = "Impact";
+$("bar").style.fontFamily = "var(--zh)";
+const t = $("t"); let fs = 62;
+while (t.scrollWidth > 730 && fs > 34) { fs -= 2; t.style.fontSize = fs + "px"; }
+const r = $("plate").getBoundingClientRect();
+Object.assign($("pshadow").style, { width: r.width + "px", height: r.height + "px" });
+if (ep) ep.style.fontFamily = "";
+$("bar").style.fontFamily = "";
+</script>
+</body>
+</html>
