@@ -1,5 +1,5 @@
 ---
-title: "【#突發/#遊戲】Vol. 4: 東方ダンマクカグラ & プロジェクトセカイ: 測試平板直播"
+title: "【#遊戲】Vol. 4: 東方ダンマクカグラ & プロジェクトセカイ #1: 測試平板直播"
 date: "2021-08-08"
 author: "悠太翼"
 thumbnail: "/images/posts/streamings/4.webp"

@@ -1,5 +1,5 @@
 ---
-title: "【#突發/#遊戲】Vol. 5: 第七史詩 Epic Seven #1: 開新帳號，進入第一部第一章"
+title: "【#遊戲】Vol. 5: 第七史詩 Epic Seven #1: 開新帳號，進入第一部第一章"
 date: "2021-08-09"
 author: "悠太翼"
 thumbnail: "/images/posts/streamings/5.webp"
