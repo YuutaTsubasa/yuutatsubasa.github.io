@@ -10,6 +10,7 @@
   import bash from 'highlight.js/lib/languages/bash';
   import powershell from 'highlight.js/lib/languages/powershell';
   import python from 'highlight.js/lib/languages/python';
+  import c from 'highlight.js/lib/languages/c';
   import csharp from 'highlight.js/lib/languages/csharp';
   import { LOG_ENTRIES, findLog, findLogCategory } from '$lib/data/log.js';
   import { VIDEOS } from '$lib/data/videos.js';
@@ -19,7 +20,7 @@
   import { reveal } from '$lib/utils/reveal.js';
 
   // 程式碼區塊上色：只註冊講義會用到的語言；沒標語言或沒註冊的就照原樣輸出
-  for (const [name, lang] of Object.entries({ css, xml, javascript, json, bash, powershell, python, csharp })) {
+  for (const [name, lang] of Object.entries({ css, xml, javascript, json, bash, powershell, python, c, csharp })) {
     hljs.registerLanguage(name, lang);
   }
   const marked = new Marked(
