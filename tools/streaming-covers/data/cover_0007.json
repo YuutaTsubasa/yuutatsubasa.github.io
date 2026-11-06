@@ -1,0 +1,23 @@
+{
+  "vol": 7,
+  "card": "hud",
+  "types": [
+    "code"
+  ],
+  "title": "程式設計入門",
+  "sub": "以 C/C++ 語言為例：基本輸入輸出 & 變數與運算",
+  "ep": 1,
+  "date": "2021.08.10",
+  "weekday": "TUE",
+  "time": "21:29",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_7.jpg",
+  "heroSrc": "assets/vtuber1.0-5.png",
+  "heroBox": {
+    "right": "-10px",
+    "bottom": "-70px",
+    "width": "560px",
+    "height": "800px"
+  },
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}

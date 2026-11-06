@@ -1,0 +1,16 @@
+{
+  "vol": 3,
+  "card": "hud",
+  "types": [
+    "game"
+  ],
+  "title": "Clickr",
+  "sub": "來玩簡單的益智小遊戲吧！",
+  "date": "2021.08.07",
+  "weekday": "SAT",
+  "time": "21:30",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_3.jpg",
+  "heroSrc": "assets/vtuber1.0-2.png",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}

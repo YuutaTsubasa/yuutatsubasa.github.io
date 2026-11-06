@@ -22,6 +22,11 @@ function SoloApp() {
         return r.json();
       })
       .then((data) => {
+        // HUD 版是獨立的頁面，不走 React 版型
+        if (data.card === "hud") {
+          window.location.replace(window.location.pathname.replace("template", "hud") + window.location.search);
+          return;
+        }
         const merged = { ...DEFAULTS, ...data };
         const card = (cardOverride || data.card || "a").toLowerCase();
         setState({ data: merged, card });

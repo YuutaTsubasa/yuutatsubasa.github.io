@@ -1,0 +1,16 @@
+{
+  "vol": 8,
+  "card": "hud",
+  "types": [
+    "game"
+  ],
+  "title": "Sonic Generations",
+  "sub": "來複習一下吧！",
+  "date": "2021.08.14",
+  "weekday": "SAT",
+  "time": "21:30",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_8.jpg",
+  "heroSrc": "assets/vtuber1.0-4.png",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}

@@ -1,0 +1,16 @@
+{
+  "vol": 4,
+  "card": "hud",
+  "types": [
+    "game"
+  ],
+  "title": "ダンカグ ＆ プロセカ",
+  "sub": "東方ダンマクカグラ & プロジェクトセカイ",
+  "date": "2021.08.08",
+  "weekday": "SUN",
+  "time": "21:29",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_4.jpg",
+  "heroSrc": "assets/vtuber1.0-2.png",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}
