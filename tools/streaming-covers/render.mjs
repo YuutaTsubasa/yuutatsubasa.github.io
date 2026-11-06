@@ -14,7 +14,7 @@
  *   5. 刪掉暫存 PNG
  */
 import { createServer } from 'node:http';
-import { readFile, mkdir, mkdtemp, readdir, rename, rm, stat } from 'node:fs/promises';
+import { copyFile, readFile, mkdir, mkdtemp, readdir, rm, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { spawn, spawnSync } from 'node:child_process';
@@ -154,8 +154,8 @@ async function renderOne(vol, port, encodeWebp, pngDir) {
   }
 
   if (pngDir || !encodeWebp) {
-    await rm(outFile, { force: true });
-    await rename(tmpPng, outFile);
+    await copyFile(tmpPng, outFile);
+    await rm(tmpPng, { force: true });
   } else {
     const encoded = encodeWebp(tmpPng, outFile);
     await rm(tmpPng, { force: true });
