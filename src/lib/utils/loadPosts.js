@@ -35,5 +35,5 @@ export async function loadPosts() {
   }
 
   // 按照發佈日期排序文章
-  return allPosts.sort((a, b) => b.date.getTime() - a.date.getTime());
+  return allPosts.sort((a, b) => b.date.getTime() - a.date.getTime() || b.filename.localeCompare(a.filename));
 }
