@@ -51,6 +51,7 @@ duration: "1:18:55"
 - 01:15:42 結尾
 
 ## 🛡️歌曲來源🛡️
+- カラオケ歌っちゃ王（其餘歌曲）: https://www.youtube.com/@uta-cha-oh
 - あなたクランケン / tamon: https://youtu.be/u-3NO8NzXAA
 - このピアノでお前を8759632145回ぶん殴る / SLAVE.V-V-R feat. 猫村いろは: https://youtu.be/-tSCg563yIQ
 - ルマ / かいりきベア feat. 初音ミク: https://youtu.be/vAdGhWQQsRA（已下架）
