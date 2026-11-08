@@ -1,0 +1,16 @@
+{
+  "vol": 12,
+  "card": "hud",
+  "types": [
+    "game"
+  ],
+  "title": "陽春白雪",
+  "sub": "Lyrica",
+  "date": "2021.08.21",
+  "weekday": "SAT",
+  "time": "21:30",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_12.jpg",
+  "heroSrc": "assets/vtuber1.0-8.png",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}
