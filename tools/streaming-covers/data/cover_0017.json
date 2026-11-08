@@ -1,0 +1,23 @@
+{
+  "vol": 17,
+  "card": "hud",
+  "types": [
+    "code"
+  ],
+  "title": "程式設計入門",
+  "sub": "以 C/C++ 語言為例：字元與字串",
+  "ep": 4,
+  "date": "2021.08.31",
+  "weekday": "TUE",
+  "time": "21:30",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_7.jpg",
+  "heroSrc": "assets/vtuber1.0-5.png",
+  "heroBox": {
+    "right": "-10px",
+    "bottom": "-70px",
+    "width": "560px",
+    "height": "800px"
+  },
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}

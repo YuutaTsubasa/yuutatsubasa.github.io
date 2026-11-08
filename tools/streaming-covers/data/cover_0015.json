@@ -1,0 +1,17 @@
+{
+  "vol": 15,
+  "card": "hud",
+  "types": [
+    "game"
+  ],
+  "title": "Celeste",
+  "sub": "來登山囉！",
+  "ep": 1,
+  "date": "2021.08.28",
+  "weekday": "SAT",
+  "time": "21:29",
+  "artist": "猫島羽依 @nekosimayui ／ LIVE2D 夜颯",
+  "frameSrc": "assets/frame_15.jpg",
+  "heroSrc": "assets/vtuber1.0-6.png",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}
