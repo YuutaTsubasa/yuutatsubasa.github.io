@@ -1,0 +1,22 @@
+{
+  "vol": 942,
+  "themes": [
+    {
+      "level": "main",
+      "title": "索尼克賽車 交叉世界",
+      "sub": "Sonic Racing: CrossWorlds",
+      "episode": 72
+    }
+  ],
+  "categories": "game",
+  "artist": "",
+  "streamTime": "2026.11.09 · 23:10",
+  "logoSrc": "assets/game_sonic_racing_crossworlds_logo.webp",
+  "theme": "azure",
+  "mode": "light",
+  "heroSrc": "assets/vtuber-h04-b01-0.webp",
+  "bgSrc": "assets/942.webp",
+  "bgEffect": "soft",
+  "vtuberLogoSrc": "assets/vtuber-logo.png",
+  "card": "d"
+}
