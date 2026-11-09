@@ -1,6 +1,6 @@
 ---
 name: add-streaming-cover
-description: 新增一集直播封面到 yuutatsubasa.github.io。觸發條件：使用者要「加封面」「新增直播封面」「生 Vol X 封面」「做一張 X 集封面」「我要新增一張直播圖」、或直接打 `/add-streaming-cover Vol.N ...`。預設用 HUD 版（card: "hud"）：把本機素材（畫面 / 立繪）搬進 tools/streaming-covers/assets/、寫 data/cover_NNNN.json、跑 render.mjs 產出 static/images/posts/streamings/N.webp。
+description: 新增一集直播封面到 yuutatsubasa.github.io。觸發條件：使用者要「加封面」「新增直播封面」「生 Vol X 封面」「做一張 X 集封面」「我要新增一張直播圖」、或直接打 `/add-streaming-cover Vol.N ...`。預設用 HUD 版（card 設成 hud）：把本機素材（畫面 / 立繪）搬進 tools/streaming-covers/assets/、寫 data/cover_NNNN.json、跑 render.mjs 產出 static/images/posts/streamings/N.webp。
 ---
 
 # add-streaming-cover — 新增直播封面
