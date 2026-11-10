@@ -229,7 +229,7 @@ fn main() -> Status {
 
 ### 為什麼需要 panic handler
 
-平常程式 panic 時，std 會印出錯誤、結束程式。沒有 std，Rust 會要求你自己寫「panic 時要做什麼」，不寫就編譯不過。我們在 `Cargo.toml` 開了 `panic_handler` 這個 feature，`uefi` crate 會幫我們印出錯誤訊息然後停住。下一堂會自己寫一個。
+平常程式 panic 時，std 會印出錯誤、結束程式。沒有 std，Rust 會要求你自己寫「panic 時要做什麼」，不寫就編譯不過。我們在 `Cargo.toml` 開了 `panic_handler` 這個 feature，`uefi` crate 會幫我們印出錯誤訊息，等 10 秒讓你看清楚，然後把電腦關機。下一堂會自己寫一個。
 
 ### 編譯
 
@@ -376,14 +376,14 @@ let number: Option<u32> = None;
 number.unwrap();
 ```
 
-重新跑一次，畫面會印出 panic 的訊息和行號，然後停住：
+重新跑一次，畫面會印出 panic 的訊息和行號：
 
 ```
 [PANIC]: panicked at src\main.rs:15:12:
 called `Option::unwrap()` on a `None` value
 ```
 
-這就是 `panic_handler` 在做的事。看完記得刪掉。
+這就是 `panic_handler` 在做的事。10 秒後 QEMU 視窗會自己關掉，那是 `uefi` 的 panic handler 呼叫了關機；PowerShell 視窗（序列埠）裡的訊息會留著，可以慢慢看。看完記得把這兩行刪掉。
 
 ### 演練 3：用 log 印
 
