@@ -338,9 +338,9 @@ error: error loading target specification: could not find specification for targ
 
 錯誤訊息的最後一行已經給答案了：`x86_64` 中間是底線。Rust 的錯誤訊息常常會像這樣附上 `help`，卡住時先看最後幾行。
 
-### 坑 3：還沒換 `main.rs`，QEMU 就跳到設定選單
+### 坑 3：`main.rs` 忘了存檔，QEMU 就跳到設定選單
 
-如果還沒把 `main.rs` 換成上面那段，直接編譯、開 QEMU，畫面不會停在我們的字，而是出現韌體的設定選單：
+直播時在 VSCode 改好了 `main.rs`，卻忘了存檔就去編譯。硬碟上的 `main.rs` 還是 `cargo new` 產生的 Hello world，開 QEMU 之後畫面不會停在我們的字，而是出現韌體的設定選單：
 
 ```
 Select Language            <Standard English>
@@ -353,7 +353,9 @@ Select Language            <Standard English>
 
 奇怪的是 `cargo new` 產生的那支 Hello world 居然**編得過**。原因是 Rust 現在替 `x86_64-unknown-uefi` 準備了官方的 std：一般的 `println!` 會透過 UEFI 印字，所以 Hello world 真的有在 QEMU 裡印出來。只是印完 `main` 就結束了，韌體以為開機程式跑完，就回到設定選單，字一閃就不見了。
 
-這剛好說明了上面 `loop {}` 的用途。這個系列不用 UEFI 版的 std，因為之後我們會「接管」電腦、把 UEFI 關掉，到時候 std 就沒有人可以靠了，所以從一開始就用 `no_std`。
+存檔（`Ctrl` + `S`）再跑一次就好了。VSCode 分頁上的檔名旁邊有一個白色圓點，就是「還沒存檔」的意思；怕忘記的話，可以在「檔案」選單打開「自動儲存」。
+
+這個坑剛好說明了上面 `loop {}` 的用途。這個系列不用 UEFI 版的 std，因為之後我們會「接管」電腦、把 UEFI 關掉，到時候 std 就沒有人可以靠了，所以從一開始就用 `no_std`。
 
 ## 六、延伸
 
