@@ -131,13 +131,13 @@
             {#if v.duration}
               <div class="mono duration">{v.duration}</div>
             {/if}
-            <span class="mono idx">#{String(i + 1).padStart(2, '0')}</span>
           </div>
 
           <div class="body">
             <div class="title">{v.title}</div>
             <div class="meta mono">
               <span>{v.date}</span>
+              <span class="idx">#{String(i + 1).padStart(2, '0')}</span>
             </div>
           </div>
         </a>
@@ -305,12 +305,14 @@
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(4px);
   }
+  /* 放右上角：封面左上角通常是集數（Vol. / #N），不能被蓋住 */
   .type-tag {
     position: absolute;
     top: 10px;
-    left: 10px;
+    right: 10px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 4px;
     max-width: calc(100% - 80px);
   }
@@ -322,13 +324,6 @@
     background: rgba(0, 0, 0, 0.7);
     color: #FFFFFF;
     font-size: 11px;
-  }
-  .idx {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 9px;
-    color: rgba(255, 255, 255, 0.7);
   }
   .body { padding: 16px 18px 18px; }
   .title {
