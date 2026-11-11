@@ -13,8 +13,10 @@ duration: "3:11:12"
 
 ## 🛡️工具資訊🛡️
 - 今次內容的講義: https://yuuta-tsubasa.studio/log/c-course-01
+- 編譯器與編輯器: Dev-C++ https://sourceforge.net/projects/orwelldevcpp/
 - 基本語法: https://github.com/YuutaTsubasa/C-C-Tutorial/blob/master/Code/c04.c
 - 投影片參考: 台灣大學資訊系統訓練班
+- 其他選擇: Visual Studio Code https://code.visualstudio.com/ 、Visual Studio https://visualstudio.microsoft.com/zh-hant/ 、Code::Blocks https://www.codeblocks.org/ 、MinGW-w64 (GCC) https://www.mingw-w64.org/
 
 ## 🛡️直播與影片連結🛡️
 - 原直播：[https://yutaii.run/v/7](https://yutaii.run/v/7)

@@ -13,6 +13,7 @@ duration: "3:25:00"
 
 ## 🛡️工具資訊🛡️
 - 今次內容的講義: https://yuuta-tsubasa.studio/log/c-course-02
+- 編譯器與編輯器: Dev-C++ https://sourceforge.net/projects/orwelldevcpp/
 - 基本語法: https://github.com/YuutaTsubasa/C-C-Tutorial/blob/master/Code/c04.c
 - 投影片參考: 台灣大學資訊系統訓練班
 
