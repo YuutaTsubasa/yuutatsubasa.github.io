@@ -11,6 +11,9 @@ duration: "2:39:03"
 
 今天來玩音樂遊戲－《陽春白雪》吧！
 
+## 🛡️遊戲資訊🛡️
+- 陽春白雪 Lyrica (iPad 版): https://apps.apple.com/tw/app/id1286609624
+
 ## 🛡️直播與影片連結🛡️
 - 原直播：[https://yutaii.run/v/12](https://yutaii.run/v/12)
 
