@@ -4,6 +4,8 @@ date: "2021-08-28"
 author: "悠太翼"
 thumbnail: "/images/posts/streamings/15.webp"
 tags: ["遊戲實況", "直播影片"]
+series: celeste
+ep: 1
 excerpt: "今天來玩據說很難的動作遊戲《Celeste》吧！"
 duration: "2:54:12"
 ---

@@ -6,6 +6,8 @@ time: "21:30"
 category: workshop
 excerpt: "字元其實就是數字：認識 ASCII 表、getchar 與 putchar、判斷與轉換大小寫；字串就是結尾有 '\\0' 的字元陣列，再用 fgets 讀整行、避開換行殘留的陷阱，最後用 string.h 的四個函式和自己寫的迴圈處理字串 — Vol. 17 的直播講義。"
 tags: ["C", "C++", "程式設計入門", "字元", "字串", "Workshop", "教學"]
+series: c-course
+ep: 4
 stack: ["C", "Dev-C++"]
 streams: [17]
 links:

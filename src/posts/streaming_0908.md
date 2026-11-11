@@ -4,6 +4,8 @@ date: "2026-05-11"
 author: "悠太翼"
 thumbnail: "/images/posts/streamings/908.webp"
 tags: ["遊戲實況", "直播影片"]
+series: sonic-heroes
+ep: 1
 excerpt: "剛結束《Sonic Adventure 2: Battle》全成就的下禮拜，終於要進入索尼克遊戲主線系列的下一部作品《Sonic Heroes》。"
 duration: "1:31:27"
 ---

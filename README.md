@@ -60,6 +60,8 @@ date: "2025-03-12"
 youtube: "https://www.youtube.com/watch?v=..."
 duration: "2:30"       # 可選，覆寫從 YT 抓的長度
 tags: ["TAG_A", "TAG_B"]
+series: it-takes-two   # 可選，分集的系列（見下方「系列」）
+ep: 4                  # 有 series 才要，第幾集
 chapters:
   - { time: "0:00",  title: "開場" }
   - { time: "12:30", title: "正題" }
@@ -101,6 +103,9 @@ excerpt: "一兩句摘要"
 thumbnail: "/images/posts/xxx.webp"  # 可選
 tags: ["主題標籤"]
 stack: ["Svelte", "TypeScript"]      # project 用，自動納入 tag cloud
+streams: [14]               # 可選，對應的 ARCHIVE 場次（Vol.）
+series: c-course            # 可選，分集的講義（見下方「系列」）
+ep: 3                       # 有 series 才要，第幾篇
 links:                                # project 用
   - { label: "DEMO", url: "..." }
   - { label: "SOURCE", url: "..." }
@@ -118,6 +123,15 @@ markdown 正文，h2 會自動產生右側 TOC
 ```
 
 `caseNum`（#001 等編號）依日期由舊到新自動派發，不需要手動編。
+
+### 系列
+
+同一個遊戲或課程分好幾集時，在 frontmatter 加 `series` 和 `ep`。系列的 id 和顯示名稱登記在 `src/lib/data/series.js`；沒登記的 id 或少了 `ep`，`npm run build` 會直接失敗。
+
+- ARCHIVE 內頁側欄會多一塊 SERIES：列出各集，加上同系列的前一集、下一集。
+- LOG 內頁側欄列出各篇，文章最後有同系列的前後篇；RELATED 不再重複列出同系列的文章。
+- ARCHIVE 和 LOG 可以用同一個 id（例如 `c-course`），但各自只在自己的清單裡找前後集。
+- 只有一集的系列不會顯示，等第二集加進來才會出現。新的一集記得填 `series`，不然不會被接上。
 
 ### 改首頁區塊順序 / 章節編號
 

@@ -1,5 +1,6 @@
 import yaml from 'js-yaml';
 import { STREAM_TAGS } from './streamTags.js';
+import { parseSeries, seriesNav } from './series.js';
 
 // ARCHIVE 額外標籤：COVER（歌曲翻唱影片）。
 // Archive 用英文標籤（enLabel）顯示，色票延用 STREAM_TAGS 的調性。
@@ -100,6 +101,7 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
   const lastChapter = chapters[chapters.length - 1];
   const youtubeId = extractYouTubeId(body);
   const tags = (meta.tags ?? []).map((t) => TAG_MAP[t]).filter(Boolean);
+  const { series, ep } = parseSeries(meta, filename);
 
   return {
     id: vol != null ? `v${vol}` : filename,
@@ -112,6 +114,8 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
     thumbnail: meta.thumbnail,
     excerpt: meta.excerpt,
     tags,
+    series,
+    ep,
     duration: meta.duration ? padDur(meta.duration) : (lastChapter ? padDur(lastChapter.time) : null),
     youtubeId,
     chapters,
@@ -133,4 +137,8 @@ export const VIDEO_FILTERS = [
 
 export function findVideo(slug) {
   return VIDEOS.find((v) => v.slug === slug);
+}
+
+export function videoSeriesNav(video) {
+  return seriesNav(VIDEOS, video);
 }

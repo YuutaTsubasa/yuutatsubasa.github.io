@@ -6,6 +6,8 @@ time: "21:30"
 category: workshop
 excerpt: "十個數字要宣告十個變數、複製貼上十次？用陣列一次跟記憶體要一大塊空間，配合迴圈處理每一格；再看看陣列名稱其實是記憶體位置、怎麼複製陣列、二維陣列，最後用兩數交換組出選擇排序法 — Vol. 14 的直播講義。"
 tags: ["C", "C++", "程式設計入門", "陣列", "排序", "Workshop", "教學"]
+series: c-course
+ep: 3
 stack: ["C", "Dev-C++"]
 streams: [14]
 links:
