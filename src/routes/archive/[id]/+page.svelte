@@ -1,7 +1,7 @@
 <script>
   import { page } from '$app/stores';
   import { marked } from 'marked';
-  import { VIDEOS, VIDEO_TAGS, findVideo, timeToSeconds } from '$lib/data/videos.js';
+  import { VIDEOS, VIDEO_TAGS, findVideo, videoSeriesNav, timeToSeconds } from '$lib/data/videos.js';
   import { findLogsByStream, findLogCategory } from '$lib/data/log.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Seo from '$lib/components/Seo.svelte';
@@ -14,6 +14,8 @@
   $: next = idx > 0 ? VIDEOS[idx - 1] : null;
   $: tagObjs = video ? video.tags.map((id) => VIDEO_TAGS.find((t) => t.id === id)).filter(Boolean) : [];
   $: relatedLogs = video ? findLogsByStream(video.vol) : [];
+  // 同系列的前後集（ADJACENT 是全部直播的時間順序，這裡只看同一個系列）
+  $: series = videoSeriesNav(video);
 
   function padCase(vol) {
     return Number.isFinite(vol) ? String(vol).padStart(3, '0') : '???';
@@ -232,6 +234,35 @@
               {/each}
             </div>
           </div>
+
+          {#if series}
+            <div class="panel" use:reveal={{ delay: 220 }}>
+              <Corners />
+              <div class="mono panel-cap">// SERIES · EP {series.index + 1}/{series.eps.length}</div>
+              <div class="series-name">{series.label}</div>
+              <div class="ep-list">
+                {#each series.eps as e}
+                  {#if e === video}
+                    <span class="mono ep-chip current" aria-current="page">#{e.ep}</span>
+                  {:else}
+                    <a class="mono ep-chip" href={`/archive/${e.slug}`} title={e.title}>#{e.ep}</a>
+                  {/if}
+                {/each}
+              </div>
+              {#if series.prev}
+                <a class="adj bordertop" href={`/archive/${series.prev.slug}`}>
+                  <div class="mono adj-cap">◀ PREV EP #{series.prev.ep} · STREAM #{padCase(series.prev.vol)}</div>
+                  <div class="adj-title">{series.prev.title}</div>
+                </a>
+              {/if}
+              {#if series.next}
+                <a class="adj bordertop" href={`/archive/${series.next.slug}`}>
+                  <div class="mono adj-cap next">NEXT EP #{series.next.ep} · STREAM #{padCase(series.next.vol)} ▶</div>
+                  <div class="adj-title">{series.next.title}</div>
+                </a>
+              {/if}
+            </div>
+          {/if}
 
           {#if prev || next}
             <div class="panel" use:reveal={{ delay: 260 }}>
@@ -604,6 +635,37 @@
     letter-spacing: 0.15em;
   }
   .adj-cap.next { color: var(--blue-bright); }
+  .series-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--silver-0);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+  .ep-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .ep-chip {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border: 1px solid var(--line);
+    color: var(--silver-2);
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  a.ep-chip:hover {
+    color: var(--blue-bright);
+    border-color: var(--blue-bright);
+  }
+  .ep-chip.current {
+    color: #fff;
+    background: var(--blue-bright);
+    border-color: var(--blue-bright);
+  }
   .adj-title {
     font-size: 12px;
     color: var(--silver-1);

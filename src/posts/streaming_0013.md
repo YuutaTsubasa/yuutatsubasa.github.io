@@ -4,6 +4,8 @@ date: "2021-08-23"
 author: "悠太翼 feat. 貓耳未來"
 thumbnail: "/images/posts/streamings/13.webp"
 tags: ["遊戲實況", "活動合作", "直播影片"]
+series: it-takes-two
+ep: 4
 excerpt: "與貓耳未來一起來玩雙人成行這個遊戲，不知道能不能順利合作破關呢？"
 duration: "2:55:21"
 ---

@@ -4,6 +4,8 @@ date: "2021-08-09"
 author: "悠太翼"
 thumbnail: "/images/posts/streamings/5.webp"
 tags: ["遊戲實況", "直播影片"]
+series: epic-seven
+ep: 1
 excerpt: "還沒使用我的 Mac Mini 直播過，來測試看看～"
 duration: "1:00:32"
 ---

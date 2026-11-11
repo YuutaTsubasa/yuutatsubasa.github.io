@@ -1,8 +1,10 @@
 import yaml from 'js-yaml';
+import { parseSeries, seriesNav } from './series.js';
 
 // LOG：作品（project）、心得（review）、解題（solve）、講義（workshop）。
 // 來源：src/posts/log_*.md，frontmatter 內 category 區分類型。
 // frontmatter 內可加 `streams: [908, 910]` 串接對應的 ARCHIVE 場次。
+// 分集的講義加 `series: <id>` 和 `ep: <集數>`，見 series.js。
 
 const files = import.meta.glob('/src/posts/log_*.md', {
   query: '?raw',
@@ -20,6 +22,7 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
   const { meta, body } = splitFrontmatter(raw);
   const filename = path.split('/').pop().replace('.md', '');
   const slug = (meta.slug ?? filename.replace(/^log_/, '')).trim();
+  const { series, ep } = parseSeries(meta, filename);
 
   return {
     id: filename,
@@ -33,6 +36,8 @@ const ENTRIES = Object.entries(files).map(([path, raw]) => {
     tags: meta.tags ?? [],
     stack: meta.stack ?? [],
     links: meta.links ?? [],
+    series,
+    ep,
     streams: Array.isArray(meta.streams) ? meta.streams.map((v) => Number(v)).filter(Number.isFinite) : [],
     meta: meta.meta ?? {},
     bodyRaw: body.trim()
@@ -68,6 +73,10 @@ export function findLogCategory(id) {
 
 export function findLog(slug) {
   return LOG_ENTRIES.find((e) => e.slug === slug);
+}
+
+export function logSeriesNav(entry) {
+  return seriesNav(LOG_ENTRIES, entry);
 }
 
 export function findLogsByStream(vol) {

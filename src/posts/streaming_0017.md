@@ -4,6 +4,8 @@ date: "2021-08-31"
 author: "悠太翼"
 thumbnail: "/images/posts/streamings/17.webp"
 tags: ["程式實況", "直播影片"]
+series: c-course
+ep: 4
 excerpt: "要繼續講 C/C++ 語言了，不知道還會有多少人來聽呢？XD"
 duration: "2:17:36"
 ---

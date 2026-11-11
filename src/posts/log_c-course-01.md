@@ -6,6 +6,8 @@ time: "21:29"
 category: workshop
 excerpt: "從什麼是程式語言開始，裝好 Dev-C++、寫出第一支程式，學會用變數存資料、用 printf 與 scanf 輸入輸出，再做運算寫出梯形面積計算機 — Vol. 7 的直播講義。"
 tags: ["C", "C++", "程式設計入門", "Dev-C++", "Workshop", "教學"]
+series: c-course
+ep: 1
 stack: ["C", "Dev-C++"]
 streams: [7]
 links:

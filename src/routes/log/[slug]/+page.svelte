@@ -12,7 +12,7 @@
   import python from 'highlight.js/lib/languages/python';
   import c from 'highlight.js/lib/languages/c';
   import csharp from 'highlight.js/lib/languages/csharp';
-  import { LOG_ENTRIES, findLog, findLogCategory } from '$lib/data/log.js';
+  import { LOG_ENTRIES, findLog, findLogCategory, logSeriesNav } from '$lib/data/log.js';
   import { VIDEOS } from '$lib/data/videos.js';
   import Corners from '$lib/components/atoms/Corners.svelte';
   import Dot from '$lib/components/atoms/Dot.svelte';
@@ -39,6 +39,11 @@
   $: next = idx > 0 ? LOG_ENTRIES[idx - 1] : null;
   $: cat = entry ? findLogCategory(entry.category) : null;
   $: caseNum = entry?.caseNum ?? 0;
+  // 同系列的前後篇（PREV / NEXT 是全部 LOG 的時間順序，這裡只看同一個系列）
+  $: series = logSeriesNav(entry);
+  // 時間順序的前後篇跟系列前後篇是同一篇時，下面那排就不重複顯示
+  $: chronoPrev = prev && prev !== series?.prev ? prev : null;
+  $: chronoNext = next && next !== series?.next ? next : null;
 
   // Parse markdown once + extract h2 for TOC
   $: tokens = entry?.bodyRaw ? marked.lexer(entry.bodyRaw) : [];
@@ -77,9 +82,11 @@
     return cells;
   })();
 
-  // Related: same category, not self, up to 3
+  // Related: same category, not self, up to 3; 同系列的已經在 SERIES 裡，不重複列
   $: related = entry
-    ? LOG_ENTRIES.filter((e) => e.category === entry.category && e.id !== entry.id).slice(0, 3)
+    ? LOG_ENTRIES.filter(
+        (e) => e.category === entry.category && e.id !== entry.id && !(entry.series && e.series === entry.series)
+      ).slice(0, 3)
     : [];
 
   // Linked streams: resolve vol numbers in entry.streams to VIDEOS（保留陣列順序）
@@ -235,21 +242,44 @@
             <span class="mono">END OF LOG #{String(caseNum).padStart(3, '0')} ////</span>
           </div>
 
-          <!-- PREV / NEXT -->
-          {#if prev || next}
-            <div class="adj-row">
-              {#if prev}
-                <a class="adj-card" href={`/log/${prev.slug}`}>
-                  <span class="mono adj-cap">← PREV / #{String(prev.caseNum).padStart(3, '0')}</span>
-                  <span class="adj-title">{prev.title}</span>
+          <!-- SERIES PREV / NEXT -->
+          {#if series}
+            <div class="mono series-cap">// SERIES · {series.label} · EP {series.index + 1}/{series.eps.length}</div>
+            <div class="adj-row series-row">
+              {#if series.prev}
+                <a class="adj-card" href={`/log/${series.prev.slug}`}>
+                  <span class="mono adj-cap">← PREV EP #{series.prev.ep}</span>
+                  <span class="adj-title">{series.prev.title}</span>
                 </a>
               {:else}
                 <div></div>
               {/if}
-              {#if next}
-                <a class="adj-card right" href={`/log/${next.slug}`}>
-                  <span class="mono adj-cap">NEXT / #{String(next.caseNum).padStart(3, '0')} →</span>
-                  <span class="adj-title">{next.title}</span>
+              {#if series.next}
+                <a class="adj-card right" href={`/log/${series.next.slug}`}>
+                  <span class="mono adj-cap">NEXT EP #{series.next.ep} →</span>
+                  <span class="adj-title">{series.next.title}</span>
+                </a>
+              {:else}
+                <div></div>
+              {/if}
+            </div>
+          {/if}
+
+          <!-- PREV / NEXT -->
+          {#if chronoPrev || chronoNext}
+            <div class="adj-row">
+              {#if chronoPrev}
+                <a class="adj-card" href={`/log/${chronoPrev.slug}`}>
+                  <span class="mono adj-cap">← PREV / #{String(chronoPrev.caseNum).padStart(3, '0')}</span>
+                  <span class="adj-title">{chronoPrev.title}</span>
+                </a>
+              {:else}
+                <div></div>
+              {/if}
+              {#if chronoNext}
+                <a class="adj-card right" href={`/log/${chronoNext.slug}`}>
+                  <span class="mono adj-cap">NEXT / #{String(chronoNext.caseNum).padStart(3, '0')} →</span>
+                  <span class="adj-title">{chronoNext.title}</span>
                 </a>
               {:else}
                 <div></div>
@@ -275,6 +305,29 @@
                   </li>
                 {/each}
               </ol>
+            </div>
+          {/if}
+
+          {#if series}
+            <div class="panel" use:reveal={{ delay: 190 }} style:--accent={cat?.color ?? 'var(--blue-bright)'}>
+              <Corners color="var(--line-strong)" size={9} />
+              <div class="mono panel-cap">// SERIES · EP {series.index + 1}/{series.eps.length}</div>
+              <div class="series-name">{series.label}</div>
+              <div class="related">
+                {#each series.eps as e}
+                  {#if e === entry}
+                    <div class="rel-card current" aria-current="page">
+                      <div class="mono rel-id">EP {e.ep} · {e.date} · NOW READING</div>
+                      <div class="rel-title">{e.title}</div>
+                    </div>
+                  {:else}
+                    <a class="rel-card" href={`/log/${e.slug}`}>
+                      <div class="mono rel-id">EP {e.ep} · {e.date}</div>
+                      <div class="rel-title">{e.title}</div>
+                    </a>
+                  {/if}
+                {/each}
+              </div>
             </div>
           {/if}
 
@@ -728,6 +781,22 @@
   }
   .adj-card.right { text-align: right; }
   .adj-card:hover { border-color: var(--blue-bright); }
+  .series-cap {
+    font-size: 10px;
+    color: var(--blue-bright);
+    letter-spacing: 0.18em;
+    margin-bottom: 8px;
+  }
+  .series-row { margin-bottom: 14px; }
+  .series-row .adj-card { border-color: rgba(37, 99, 235, 0.35); }
+  .series-row .adj-cap { color: var(--blue-bright); }
+  .series-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--silver-0);
+    line-height: 1.4;
+    margin: -4px 0 10px;
+  }
   .adj-cap {
     font-size: 9px;
     color: var(--silver-3);
@@ -863,6 +932,10 @@
     transition: border-color 0.15s;
   }
   .rel-card:hover { border-color: var(--accent, var(--blue-bright)); }
+  .rel-card.current {
+    border-color: var(--accent, var(--blue-bright));
+    border-left-width: 3px;
+  }
   .rel-id {
     font-size: 9px;
     color: var(--silver-3);

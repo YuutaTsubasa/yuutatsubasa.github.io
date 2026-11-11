@@ -4,6 +4,8 @@ date: "2021-08-08"
 author: "悠太翼"
 thumbnail: "/images/posts/streamings/4.webp"
 tags: ["遊戲實況", "直播影片"]
+series: dankagu-pjsekai
+ep: 1
 excerpt: "來測試平板直播，順便玩點音樂遊戲吧！"
 duration: "1:39:41"
 ---

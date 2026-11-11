@@ -6,6 +6,8 @@ time: "21:31"
 category: workshop
 excerpt: "用 if else 與 switch 讓程式走不同的路，避開 = 與 ==、小數比較的陷阱，再用 while、for 重複做事，最後組出星星圖案與加總算式 — Vol. 10 的直播講義。"
 tags: ["C", "C++", "程式設計入門", "條件判斷", "迴圈", "Workshop", "教學"]
+series: c-course
+ep: 2
 stack: ["C", "Dev-C++"]
 streams: [10]
 links:

@@ -6,6 +6,8 @@ time: "23:30"
 category: workshop
 excerpt: "電腦按下電源之後發生了什麼事？用 Rust 的 no_std 寫一支 UEFI 程式，放進 QEMU 模擬的開機磁碟，讓自己的作業系統 BlueBolt OS 印出第一行字；也整理了直播時實際踩到的三個坑 — Vol. 943 的直播講義。"
 tags: ["Rust", "作業系統", "OSDev", "UEFI", "QEMU", "BlueBolt OS", "Workshop", "教學"]
+series: bluebolt-os
+ep: 1
 stack: ["Rust", "uefi crate", "QEMU"]
 streams: [943]
 links:
