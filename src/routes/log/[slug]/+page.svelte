@@ -308,29 +308,6 @@
             </div>
           {/if}
 
-          {#if series}
-            <div class="panel" use:reveal={{ delay: 190 }} style:--accent={cat?.color ?? 'var(--blue-bright)'}>
-              <Corners color="var(--line-strong)" size={9} />
-              <div class="mono panel-cap">// SERIES · EP {series.index + 1}/{series.eps.length}</div>
-              <div class="series-name">{series.label}</div>
-              <div class="related">
-                {#each series.eps as e}
-                  {#if e === entry}
-                    <div class="rel-card current" aria-current="page">
-                      <div class="mono rel-id">EP {e.ep} · {e.date} · NOW READING</div>
-                      <div class="rel-title">{e.title}</div>
-                    </div>
-                  {:else}
-                    <a class="rel-card" href={`/log/${e.slug}`}>
-                      <div class="mono rel-id">EP {e.ep} · {e.date}</div>
-                      <div class="rel-title">{e.title}</div>
-                    </a>
-                  {/if}
-                {/each}
-              </div>
-            </div>
-          {/if}
-
           {#if linkedStreams.length}
             <div class="panel streams-panel" use:reveal={{ delay: 200 }}>
               <Corners color="var(--line-strong)" size={9} />
@@ -359,6 +336,29 @@
                     target="_blank"
                     rel="noopener"
                   >↗ {l.label}</a>
+                {/each}
+              </div>
+            </div>
+          {/if}
+
+          {#if series}
+            <div class="panel" use:reveal={{ delay: 240 }} style:--accent={cat?.color ?? 'var(--blue-bright)'}>
+              <Corners color="var(--line-strong)" size={9} />
+              <div class="mono panel-cap">// SERIES · EP {series.index + 1}/{series.eps.length}</div>
+              <div class="series-name">{series.label}</div>
+              <div class="related">
+                {#each series.eps as e}
+                  {#if e === entry}
+                    <div class="rel-card current" aria-current="page">
+                      <div class="mono rel-id">EP {e.ep} · {e.date} · NOW READING</div>
+                      <div class="rel-title">{e.title}</div>
+                    </div>
+                  {:else}
+                    <a class="rel-card" href={`/log/${e.slug}`}>
+                      <div class="mono rel-id">EP {e.ep} · {e.date}</div>
+                      <div class="rel-title">{e.title}</div>
+                    </a>
+                  {/if}
                 {/each}
               </div>
             </div>
