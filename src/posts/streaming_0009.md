@@ -1,5 +1,5 @@
 ---
-title: "【#連動/#遊戲】Vol. 9: 雙人成行 It Takes Two #3 feat. 貓耳未來"
+title: "【#遊戲】Vol. 9: 雙人成行 It Takes Two #3 feat. 貓耳未來"
 date: "2021-08-16"
 author: "悠太翼 feat. 貓耳未來"
 thumbnail: "/images/posts/streamings/9.webp"

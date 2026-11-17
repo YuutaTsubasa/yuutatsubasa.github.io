@@ -7,6 +7,8 @@ export const SERIES = {
   'dankagu-pjsekai': { label: '東方ダンマクカグラ & プロジェクトセカイ' },
   'epic-seven': { label: '第七史詩 Epic Seven' },
   celeste: { label: 'Celeste' },
+  'sonic-colors-ultimate': { label: 'Sonic Colors Ultimate' },
+  'ibb-obb': { label: 'ibb & obb' },
   'sonic-heroes': { label: '索尼克 英雄 Sonic Heroes' },
   'bluebolt-os': { label: '從零做一個作業系統，以 Rust 為例' }
 };
