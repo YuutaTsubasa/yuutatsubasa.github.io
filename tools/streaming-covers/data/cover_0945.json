@@ -1,0 +1,16 @@
+{
+  "vol": 945,
+  "card": "hud",
+  "types": [
+    "code"
+  ],
+  "title": "動手做作業系統 BlueBolt OS",
+  "sub": "自己畫畫面、自己做字型",
+  "ep": 2,
+  "date": "2026.11.17",
+  "weekday": "TUE",
+  "time": "23:30",
+  "frameSrc": "assets/945.webp",
+  "heroSrc": "assets/vtuber-h04-b01-0.webp",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}
