@@ -229,7 +229,7 @@ fn main() -> Status {
 ```
 
 - `get_handle_for_protocol`：找「有提供 GOP 的那個裝置」。
-- `open_protocol_exclusive`：**獨占**打開。打開之後 UEFI 自己的文字輸出就不會再畫到畫面上了，所以從這裡開始 `uefi::println!` 看不到字，要等第五節做好自己的 console。
+- `open_protocol_exclusive`：**獨占**打開。獨占的意思是：原本在用 GOP 的驅動會被請走，其中包括 UEFI 自己畫文字的那個。所以在 QEMU 的韌體上，從這裡開始 `uefi::println!` 就看不到字了，要等第五節做好自己的 console。（UEFI 規格沒有保證每一家韌體都這樣，換到真的電腦上不一定一樣。）
 - `core::mem::forget(gop)`：Rust 的變數離開範圍時會自動「還回去」（這裡是關掉 protocol）。`forget` 是「這個東西我永遠不還」。第三堂我們會叫 UEFI 下班，到時候已經沒有人可以還了。
 
 跑 `run.ps1`：黑底、一條藍色橫帶、下面一條黃線。
@@ -609,6 +609,7 @@ serial_println!("[serial] hello from BlueBolt OS");
 
 - 回傳型態 `-> !` 念作 never：這個函式永遠不會回來。
 - 用 `try_lock` 而不是 `lock`：如果是在印字印到一半時 panic，鎖還在自己手上，`lock()` 會永遠等下去。`try_lock` 拿不到就算了，至少序列埠那邊印得出來。
+- 序列埠那邊的 `serial_println!` 還是用 `lock()`：如果 panic 剛好發生在序列埠印字的途中，這裡一樣會卡住。機率很低，先這樣；想更保險，可以替序列埠也做一個用 `try_lock` 的版本。
 
 **演練**：在 `main` 裡故意 `None::<u32>.unwrap();`，看黃色的 panic 訊息和 PowerShell 視窗的 log。
 
