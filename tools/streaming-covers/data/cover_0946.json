@@ -1,0 +1,16 @@
+{
+  "vol": 946,
+  "card": "hud",
+  "types": [
+    "game"
+  ],
+  "title": "索尼克賽車 交叉世界",
+  "sub": "Sonic Racing CrossWorlds",
+  "ep": 74,
+  "date": "2026.11.23",
+  "weekday": "MON",
+  "time": "23:30",
+  "frameSrc": "assets/946.webp",
+  "heroSrc": "assets/vtuber-h04-b01-1.webp",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}
