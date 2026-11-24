@@ -38,5 +38,6 @@ export const SCHEDULE = [
   { id: 'v944',      startsAt: '2026-11-14T23:30:00+08:00', durationMinutes: 90,  title: '索尼克賽車 交叉世界 #73',                    platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/944' },
   // 週日 11-15 休息日
   { id: 'v945',      startsAt: '2026-11-17T23:30:00+08:00', durationMinutes: 120, title: '動手做作業系統 BlueBolt OS #2',             platforms: ['YouTube', 'Twitch'], tags: ['code'], url: 'https://yutaii.run/v/945' },
-  { id: 'v946',      startsAt: '2026-11-23T23:30:00+08:00', durationMinutes: 90,  title: '索尼克賽車 交叉世界 #74',                    platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/946' }
+  { id: 'v946',      startsAt: '2026-11-23T23:30:00+08:00', durationMinutes: 90,  title: '索尼克賽車 交叉世界 #74',                    platforms: ['YouTube', 'Twitch'], tags: ['game'], url: 'https://yutaii.run/v/946' },
+  { id: 'v947',      startsAt: '2026-11-24T23:30:00+08:00', durationMinutes: 120, title: '動手做作業系統 BlueBolt OS #3',             platforms: ['YouTube', 'Twitch'], tags: ['code'], url: 'https://yutaii.run/v/947' }
 ];
