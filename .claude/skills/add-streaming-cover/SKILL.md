@@ -140,7 +140,13 @@ Image.open(r'<畫面.png>').convert('RGB').save('tools/streaming-covers/assets/<
 8. **看成品**：webp 轉成 PNG 用 Read 看（例如 `python -c "from PIL import Image; Image.open('static/images/posts/streamings/942.webp').save('<scratchpad>/942.png')"`）。檢查標題沒被切、立繪位置正常、日期星期正確。
 9. **build**：`npm ci`（新 worktree 才要）＋`npm run build`，確認 `dist/images/posts/streamings/N.webp` 在。
 10. **commit / PR**：commit 訊息照慣例 `Add Vol.N <標題> #<ep> cover.`；PR 說明寫清楚素材來源。照 tailsmachine-ops 規則跑 Codex 審查，結果寫進 PR 的「Codex review」。
-11. **回報**：PR 連結、封面圖、挑了哪張立繪、有沒有用不到的要求（例如 logo）。
+11. **設定直播畫面的主題**（使用者 2026-11-25 要的：947 開播時忘了改，前段畫面一直是舊主題）。直播畫面（OBS 的 Browser Source）由 ProjectVtuber 的 overlay 伺服器提供，主題存在它的狀態裡：
+    - **只在這張封面是「下一場」直播時做**：如果在它之前還有一場沒播（封面提早做），先不要改，免得蓋掉那一場的主題，回報裡提醒使用者。
+    - 要設的欄位：`title` ＝ 封面的 `title`，有 `ep` 就接 ` #<ep>`（例：`動手做作業系統 BlueBolt OS #3`）；`subtitle` ＝ `sub`；`category`／`categoryEn` 依 `types` 第一個：`game` → `遊戲`／`GAME`，`code` → `程式`／`CODING`，`karaoke` → `歌回`／`KARAOKE`，其他（`chat` 等）→ `雜談`／`TALK`。其他欄位不要動。
+    - 伺服器有開（`curl -s --max-time 3 http://127.0.0.1:5190/api/state` 有回應）：`curl -s -X PATCH http://127.0.0.1:5190/api/state -H 'content-type: application/json' --data-binary @<UTF-8 的 JSON 檔>`，只放上面四個欄位（中文用檔案送，避免命令列編碼問題）。回傳的 state 確認四個欄位對了。
+    - 伺服器沒開：改 `%USERPROFILE%\Data\10_Projects\ProjectVtuber\projects\stream-scenes\runtime\overlay\.state.json` 的這四個欄位（UTF-8，其他欄位原樣保留），下次啟動伺服器會讀進來。伺服器開著時不要改這個檔，會被它蓋掉。
+    - 不要啟動伺服器或 OBS（不從 Claude 工作階段開使用者的程式）。
+12. **回報**：PR 連結、封面圖、挑了哪張立繪、直播畫面主題有沒有設（或為什麼沒設）、有沒有用不到的要求（例如 logo）。
 
 只加封面；直播存檔文章（`src/posts/streaming_*.md`）和 `schedule.js` 不在這個 skill 的範圍，使用者要才做。
 
