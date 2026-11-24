@@ -1,0 +1,16 @@
+{
+  "vol": 947,
+  "card": "hud",
+  "types": [
+    "code"
+  ],
+  "title": "動手做作業系統 BlueBolt OS",
+  "sub": "接管電腦、中斷與鍵盤",
+  "ep": 3,
+  "date": "2026.11.24",
+  "weekday": "TUE",
+  "time": "23:30",
+  "frameSrc": "assets/947.webp",
+  "heroSrc": "assets/vtuber-h04-b01-0.webp",
+  "vtuberLogoSrc": "assets/vtuber-logo.png"
+}
