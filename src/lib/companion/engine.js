@@ -8,6 +8,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { SEAT } from '$lib/data/companion.js';
 import { createIdle, eulerToQuat, POSE_BONES } from './idle.js';
+import { createArmIK } from './armik.js';
 
 const SCENE_URL = '/companion/talkroom.glb';
 const AMBIENT_CLIP = 'Talkroom_Ambient_48s';
@@ -106,6 +107,7 @@ export async function createCompanion(canvas, opts = {}) {
   const idle = createIdle();
   idle.setEnabled(idleMotions);
   const _base = new THREE.Quaternion();
+  const _sway = new THREE.Quaternion();
   const _eye = new THREE.Vector3();
   let reactionIndex = 0;
 
@@ -132,6 +134,9 @@ export async function createCompanion(canvas, opts = {}) {
   }
 
   let modelScale = SEAT.scale;
+  let armIK = null;
+  // 手臂骨頭這一格的坐姿基準（給 IK 判斷待機動作有沒有把手抬走）
+  const armBase = Object.fromEntries(['left', 'right'].flatMap((s) => ['UpperArm', 'LowerArm', 'Hand'].map((b) => [`${s}${b}`, new THREE.Quaternion()])));
 
   function seat(v) {
     const h = v.humanoid;
@@ -150,6 +155,10 @@ export async function createCompanion(canvas, opts = {}) {
     const hips = h.getRawBoneNode('hips').getWorldPosition(new THREE.Vector3());
     const thigh = h.getRawBoneNode('leftUpperLeg').getWorldPosition(new THREE.Vector3());
     v.scene.position.fromArray(SEAT.seat).sub(new THREE.Vector3(hips.x, thigh.y, hips.z));
+    v.scene.updateMatrixWorld(true);
+    // 量這個模型的大腿表面，手才放得剛好（data/companion.js 的 SEAT.hands）
+    armIK = SEAT.hands ? createArmIK(v, SEAT.hands) : null;
+    armIK?.measure();
   }
 
   async function loadModel(url, scale = SEAT.scale) {
@@ -346,12 +355,21 @@ export async function createCompanion(canvas, opts = {}) {
       for (const name of POSE_BONES) {
         const b = bone(name);
         if (!b) continue;
-        const r0 = base(name);
         const s0 = sway[name];
-        const r = s0 ? [r0[0] + s0[0], r0[1] + s0[1], r0[2] + s0[2]] : r0;
-        eulerToQuat(r, _base);
+        const rest = armIK?.rest?.[name];
+        if (rest) {
+          // 手臂的坐姿基準是 IK 依這個模型的大腿算出來的；小晃動疊在上面
+          _base.copy(rest);
+          if (s0) _base.multiply(eulerToQuat(s0, _sway));
+        } else {
+          const r0 = base(name);
+          eulerToQuat(s0 ? [r0[0] + s0[0], r0[1] + s0[1], r0[2] + s0[2]] : r0, _base);
+        }
+        armBase[name]?.copy(_base);
         idle.apply(name, _base, b.quaternion);
       }
+      // 手放回大腿表面（不然不同模型、加上晃動時手會穿進大腿）
+      armIK?.update(armBase);
 
       // 眨眼
       const em = vrm.expressionManager;
@@ -393,7 +411,7 @@ export async function createCompanion(canvas, opts = {}) {
     },
     setRunning(v) { running = v; if (v) clock.getDelta(); },
     /** 給除錯用：調整座位與鏡頭 */
-    debug: { scene, camera, idle, get vrm() { return vrm; }, reseat: () => vrm && seat(vrm), frameCamera, renderer },
+    debug: { scene, camera, idle, get armIK() { return armIK; }, get vrm() { return vrm; }, reseat: () => vrm && seat(vrm), frameCamera, renderer },
     dispose() {
       disposed = true;
       loadToken++;
