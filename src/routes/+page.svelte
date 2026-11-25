@@ -63,10 +63,18 @@
   let Companion = null;
   let companionOpen = false;
 
+  // 是不是我們自己推進去的 #play：直接開 /#play 的訪客按「回網站」不能用 history.back()，會離開網站
+  let pushedPlay = false;
+
   async function openCompanion(push = true) {
     if (companionOpen) return;
-    if (push && location.hash !== PLAY_HASH) history.pushState({ companion: true }, '', PLAY_HASH);
+    if (push && location.hash !== PLAY_HASH) {
+      history.pushState({ companion: true }, '', PLAY_HASH);
+      pushedPlay = true;
+    }
     Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
+    // 第一次載入元件的途中按了上一頁，就不要打開
+    if (location.hash !== PLAY_HASH) return;
     companionOpen = true;
     document.documentElement.style.overflow = 'hidden';
   }
@@ -74,13 +82,19 @@
     if (!companionOpen) return;
     companionOpen = false;
     document.documentElement.style.overflow = '';
-    if (location.hash === PLAY_HASH) history.back();
+    if (location.hash !== PLAY_HASH) return;
+    if (pushedPlay) history.back();
+    else history.replaceState(history.state, '', location.pathname + location.search);
+    pushedPlay = false;
   }
   function onPopState() {
     if (location.hash === PLAY_HASH) openCompanion(false);
-    else if (companionOpen) {
-      companionOpen = false;
-      document.documentElement.style.overflow = '';
+    else {
+      pushedPlay = false;
+      if (companionOpen) {
+        companionOpen = false;
+        document.documentElement.style.overflow = '';
+      }
     }
   }
 

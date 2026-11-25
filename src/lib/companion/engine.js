@@ -84,6 +84,7 @@ export async function createCompanion(canvas, opts = {}) {
   // ── 角色 ──
   let vrm = null;
   let loadToken = 0;
+  let disposed = false;
   const lookTarget = new THREE.Object3D();
   scene.add(lookTarget);
   const pointer = new THREE.Vector2(0, 0);
@@ -132,8 +133,12 @@ export async function createCompanion(canvas, opts = {}) {
     const gltf = await loader.loadAsync(url, (e) => {
       if (e.total && token === loadToken) { progress.model = e.loaded / e.total; report('AVATAR'); }
     });
-    if (token !== loadToken) return; // 換模型時舊的下載才回來
     const next = gltf.userData.vrm;
+    // 換模型時舊的下載才回來，或下載途中已經離開陪伴模式：丟掉這份
+    if (token !== loadToken || disposed) {
+      VRMUtils.deepDispose(gltf.scene);
+      return;
+    }
     if (!next) throw new Error('Not a VRM file');
     VRMUtils.rotateVRM0(next);
     next.scene.traverse((o) => {
@@ -265,6 +270,8 @@ export async function createCompanion(canvas, opts = {}) {
     /** 給除錯用：調整座位與鏡頭 */
     debug: { scene, camera, get vrm() { return vrm; }, reseat: () => vrm && seat(vrm), frameCamera, renderer },
     dispose() {
+      disposed = true;
+      loadToken++;
       cancelAnimationFrame(raf);
       ro.disconnect();
       canvas.removeEventListener('pointermove', onPointerMove);
