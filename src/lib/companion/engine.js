@@ -38,7 +38,8 @@ export async function createCompanion(canvas, opts = {}) {
   scene.environmentIntensity = 0.6;
 
   // 燈光沿用 Talkroom 預覽的 rendering-config.json
-  scene.add(new THREE.HemisphereLight('#e9f4ff', '#8190ab', 0.6));
+  const hemi = new THREE.HemisphereLight('#e9f4ff', '#8190ab', 0.6);
+  scene.add(hemi);
   const sun = new THREE.DirectionalLight('#fff6ed', 2.2);
   sun.position.set(-3.5, 6, 4);
   sun.target.position.set(0, 1.5, -1);
@@ -87,10 +88,52 @@ export async function createCompanion(canvas, opts = {}) {
     const node = room.scene.getObjectByName(name);
     if (node) node.visible = false;
   }
+  // 拿掉的物件身上的裝飾跟別的東西在同一個網格裡：只刪掉整個三角形都在指定範圍（網格自己的座標）裡的部分
+  for (const { node: name, min, max } of SEAT.trimNodes ?? []) {
+    const geo = room.scene.getObjectByName(name)?.geometry;
+    if (!geo?.index) continue;
+    const pos = geo.attributes.position;
+    const inside = (v) => [pos.getX(v), pos.getY(v), pos.getZ(v)].every((x, k) => x >= min[k] && x <= max[k]);
+    const src = geo.index.array;
+    const keep = [];
+    for (let t = 0; t < src.length; t += 3) {
+      if (inside(src[t]) && inside(src[t + 1]) && inside(src[t + 2])) continue;
+      keep.push(src[t], src[t + 1], src[t + 2]);
+    }
+    geo.setIndex(keep);
+  }
   scene.add(room.scene);
   const mixer = new THREE.AnimationMixer(room.scene);
   const clip = room.animations.find((a) => a.name === AMBIENT_CLIP);
   if (clip) mixer.clipAction(clip).play();
+
+  // ── 光線氛圍 ──
+  // 各燈的預設值（Talkroom 預覽的設定）；氛圍是在這上面調顏色與強度
+  const LIGHT_BASE = {
+    exposure: renderer.toneMappingExposure,
+    env: scene.environmentIntensity,
+    hemi: [hemi.color.clone(), hemi.groundColor.clone(), hemi.intensity],
+    sun: [sun.color.clone(), sun.intensity],
+    fill: [fill.color.clone(), fill.intensity],
+    face: [faceLight.color.clone(), faceLight.intensity],
+    shadowRadius: sun.shadow.radius
+  };
+  function setLighting(p = {}) {
+    const B = LIGHT_BASE;
+    const tint = (base, c) => (c ? new THREE.Color(c) : base.clone());
+    renderer.toneMappingExposure = B.exposure * (p.exposure ?? 1);
+    scene.environmentIntensity = B.env * (p.env ?? 1);
+    hemi.color.copy(tint(B.hemi[0], p.sky));
+    hemi.groundColor.copy(tint(B.hemi[1], p.ground));
+    hemi.intensity = B.hemi[2] * (p.ambient ?? 1);
+    sun.color.copy(tint(B.sun[0], p.sun));
+    sun.intensity = B.sun[1] * (p.key ?? 1);
+    fill.color.copy(tint(B.fill[0], p.fill));
+    fill.intensity = B.fill[1] * (p.fillPower ?? 1);
+    faceLight.color.copy(tint(B.face[0], p.face));
+    faceLight.intensity = B.face[1] * (p.facePower ?? 1);
+    sun.shadow.radius = p.shadowRadius ?? B.shadowRadius;
+  }
 
   // ── 角色 ──
   let vrm = null;
@@ -400,6 +443,7 @@ export async function createCompanion(canvas, opts = {}) {
   return {
     loadModel,
     react,
+    setLighting,
     /** 頭頂在畫面上的位置（0–1，左上為原點），給對話泡泡定位用 */
     headAnchor() {
       const head = vrm?.humanoid.getRawBoneNode('head');

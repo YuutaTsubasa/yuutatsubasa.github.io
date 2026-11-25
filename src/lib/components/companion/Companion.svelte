@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher, tick } from 'svelte';
-  import { COMPANION_MODELS, COMPANION_PLAYLIST, COMPANION_LINES } from '$lib/data/companion.js';
+  import { COMPANION_MODELS, COMPANION_MODEL_GROUPS, COMPANION_LIGHTS, COMPANION_PLAYLIST, COMPANION_LINES } from '$lib/data/companion.js';
   import { load, save } from '$lib/companion/storage.js';
 
   const dispatch = createEventDispatcher();
@@ -12,7 +12,7 @@
   let loadLabel = 'ROOM';
   let error = '';
   let uiHidden = false;
-  let panel = null; // 'todo' | 'model' | null
+  let panel = null; // 'todo' | 'model' | 'light' | null
   let mobile = false;
 
   // ── 時鐘 ──
@@ -181,8 +181,37 @@
     if (autoplay) audio.play().catch(() => (playing = false));
   }
   function togglePlay() {
+    // 記住使用者要不要音樂：自己按了暫停，下次進來就不自動播
+    musicAuto = audio.paused;
+    save('musicAuto', musicAuto);
     if (audio.paused) audio.play().catch(() => {});
     else audio.pause();
+  }
+  // 進來就播音樂（使用者 2026-11-26 要的）。從 00 START 點進來時瀏覽器允許有聲自動播放；
+  // 直接開 /#play 之類沒點過頁面的情況會被擋，就等訪客第一次在陪伴畫面上點擊或按鍵時再開始
+  let musicAuto = load('musicAuto', true) !== false;
+  let autoplayPending = false;
+  function autoplayMusic() {
+    if (!musicAuto || !audio?.paused) return;
+    audio.play().catch(() => {
+      if (destroyed || autoplayPending) return;
+      autoplayPending = true;
+      root.addEventListener('pointerdown', autoplayOnGesture, true);
+      root.addEventListener('keydown', autoplayOnGesture, true);
+    });
+  }
+  function stopAutoplayWait() {
+    if (!autoplayPending) return;
+    autoplayPending = false;
+    root?.removeEventListener('pointerdown', autoplayOnGesture, true);
+    root?.removeEventListener('keydown', autoplayOnGesture, true);
+  }
+  function autoplayOnGesture(e) {
+    // 點的是播放器本身：交給播放器（不然按「播放」會變成先播再停）；調音量、拖進度不會開始播放，所以繼續等下一次點擊。
+    if (e.target?.closest?.('.music')) return;
+    // 不是每種按鍵都算允許出聲的手勢（例如 Tab）：播放失敗就繼續等，真的開始播放時（on:play）才不再等
+    if (!musicAuto) return stopAutoplayWait();
+    if (audio?.paused) audio.play().catch(() => {});
   }
   function onEnded() {
     if (repeatOne) {
@@ -226,6 +255,16 @@
       say('這套衣服暫時拿不到，等一下再試試看。');
     }
     loading = false;
+  }
+
+  // ── 光線 ──
+  let lightId = load('light', 'default');
+  if (!COMPANION_LIGHTS.some((l) => l.id === lightId)) lightId = 'default';
+  $: light = COMPANION_LIGHTS.find((l) => l.id === lightId) ?? COMPANION_LIGHTS[0];
+  $: engine?.setLighting(light);
+  function pickLight(id) {
+    lightId = id;
+    save('light', id);
   }
 
   // ── 其他 ──
@@ -291,6 +330,8 @@
     }, 500);
     document.addEventListener('visibilitychange', onVisibility);
     document.addEventListener('fullscreenchange', onFullscreenChange);
+    // 一進來就開始放音樂（不用等 3D 場景載完，離點擊越近越不會被瀏覽器擋）
+    autoplayMusic();
     try {
       const { createCompanion } = await import('$lib/companion/engine.js');
       if (destroyed) return;
@@ -338,6 +379,7 @@
       document.documentElement.classList.remove('companion-hover');
     }
     observer?.disconnect();
+    stopAutoplayWait();
     engine?.dispose();
     // 從畫面移除的 <audio> 仍可能繼續播放：離開時一定要停掉
     if (audio) {
@@ -353,7 +395,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div class="companion" class:ui-hidden={uiHidden} bind:this={root} role="region" aria-label="悠太翼 陪伴模式" tabindex="-1"
   on:keydown={onKey} on:pointerenter={pointerIn} on:pointerleave={pointerOut}>
-  <canvas bind:this={canvas} class="stage" aria-label="悠太翼坐在房間裡，點他會說話"></canvas>
+  <canvas bind:this={canvas} class="stage" style:filter={light.filter ?? null} aria-label="悠太翼坐在房間裡，點他會說話"></canvas>
 
   {#if line}
     <div class="bubble" role="status"
@@ -440,7 +482,7 @@
       <input bind:this={fileInput} type="file" accept="audio/*" multiple hidden on:change={addFiles} />
     </div>
     <audio bind:this={audio} src={song?.url} preload="metadata"
-      on:play={() => (playing = true)} on:pause={() => (playing = false)} on:ended={onEnded}
+      on:play={() => { playing = true; stopAutoplayWait(); }} on:pause={() => (playing = false)} on:ended={onEnded}
       on:timeupdate={() => (current = audio.currentTime)} on:loadedmetadata={() => (duration = audio.duration)}></audio>
   </section>
 
@@ -470,9 +512,26 @@
   {:else if panel === 'model'}
     <section class="card sheet" inert={uiHidden || undefined} aria-label="換造型">
       <header><span class="tech">AVATAR</span><span class="mono">{COMPANION_MODELS.length} RIGS</span></header>
-      <ul class="models">
-        {#each COMPANION_MODELS as m}
-          <li><button class:active={m.id === modelId} on:click={() => pickModel(m.id)}>{m.label}</button></li>
+      <div class="groups">
+        {#each COMPANION_MODEL_GROUPS as g}
+          <div class="group" role="group" aria-labelledby="avatar-group-{g.id}">
+            <h3 id="avatar-group-{g.id}">{g.label}</h3>
+            <ul class="models">
+              {#each COMPANION_MODELS.filter((m) => m.group === g.id) as m}
+                <li><button class:active={m.id === modelId} aria-pressed={m.id === modelId} aria-label={m.name}
+                  on:click={() => pickModel(m.id)}>{m.label}</button></li>
+              {/each}
+            </ul>
+          </div>
+        {/each}
+      </div>
+    </section>
+  {:else if panel === 'light'}
+    <section class="card sheet" inert={uiHidden || undefined} aria-label="光線">
+      <header><span class="tech">LIGHTING</span><span class="mono">{light.label}</span></header>
+      <ul class="models lights">
+        {#each COMPANION_LIGHTS as l}
+          <li><button class:active={l.id === lightId} aria-pressed={l.id === lightId} on:click={() => pickLight(l.id)}>{l.label}</button></li>
         {/each}
       </ul>
     </section>
@@ -488,6 +547,10 @@
     <button class:on={panel === 'model'} on:click={() => (panel = panel === 'model' ? null : 'model')} aria-label="換造型">
       <svg viewBox="0 0 24 24"><path d="M9 3 4 6v5h3v10h10V11h3V6l-5-3a3 3 0 0 1-6 0z"/></svg>
       <span>造型</span>
+    </button>
+    <button class:on={panel === 'light'} on:click={() => (panel = panel === 'light' ? null : 'light')} aria-label="光線">
+      <svg viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5 1.5 3h-3zm0 20-1.5-3h3zM2 12l3-1.5v3zm20 0-3 1.5v-3zM4.9 4.9l3.2 1-2.1 2.1zm14.2 14.2-3.2-1 2.1-2.1zM4.9 19.1l1-3.2 2.1 2.1zM19.1 4.9l-1 3.2-2.1-2.1z"/></svg>
+      <span>光線</span>
     </button>
     <button on:click={() => (uiHidden = !uiHidden)} aria-label={uiHidden ? '顯示介面' : '隱藏介面'} aria-pressed={uiHidden}>
       <svg viewBox="0 0 24 24"><path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
@@ -643,6 +706,9 @@
   .todos input[type='checkbox'] { accent-color: #60a5fa; width: 16px; height: 16px; flex: none; }
   .x { background: none; border: 0; color: #bfdbfe; font-size: 18px; line-height: 1; }
   .note { margin: 0; font-size: 11px; color: #93c5fd; }
+  .groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .group h3 { margin: 0 0 6px; font-size: 13px; font-weight: 700; color: #bfdbfe; letter-spacing: .08em; }
+  .group .models { grid-template-columns: 1fr; }
   .models { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
   .models button { width: 100%; padding: 10px; background: rgba(255,255,255,.06); border: 1px solid rgba(147,197,253,.35); color: #fff; font-family: var(--font-tech); letter-spacing: .08em; }
   .models button.active { background: var(--blue-electric); border-color: var(--blue-glow); }
