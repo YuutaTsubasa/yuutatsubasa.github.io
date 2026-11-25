@@ -64,9 +64,18 @@ export async function createCompanion(canvas, opts = {}) {
   const progress = { scene: 0, model: 0 };
   const report = (label) => onProgress((progress.scene + progress.model) / 2, label);
 
-  const room = await loader.loadAsync(SCENE_URL, (e) => {
-    if (e.total) { progress.scene = e.loaded / e.total; report('ROOM'); }
-  });
+  let room;
+  try {
+    room = await loader.loadAsync(SCENE_URL, (e) => {
+      if (e.total) { progress.scene = e.loaded / e.total; report('ROOM'); }
+    });
+  } catch (err) {
+    // 下載失敗就先釋放 WebGL，否則反覆重試會耗盡瀏覽器的 WebGL context
+    scene.environment?.dispose();
+    pmrem.dispose();
+    renderer.dispose();
+    throw err;
+  }
   progress.scene = 1;
   report('AVATAR');
   room.scene.traverse((o) => {
