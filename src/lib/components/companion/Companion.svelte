@@ -191,20 +191,20 @@
   // ── 化身 ──
   let modelId = load('model', COMPANION_MODELS[0].id);
   if (!COMPANION_MODELS.some((m) => m.id === modelId)) modelId = COMPANION_MODELS[0].id;
+  // 換造型：下載成功才記住；失敗就留在原本的造型（engine 在失敗時不會換掉目前的模型）
   async function pickModel(id) {
     panel = null;
-    if (id === modelId && !error) return;
-    modelId = id;
-    save('model', id);
+    if (id === modelId) return;
     loading = true;
-    error = '';
     try {
       const m = COMPANION_MODELS.find((m) => m.id === id);
       await engine.loadModel(m.url, m.scale);
+      modelId = id;
+      save('model', id);
       say('換好衣服了，好看嗎？');
     } catch (e) {
-      error = '化身載入失敗，請稍後再試。';
       console.error(e);
+      say('這套衣服暫時拿不到，等一下再試試看。');
     }
     loading = false;
   }
@@ -220,6 +220,8 @@
       } else {
         await document.documentElement.requestFullscreen();
         ownFullscreen = true;
+        // 全螢幕請求完成前就已經離開陪伴模式
+        if (destroyed) document.exitFullscreen().catch(() => {});
       }
     } catch {}
   }
@@ -264,7 +266,17 @@
       if (destroyed) return created.dispose();
       engine = created;
       const m = COMPANION_MODELS.find((m) => m.id === modelId);
-      await engine.loadModel(m.url, m.scale);
+      try {
+        await engine.loadModel(m.url, m.scale);
+      } catch (e) {
+        // 記住的造型載不到（例如之後被移除），退回預設造型，不要讓訪客卡在錯誤畫面
+        const fallback = COMPANION_MODELS[0];
+        if (m.id === fallback.id || destroyed) throw e;
+        console.error(e);
+        modelId = fallback.id;
+        save('model', fallback.id);
+        await engine.loadModel(fallback.url, fallback.scale);
+      }
       if (destroyed) return;
       if (import.meta.env.DEV) window.__companion = engine;
       loading = false;
