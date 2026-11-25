@@ -47,7 +47,10 @@
   // 已經在首頁時連到 /#play（或用上一頁回到 #play）不會重新掛載，所以也聽 hashchange
   onMount(() => {
     const onHash = () => {
-      if (location.hash === '#play') start();
+      if (location.hash !== '#play') return;
+      // 沒有 id="play" 的錨點，瀏覽器不會自己捲：在頁面下方點到 #play 連結時捲回 00
+      if (window.scrollY > 0) gotoSection('hero');
+      start();
     };
     onHash();
     window.addEventListener('hashchange', onHash);
