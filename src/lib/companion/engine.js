@@ -284,13 +284,12 @@ export async function createCompanion(canvas, opts = {}) {
 
       // 視線跟著滑鼠（看向鏡頭附近，幅度不大）；待機動作可以把視線帶到別處（gaze）
       pointerSmoothed.lerp(pointer, 1 - Math.exp(-dt * 4));
-      const t = new THREE.Vector3().fromArray(SEAT.camera.position);
       // 視線高度用眼睛的高度（正前方的訪客＝平視），不然鏡頭稍高時會變成往上看
       const eyeY = (vrm.humanoid.getRawBoneNode('leftEye') ?? vrm.humanoid.getRawBoneNode('head')).getWorldPosition(_eye).y;
       lookTarget.position.set(
         camera.position.x + pointerSmoothed.x * 1.6 + add.gaze[0],
         eyeY + pointerSmoothed.y * 1.0 + add.gaze[1],
-        t.z
+        camera.position.z
       );
 
       // 呼吸與輕微晃動，加上待機動作對軀幹、頭的疊加
