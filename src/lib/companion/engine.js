@@ -180,15 +180,25 @@ export async function createCompanion(canvas, opts = {}) {
     const r = canvas.getBoundingClientRect();
     pointer.set(((e.clientX - r.left) / r.width) * 2 - 1, -(((e.clientY - r.top) / r.height) * 2 - 1));
   }
+  // 點角色：按下又放開、幾乎沒移動才算（手機上從角色身上開始滑動捲頁時不會觸發）
+  let press = null;
   function onPointerDown(e) {
     onPointerMove(e);
-    if (!vrm) return;
+    press = { x: e.clientX, y: e.clientY, t: performance.now() };
+  }
+  function onPointerUp(e) {
+    const p = press;
+    press = null;
+    if (!p || !vrm) return;
+    if (Math.hypot(e.clientX - p.x, e.clientY - p.y) > 10 || performance.now() - p.t > 600) return;
+    onPointerMove(e);
     raycaster.setFromCamera(pointer, camera);
     if (raycaster.intersectObject(vrm.scene, true).length) {
       react();
       onCharacterClick();
     }
   }
+  const onPointerCancel = () => (press = null);
   function react() {
     if (!vrm) return;
     idle.play('wave'); // 點角色：打招呼（正在播的待機動作會平順接過去）；不管模型有沒有對應的表情都會揮
@@ -202,6 +212,8 @@ export async function createCompanion(canvas, opts = {}) {
 
   canvas.addEventListener('pointermove', onPointerMove);
   canvas.addEventListener('pointerdown', onPointerDown);
+  canvas.addEventListener('pointerup', onPointerUp);
+  canvas.addEventListener('pointercancel', onPointerCancel);
 
   function resize() {
     const w = canvas.clientWidth;
@@ -335,6 +347,8 @@ export async function createCompanion(canvas, opts = {}) {
       ro.disconnect();
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerdown', onPointerDown);
+      canvas.removeEventListener('pointerup', onPointerUp);
+      canvas.removeEventListener('pointercancel', onPointerCancel);
       if (vrm) VRMUtils.deepDispose(vrm.scene);
       room.scene.traverse((o) => {
         if (o.isMesh) {

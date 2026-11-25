@@ -19,11 +19,13 @@
   let section;
   let enterButton;
 
-  async function start() {
+  async function start(fromHash = false) {
     if (playing) return;
     error = false;
     try {
       Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
+      // 從 #play 開的：下載途中已經用上一頁離開，就不要開
+      if (fromHash && location.hash !== '#play') return;
       playing = true;
       // 鍵盤使用者：焦點移到剛出現的陪伴畫面
       await tick();
@@ -54,7 +56,7 @@
       }
       // 沒有 id="play" 的錨點，瀏覽器不會自己捲：在頁面下方點到 #play 連結時捲回 00
       if (window.scrollY > 0) gotoSection('hero');
-      start();
+      start(true);
     };
     onHash();
     window.addEventListener('hashchange', onHash);
@@ -69,7 +71,7 @@
     <svelte:component this={Companion} on:close={stop} />
   {:else}
     <!-- 整塊畫面就是「點一下進入陪伴模式」的按鈕 -->
-    <button class="enter" bind:this={enterButton} on:click={start} aria-label="進入陪伴模式：悠太翼在房間裡陪你">
+    <button class="enter" bind:this={enterButton} on:click={() => start()} aria-label="進入陪伴模式：悠太翼在房間裡陪你">
       <picture class="bg" aria-hidden="true">
         <source media="(max-aspect-ratio: 1/1)" srcset="/companion/start-portrait.webp" />
         <img src="/companion/start.webp" alt="" fetchpriority="high" />
