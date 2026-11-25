@@ -46,6 +46,24 @@ function rotateWorld(bone, qWorld) {
   bone.updateMatrixWorld(true);
 }
 
+const _ta = new THREE.Vector3();
+const _tb = new THREE.Vector3();
+const _tq = new THREE.Quaternion();
+/**
+ * 繞骨頭自己的方向（axis，世界座標）扭轉，讓骨頭區域 +Y 那面盡量朝 want（世界座標）。
+ * 手臂骨頭沿區域 ±X 延伸，+Y 是 T 字姿勢時朝上的那面。
+ */
+function twist(bone, axis, want) {
+  bone.getWorldQuaternion(_tq);
+  _ta.set(0, 1, 0).applyQuaternion(_tq).addScaledVector(axis, -axis.dot(_ta.set(0, 1, 0).applyQuaternion(_tq)));
+  _tb.copy(want).addScaledVector(axis, -axis.dot(want));
+  if (_ta.lengthSq() < 1e-8 || _tb.lengthSq() < 1e-8) return;
+  _ta.normalize();
+  _tb.normalize();
+  const angle = Math.atan2(_tb.clone().cross(_ta).dot(axis) * -1, _ta.dot(_tb));
+  rotateWorld(bone, _tq.setFromAxisAngle(axis, angle));
+}
+
 /**
  * @param {import('@pixiv/three-vrm').VRM} vrm
  * @param {object} cfg SEAT.hands
@@ -159,6 +177,11 @@ export function createArmIK(vrm, cfg) {
     _m.makeBasis(_x, _y, _z);
     _qh.setFromRotationMatrix(_m);
     a.hand.parent.getWorldQuaternion(_qp);
+    // 前臂跟著手掌轉（手腕不會扭成麻花）
+    a.lower.getWorldPosition(_v1);
+    a.hand.getWorldPosition(_v2);
+    twist(a.lower, _v2.sub(_v1).normalize(), _v1.copy(_y));
+    a.hand.parent.getWorldQuaternion(_qp);
     a.hand.quaternion.copy(_qp.invert().multiply(_qh)).multiply(handDelta);
     a.upper.updateMatrixWorld(true);
   }
@@ -184,6 +207,9 @@ export function createArmIK(vrm, cfg) {
     _v1.subVectors(_e, _s).normalize();
     _q.setFromUnitVectors(_v1, _v2.clone().sub(_s).normalize());
     rotateWorld(a.upper, _q);
+    // 上臂的扭轉：只轉方向的話上臂會往內扭（肩甲朝前、肩膀看起來內凹）。
+    // 讓上臂外側（T 字時朝上的那面）朝身體外側、稍微往前
+    twist(a.upper, _v2.subVectors(_v2, _s).normalize(), _v1.set(a.sign, 0, cfg.shoulderForward));
     // 前臂：從現在的手腕方向轉到目標
     a.lower.getWorldPosition(_e);
     a.hand.getWorldPosition(_w);
