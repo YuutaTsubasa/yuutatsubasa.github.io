@@ -151,13 +151,14 @@
     </aside>
   {/if}
 
-  {#if liveStream}
+  <!-- 直播提示只在開始畫面顯示（陪伴模式開著時會蓋到介面） -->
+  {#if !playing && liveStream}
     <a class="live-pill live" href={liveStream.url} target="_blank" rel="noopener">
       <Dot color="#EF4444" />
       <span class="tech">LIVE NOW</span>
       <span class="live-title">{liveStream.title}</span>
     </a>
-  {:else if nextStream}
+  {:else if !playing && nextStream}
     <a class="live-pill next" href={nextStream.url} target="_blank" rel="noopener">
       <Dot color="#22D3EE" />
       <span class="tech">NEXT STREAM</span>
