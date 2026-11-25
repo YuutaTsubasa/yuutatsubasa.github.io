@@ -3,13 +3,48 @@
 // 可以選的化身。url 是網頁用的輕量版 VRM（原檔太大，不放網站）。
 // 新造型的輕量版做好後加在這裡即可。
 // scale：坐在椅子上的縮放（預設 SEAT.scale）；H05 是成人體型，軀幹比 H04 長約 1.3 倍，縮小一點才不會比椅子還大
+// group：造型面板分成正太版、青年版兩欄（使用者 2026-11-26：這樣比較好找）；label 是欄裡的名稱，name 是完整名稱
+export const COMPANION_MODEL_GROUPS = [
+  { id: 'H04', label: '正太版' },
+  { id: 'H05', label: '青年版' }
+];
 export const COMPANION_MODELS = [
-  { id: 'H04-B01', label: '正太盔甲版', url: '/companion/models/H04-B01.vrm' },
-  { id: 'H04-B02', label: '正太便服版', url: '/companion/models/H04-B02.vrm' },
-  { id: 'H04-B06', label: '正太白盔版', url: '/companion/models/H04-B06.vrm' },
-  { id: 'H05-B01', label: '青年盔甲版', url: '/companion/models/H05-B01.vrm', scale: 2.1 },
-  { id: 'H05-B02', label: '青年便服版', url: '/companion/models/H05-B02.vrm', scale: 2.1 },
-  { id: 'H05-B06', label: '青年白盔版', url: '/companion/models/H05-B06.vrm', scale: 2.1 }
+  { id: 'H04-B01', group: 'H04', label: '盔甲', name: '正太盔甲版', url: '/companion/models/H04-B01.vrm' },
+  { id: 'H04-B02', group: 'H04', label: '便服', name: '正太便服版', url: '/companion/models/H04-B02.vrm' },
+  { id: 'H04-B06', group: 'H04', label: '白盔', name: '正太白盔版', url: '/companion/models/H04-B06.vrm' },
+  { id: 'H05-B01', group: 'H05', label: '盔甲', name: '青年盔甲版', url: '/companion/models/H05-B01.vrm', scale: 2.1 },
+  { id: 'H05-B02', group: 'H05', label: '便服', name: '青年便服版', url: '/companion/models/H05-B02.vrm', scale: 2.1 },
+  { id: 'H05-B06', group: 'H05', label: '白盔', name: '青年白盔版', url: '/companion/models/H05-B06.vrm', scale: 2.1 }
+];
+
+// 光線氛圍（使用者 2026-11-26 要的：比較冷、比較溫暖、比較銳利、黑白）。
+// 數值是乘在預設燈光上的倍數（exposure 曝光、env 環境反光、ambient 天空光、key 主光、fillPower 補光、facePower 臉部補光），
+// 顏色會取代該燈的預設顏色；shadowRadius 是影子邊緣的柔和度（小＝銳利）。
+// filter 是套在整個 3D 畫面上的 CSS 調色（黑白就是這裡做的）。
+export const COMPANION_LIGHTS = [
+  { id: 'default', label: '預設' },
+  {
+    id: 'warm', label: '溫暖',
+    sky: '#fff1dc', ground: '#a08770', sun: '#ffd9a8', fill: '#ffe2c2', face: '#fff0de',
+    exposure: 1.04, key: 1.05,
+    filter: 'sepia(0.14) saturate(1.08)'
+  },
+  {
+    id: 'cool', label: '冷調',
+    sky: '#dcebff', ground: '#6f82a6', sun: '#dbe8ff', fill: '#a9c8ff', face: '#eef4ff',
+    exposure: 0.96, fillPower: 1.4,
+    filter: 'saturate(0.92) hue-rotate(-6deg) brightness(0.98)'
+  },
+  {
+    id: 'sharp', label: '銳利',
+    ambient: 0.55, env: 0.6, key: 1.35, fillPower: 0.6, facePower: 0.8, shadowRadius: 0.6,
+    filter: 'contrast(1.18) saturate(1.12)'
+  },
+  {
+    id: 'mono', label: '黑白',
+    exposure: 1.02,
+    filter: 'grayscale(1) contrast(1.08)'
+  }
 ];
 
 // 預設播放清單。玩家也可以自己加本機的音樂檔（只在這次瀏覽有效，不會上傳）。
@@ -57,6 +92,9 @@ export const SEAT = {
   seat: [1.1, 1.54, 0.78],
   // 拿掉的物件：椅子上前面那顆抱枕
   hideNodes: ['21_Chair_RuntimeMesh001_1'],
+  // 那顆抱枕的白色滾邊和葉子徽章跟椅背的白線是同一個網格（不能整個藏）：
+  // 只刪掉落在抱枕正面那一層的三角形（網格自己的座標；使用者 2026-11-26：抱枕拿掉後留下一個奇怪的框框）
+  trimNodes: [{ node: '21_Chair_RuntimeMesh001_2', min: [-0.3, -0.7, 0.26], max: [0.75, -0.1, 0.31] }],
   rotationY: 0,
   // 椅子以場景比例來說很大，角色要放大才坐得進去
   scale: 2.5,
