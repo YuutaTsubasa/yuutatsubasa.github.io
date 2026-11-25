@@ -207,9 +207,10 @@
     root?.removeEventListener('keydown', autoplayOnGesture, true);
   }
   function autoplayOnGesture(e) {
-    stopAutoplayWait();
-    // 點的是播放器本身：交給播放器的按鈕，不然按「播放」會變成先播再停
+    // 點的是播放器本身：交給播放器（不然按「播放」會變成先播再停）；調音量、拖進度不會開始播放，所以繼續等下一次點擊。
+    // 播放器真的開始播放時（on:play）就不再等
     if (e.target?.closest?.('.music')) return;
+    stopAutoplayWait();
     if (musicAuto && audio?.paused) audio.play().catch(() => {});
   }
   function onEnded() {
@@ -481,7 +482,7 @@
       <input bind:this={fileInput} type="file" accept="audio/*" multiple hidden on:change={addFiles} />
     </div>
     <audio bind:this={audio} src={song?.url} preload="metadata"
-      on:play={() => (playing = true)} on:pause={() => (playing = false)} on:ended={onEnded}
+      on:play={() => { playing = true; stopAutoplayWait(); }} on:pause={() => (playing = false)} on:ended={onEnded}
       on:timeupdate={() => (current = audio.currentTime)} on:loadedmetadata={() => (duration = audio.duration)}></audio>
   </section>
 
