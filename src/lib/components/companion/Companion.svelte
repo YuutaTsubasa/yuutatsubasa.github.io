@@ -357,7 +357,7 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<div class="companion" class:ui-hidden={uiHidden} class:still bind:this={root} role="region" aria-label="悠太翼 陪伴模式"
+<div class="companion" class:ui-hidden={uiHidden} class:still bind:this={root} role="region" aria-label="悠太翼 陪伴模式" tabindex="-1"
   on:keydown={onKey} on:pointerenter={pointerIn} on:pointerleave={pointerOut}>
   <canvas bind:this={canvas} class="stage" aria-label="悠太翼坐在房間裡，點他會說話"></canvas>
 
@@ -541,6 +541,7 @@
     font-family: var(--font-body);
     overflow: hidden;
     cursor: auto;
+    outline: none;
   }
   /* 產生開站背景圖時整個視窗只畫場景（不含導覽列） */
   .companion.still { position: fixed; z-index: 300; }

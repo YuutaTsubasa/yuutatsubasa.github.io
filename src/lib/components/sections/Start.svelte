@@ -1,5 +1,6 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
+  import { replaceState } from '$app/navigation';
   import { SCHEDULE } from '$lib/data/schedule.js';
   import { currentLive, nextUpcoming, dayName, formatTime } from '$lib/utils/schedule.js';
   import { now } from '$lib/stores/now.js';
@@ -15,6 +16,8 @@
   let Companion = null;
   let playing = false;
   let error = false;
+  let section;
+  let enterButton;
 
   async function start() {
     if (playing) return;
@@ -22,11 +25,22 @@
     try {
       Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
       playing = true;
+      // 鍵盤使用者：焦點移到剛出現的陪伴畫面
+      await tick();
+      section?.querySelector('.companion')?.focus({ preventScroll: true });
     } catch (e) {
       // 網路中斷，或網站更新後舊頁面要的檔案已經不在
       console.error(e);
       error = true;
     }
+  }
+
+  async function stop() {
+    playing = false;
+    // 從 /#play 進站的：結束後拿掉 #play，重新整理或分享網址才不會又自動開起來
+    if (location.hash === '#play') replaceState(location.pathname + location.search, {});
+    await tick();
+    enterButton?.focus({ preventScroll: true });
   }
 
   // 直接開 /#play 的連結：進站就開起來
@@ -35,14 +49,14 @@
   });
 </script>
 
-<section id="hero" class="start" data-screen-label="00 Start">
+<section id="hero" class="start" data-screen-label="00 Start" bind:this={section}>
   <h1 class="sr-only">悠太翼 YUUTA TSUBASA · 程式系台灣 VTuber</h1>
 
   {#if playing}
-    <svelte:component this={Companion} on:close={() => (playing = false)} />
+    <svelte:component this={Companion} on:close={stop} />
   {:else}
     <!-- 整塊畫面就是「點一下進入陪伴模式」的按鈕 -->
-    <button class="enter" on:click={start} aria-label="進入陪伴模式：悠太翼在房間裡陪你">
+    <button class="enter" bind:this={enterButton} on:click={start} aria-label="進入陪伴模式：悠太翼在房間裡陪你">
       <picture class="bg" aria-hidden="true">
         <source media="(max-aspect-ratio: 1/1)" srcset="/companion/start-portrait.webp" />
         <img src="/companion/start.webp" alt="" fetchpriority="high" />
