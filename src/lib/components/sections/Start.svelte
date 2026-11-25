@@ -67,11 +67,16 @@
   let video;
   let inView = true; // 00 區塊在畫面內才播放
   onMount(() => {
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const saveData = navigator.connection?.saveData;
-    if (reduce || saveData) return;
-    // 手機（窄螢幕）一律 720p，省流量
-    videoSrc = matchMedia('(max-width: 768px)').matches ? '/companion/start/wallpaper-720.mp4' : '/companion/start/wallpaper-1080.mp4';
+    const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
+    const narrow = matchMedia('(max-width: 768px)').matches;
+    // 開著頁面時切換「減少動態效果」也跟著換：開了只顯示封面圖，關了就播影片
+    const decide = () => {
+      const off = reduceQuery.matches || navigator.connection?.saveData;
+      // 手機（窄螢幕）一律 720p，省流量
+      videoSrc = off ? '' : narrow ? '/companion/start/wallpaper-720.mp4' : '/companion/start/wallpaper-1080.mp4';
+    };
+    decide();
+    reduceQuery.addEventListener('change', decide);
     // 捲離 00 區塊時暫停，省電
     const io = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
@@ -80,7 +85,10 @@
       else video.pause();
     });
     io.observe(section);
-    return () => io.disconnect();
+    return () => {
+      io.disconnect();
+      reduceQuery.removeEventListener('change', decide);
+    };
   });
 
   // 直接開 /#play 的連結：進站就開起來
