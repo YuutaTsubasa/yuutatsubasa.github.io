@@ -68,15 +68,18 @@
   let inView = true; // 00 區塊在畫面內才播放
   onMount(() => {
     const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
-    const narrow = matchMedia('(max-width: 768px)').matches;
-    // 開著頁面時切換「減少動態效果」也跟著換：開了只顯示封面圖，關了就播影片
+    const narrowQuery = matchMedia('(max-width: 768px)');
+    const connection = navigator.connection;
+    // 開著頁面時切換「減少動態效果」、省流量或視窗寬度也跟著換
     const decide = () => {
-      const off = reduceQuery.matches || navigator.connection?.saveData;
+      const off = reduceQuery.matches || connection?.saveData;
       // 手機（窄螢幕）一律 720p，省流量
-      videoSrc = off ? '' : narrow ? '/companion/start/wallpaper-720.mp4' : '/companion/start/wallpaper-1080.mp4';
+      videoSrc = off ? '' : narrowQuery.matches ? '/companion/start/wallpaper-720.mp4' : '/companion/start/wallpaper-1080.mp4';
     };
     decide();
     reduceQuery.addEventListener('change', decide);
+    narrowQuery.addEventListener('change', decide);
+    connection?.addEventListener?.('change', decide);
     // 捲離 00 區塊時暫停，省電
     const io = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
@@ -88,6 +91,8 @@
     return () => {
       io.disconnect();
       reduceQuery.removeEventListener('change', decide);
+      narrowQuery.removeEventListener('change', decide);
+      connection?.removeEventListener?.('change', decide);
     };
   });
 
