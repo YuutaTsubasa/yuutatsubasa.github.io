@@ -63,14 +63,23 @@ export async function createCompanion(canvas, opts = {}) {
   loader.setMeshoptDecoder(MeshoptDecoder);
   loader.register((parser) => new VRMLoaderPlugin(parser));
 
-  // 兩個下載（場景、模型）各佔一半進度
+  // 兩個下載（場景、模型）各佔一半進度。
+  // 伺服器用 gzip 傳時，e.total 是壓縮後的大小、e.loaded 卻是解壓後的位元組，直接相除會超過 100%（使用者 2026-11-26 看到）。
+  // 所以分母用建置時讀到的檔案實際大小（vite.config.js 的 __COMPANION_SIZES__）；查不到才退回 e.total。
+  // 封頂 0.99：真的載完（下面設成 1）才到 100%
+  const SIZES = typeof __COMPANION_SIZES__ === 'undefined' ? {} : __COMPANION_SIZES__;
+  const ratio = (url, e) => {
+    const total = SIZES[new URL(url, location.href).pathname] ?? e.total;
+    return total ? Math.min(0.99, e.loaded / total) : 0;
+  };
   const progress = { scene: 0, model: 0 };
   const report = (label) => onProgress((progress.scene + progress.model) / 2, label);
 
   let room;
   try {
     room = await loader.loadAsync(SCENE_URL, (e) => {
-      if (e.total) { progress.scene = e.loaded / e.total; report('ROOM'); }
+      progress.scene = ratio(SCENE_URL, e);
+      report('ROOM');
     });
   } catch (err) {
     // 下載失敗就先釋放 WebGL，否則反覆重試會耗盡瀏覽器的 WebGL context
@@ -208,7 +217,7 @@ export async function createCompanion(canvas, opts = {}) {
     const token = ++loadToken;
     progress.model = 0;
     const gltf = await loader.loadAsync(url, (e) => {
-      if (e.total && token === loadToken) { progress.model = e.loaded / e.total; report('AVATAR'); }
+      if (token === loadToken) { progress.model = ratio(url, e); report('AVATAR'); }
     });
     const next = gltf.userData.vrm;
     // 換模型時舊的下載才回來，或下載途中已經離開陪伴模式：丟掉這份
