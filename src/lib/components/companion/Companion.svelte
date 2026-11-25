@@ -74,17 +74,15 @@
     if (!pomoRunning) return;
     pomoLeft = Math.max(0, Math.round((pomoEndAt - Date.now()) / 1000));
     if (pomoLeft > 0) return;
-    chime();
-    if (pomoMode === 'work') {
-      pomoCycles += 1;
-      pomoMode = 'rest';
-      say('辛苦了！休息一下吧。');
-    } else {
-      pomoMode = 'work';
-      say('休息結束，繼續加油！');
+    // 手機鎖屏或分頁在背景時計時器會暫停：回來後照實際經過的時間推進，可能一次跨好幾段
+    while (pomoEndAt <= Date.now()) {
+      if (pomoMode === 'work') pomoCycles += 1;
+      pomoMode = pomoMode === 'work' ? 'rest' : 'work';
+      pomoEndAt += (pomoMode === 'work' ? pomo.work : pomo.rest) * 60 * 1000;
     }
-    pomoLeft = (pomoMode === 'work' ? pomo.work : pomo.rest) * 60;
-    pomoEndAt = Date.now() + pomoLeft * 1000;
+    pomoLeft = Math.max(0, Math.round((pomoEndAt - Date.now()) / 1000));
+    chime();
+    say(pomoMode === 'rest' ? '辛苦了！休息一下吧。' : '休息結束，繼續加油！');
   }
   function pomoSave() {
     pomo = {
@@ -212,6 +210,7 @@
   // ── 其他 ──
   // 只有陪伴模式自己開的全螢幕，離開時才退出（不動使用者原本就開著的全螢幕）
   let ownFullscreen = false;
+  let canFullscreen = false; // iPhone Safari 不支援網頁全螢幕，就不顯示按鈕
   async function toggleFullscreen() {
     try {
       if (document.fullscreenElement) {
@@ -247,6 +246,7 @@
   onMount(async () => {
     mobile = matchMedia('(max-width: 768px), (pointer: coarse)').matches;
     still = new URLSearchParams(location.search).has('still');
+    canFullscreen = !!document.fullscreenEnabled;
     document.documentElement.classList.add('companion-open');
     if (still) uiHidden = true;
     clockTimer = setInterval(() => {
@@ -450,10 +450,12 @@
       <svg viewBox="0 0 24 24"><path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
       <span>{uiHidden ? '顯示' : '專心看'}</span>
     </button>
-    <button on:click={toggleFullscreen} aria-label="全螢幕">
-      <svg viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 0h2v6h-6v-2h4z"/></svg>
-      <span>全螢幕</span>
-    </button>
+    {#if canFullscreen}
+      <button on:click={toggleFullscreen} aria-label="全螢幕">
+        <svg viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 0h2v6h-6v-2h4z"/></svg>
+        <span>全螢幕</span>
+      </button>
+    {/if}
     <span class="sep" aria-hidden="true"></span>
     <button class="exit" on:click={close} aria-label="離開陪伴模式">
       <svg viewBox="0 0 24 24"><path d="M10 17l1.4-1.4-2.6-2.6H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 3h8v2H4v14h8v2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
