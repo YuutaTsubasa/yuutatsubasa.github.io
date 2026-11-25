@@ -6,6 +6,9 @@
   import Dot from '$lib/components/atoms/Dot.svelte';
   import { gotoSection } from '$lib/stores/active.js';
 
+  /** 陪伴模式載入失敗時顯示提示 */
+  export let error = false;
+
   const dispatch = createEventDispatcher();
 
   $: liveStream = currentLive(SCHEDULE, $now);
@@ -29,6 +32,9 @@
         <span class="blink">▶</span> CLICK TO START
         <span class="zh">點一下，進入陪伴模式</span>
       </span>
+      {#if error}
+        <span class="err" role="alert">陪伴模式載入失敗，請重新整理頁面再試一次。</span>
+      {/if}
     </span>
   </button>
 
@@ -117,6 +123,12 @@
     -webkit-backdrop-filter: blur(6px);
   }
   .prompt .zh { font-family: var(--font-body); font-size: 0.85em; letter-spacing: 0.12em; color: #bfdbfe; }
+  .err {
+    padding: 6px 14px;
+    background: rgba(220, 38, 38, 0.9);
+    color: #fff;
+    font-size: 13px;
+  }
   .blink { animation: blink 1.2s steps(2, start) infinite; color: #60a5fa; }
   @keyframes blink { to { visibility: hidden; } }
 

@@ -63,11 +63,26 @@
   let Companion = null;
   let companionOpen = false;
   let leaving = false; // 「回網站」呼叫的 history.back() 還沒完成
+  let companionError = false; // 陪伴模式的程式載不到
 
   async function openCompanion(push = true) {
     if (companionOpen || leaving) return;
     if (push && location.hash !== PLAY_HASH) history.pushState({ companion: true }, '', PLAY_HASH);
-    Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
+    companionError = false;
+    try {
+      Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
+    } catch (e) {
+      // 網路中斷，或網站更新後舊頁面要的檔案已經不在：拿掉 #play，請訪客重新整理
+      console.error(e);
+      companionError = true;
+      if (location.hash === PLAY_HASH) {
+        if (history.state?.companion) {
+          leaving = true;
+          history.back();
+        } else history.replaceState(history.state, '', location.pathname + location.search);
+      }
+      return;
+    }
     // 第一次載入元件的途中按了上一頁，就不要打開
     if (location.hash !== PLAY_HASH) return;
     companionOpen = true;
@@ -113,7 +128,7 @@
 <Seo {title} {description} {jsonLd} />
 
 <main id="main">
-  <Start on:enter={() => openCompanion()} />
+  <Start error={companionError} on:enter={() => openCompanion()} />
   <About />
   <Schedule />
   <Videos />

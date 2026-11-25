@@ -67,6 +67,7 @@
       pomoLeft = Math.max(1, Math.ceil((pomoEndAt - Date.now()) / 1000));
       pomoRunning = false;
     } else {
+      unlockChime();
       pomoEndAt = Date.now() + pomoLeft * 1000;
       pomoRunning = true;
       if (pomoMode === 'work' && pomoLeft === pomo.work * 60) say('好，開始專心！我在旁邊陪你。');
@@ -106,9 +107,18 @@
     pomoEditing = false;
     pomoReset();
   }
-  function chime() {
+  // 提示音：AudioContext 要在使用者按「開始」時建立／喚醒，iOS Safari 才會出聲
+  let audioCtx = null;
+  function unlockChime() {
     try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      audioCtx ??= new (window.AudioContext || window.webkitAudioContext)();
+      audioCtx.resume?.();
+    } catch {}
+  }
+  function chime() {
+    const ctx = audioCtx;
+    if (!ctx) return;
+    try {
       [880, 1175, 1568].forEach((f, i) => {
         const o = ctx.createOscillator();
         const g = ctx.createGain();
@@ -122,9 +132,9 @@
         o.start(t);
         o.stop(t + 0.65);
       });
-      setTimeout(() => ctx.close(), 1500);
     } catch {}
   }
+
 
   // ── 待辦 ──
   let todos = load('todos', []);
@@ -316,6 +326,7 @@
     }
     engine?.dispose();
     for (const t of playlist) if (t.local) URL.revokeObjectURL(t.url);
+    audioCtx?.close().catch(() => {});
   });
 </script>
 
