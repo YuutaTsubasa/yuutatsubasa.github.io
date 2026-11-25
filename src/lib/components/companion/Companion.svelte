@@ -210,10 +210,17 @@
   }
 
   // ── 其他 ──
+  // 只有陪伴模式自己開的全螢幕，離開時才退出（不動使用者原本就開著的全螢幕）
+  let ownFullscreen = false;
   async function toggleFullscreen() {
     try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await document.documentElement.requestFullscreen();
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        ownFullscreen = false;
+      } else {
+        await document.documentElement.requestFullscreen();
+        ownFullscreen = true;
+      }
     } catch {}
   }
   function close() {
@@ -272,7 +279,7 @@
     clearTimeout(lineTimer);
     if (typeof document !== 'undefined') {
       // 不管是按「回網站」還是瀏覽器的上一頁離開，都要退出全螢幕
-      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      if (ownFullscreen && document.fullscreenElement) document.exitFullscreen().catch(() => {});
       document.removeEventListener('visibilitychange', onVisibility);
       document.documentElement.classList.remove('companion-open');
     }
