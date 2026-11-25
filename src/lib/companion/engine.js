@@ -159,6 +159,8 @@ export async function createCompanion(canvas, opts = {}) {
       VRMUtils.deepDispose(vrm.scene);
     }
     vrm = next;
+    reaction = null;
+    blinkPhase = -1;
     modelScale = scale;
     seat(vrm);
     scene.add(vrm.scene);
@@ -184,7 +186,10 @@ export async function createCompanion(canvas, opts = {}) {
   function react() {
     if (!vrm?.expressionManager) return;
     const name = REACTIONS[reactionIndex++ % REACTIONS.length];
-    if (vrm.expressionManager.getExpression(name)) reaction = { name, t: 0 };
+    if (!vrm.expressionManager.getExpression(name)) return;
+    // 上一個表情還沒播完就換下一個：先歸零，不然會殘留在臉上
+    if (reaction) vrm.expressionManager.setValue(reaction.name, 0);
+    reaction = { name, t: 0 };
   }
   canvas.addEventListener('pointermove', onPointerMove);
   canvas.addEventListener('pointerdown', onPointerDown);

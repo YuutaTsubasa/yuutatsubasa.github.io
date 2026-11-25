@@ -217,7 +217,6 @@
     } catch {}
   }
   function close() {
-    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     dispatch('close');
   }
   function onKey(e) {
@@ -272,6 +271,8 @@
     clearInterval(clockTimer);
     clearTimeout(lineTimer);
     if (typeof document !== 'undefined') {
+      // 不管是按「回網站」還是瀏覽器的上一頁離開，都要退出全螢幕
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
       document.removeEventListener('visibilitychange', onVisibility);
       document.documentElement.classList.remove('companion-open');
     }
