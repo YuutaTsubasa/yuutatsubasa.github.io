@@ -2,6 +2,8 @@
   import { onMount, onDestroy } from 'svelte';
   import { NAV } from '$lib/data/nav.js';
   import { activeSection, setActiveFromScroll } from '$lib/stores/active.js';
+  import { page } from '$app/stores';
+  import { afterNavigate, pushState, replaceState } from '$app/navigation';
 
   import Start from '$lib/components/sections/Start.svelte';
   import About from '$lib/components/sections/About.svelte';
@@ -58,70 +60,63 @@
     setActiveFromScroll(cur);
   }
 
-  // 陪伴模式：00 START 點一下進入；網址加上 #play，瀏覽器的「上一頁」就能離開
+  // 陪伴模式：00 START 點一下進入；網址加上 #play，瀏覽器的「上一頁」就能離開。
+  // 用 SvelteKit 的 shallow routing（pushState／replaceState）記錄，開不開由 $page.state 決定，
+  // 這樣路由器才追蹤得到這筆紀錄（換頁再按上一頁也會正確回到首頁）。
   const PLAY_HASH = '#play';
   let Companion = null;
-  let companionOpen = false;
-  let leaving = false; // 「回網站」呼叫的 history.back() 還沒完成
   let companionError = false; // 陪伴模式的程式載不到
-  let pageDestroyed = false; // 下載途中已經換到別的頁面
+  let mounted = false;
+  let importing = false;
 
-  async function openCompanion(push = true) {
-    if (companionOpen || leaving) return;
-    if (push && location.hash !== PLAY_HASH) history.pushState({ companion: true }, '', PLAY_HASH);
+  $: wanted = mounted && !!$page.state.companion;
+  $: if (wanted && !Companion) loadCompanion();
+  $: companionOpen = wanted && !!Companion;
+  $: if (mounted) document.documentElement.style.overflow = companionOpen ? 'hidden' : '';
+
+  async function loadCompanion() {
+    if (importing) return;
+    importing = true;
     companionError = false;
     try {
-      Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
+      Companion = (await import('$lib/components/companion/Companion.svelte')).default;
     } catch (e) {
-      // 網路中斷，或網站更新後舊頁面要的檔案已經不在：拿掉 #play，請訪客重新整理
+      // 網路中斷，或網站更新後舊頁面要的檔案已經不在：離開 #play，請訪客重新整理
       console.error(e);
       companionError = true;
-      if (location.hash === PLAY_HASH) {
-        if (history.state?.companion) {
-          leaving = true;
-          history.back();
-        } else history.replaceState(history.state, '', location.pathname + location.search);
-      }
-      return;
+      leaveCompanion();
+    } finally {
+      importing = false;
     }
-    // 第一次載入元件的途中按了上一頁或換了頁面，就不要打開
-    if (pageDestroyed || location.hash !== PLAY_HASH) return;
-    companionOpen = true;
-    document.documentElement.style.overflow = 'hidden';
   }
-  function closeCompanion() {
-    if (!companionOpen) return;
-    companionOpen = false;
-    document.documentElement.style.overflow = '';
-    if (location.hash !== PLAY_HASH) return;
-    // 我們推進去的 #play 紀錄帶有 companion 標記（上一頁再下一頁回來也還在），用上一頁離開；
-    // 直接開 /#play 的訪客沒有這個標記，用 history.back() 會離開網站，改成只拿掉 #play
-    if (history.state?.companion) {
-      leaving = true;
-      history.back();
-    } else history.replaceState(history.state, '', location.pathname + location.search);
+  function enterCompanion() {
+    // 上一頁還沒完成時（state 仍是 companion）再點，不要重複推紀錄
+    if ($page.state.companion) return;
+    pushState(PLAY_HASH, { companion: true, pushed: true });
   }
-  function onPopState() {
-    leaving = false;
-    if (location.hash === PLAY_HASH) openCompanion(false);
-    else if (companionOpen) {
-      companionOpen = false;
-      document.documentElement.style.overflow = '';
-    }
+  function leaveCompanion() {
+    if (!$page.state.companion) return;
+    // 自己推進去的紀錄用上一頁離開；直接開 /#play 的訪客用上一頁會離開網站，改成只拿掉 #play
+    if ($page.state.pushed) history.back();
+    else replaceState(location.pathname + location.search, {});
   }
 
   onMount(() => {
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('popstate', onPopState);
     onScroll();
-    if (location.hash === PLAY_HASH) openCompanion(false);
+    mounted = true;
+  });
+
+  // 直接開 /#play：等路由器完成這次導覽才設定狀態（在 onMount 設定會被初始導覽蓋掉）
+  afterNavigate(() => {
+    if (location.hash === PLAY_HASH && !$page.state.companion) {
+      replaceState(PLAY_HASH, { companion: true, pushed: false });
+    }
   });
 
   onDestroy(() => {
-    pageDestroyed = true;
     if (typeof window !== 'undefined') {
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('popstate', onPopState);
       document.documentElement.style.overflow = '';
     }
   });
@@ -130,7 +125,7 @@
 <Seo {title} {description} {jsonLd} />
 
 <main id="main">
-  <Start error={companionError} on:enter={() => openCompanion()} />
+  <Start error={companionError} on:enter={enterCompanion} />
   <About />
   <Schedule />
   <Videos />
@@ -141,7 +136,7 @@
 </main>
 
 {#if companionOpen && Companion}
-  <svelte:component this={Companion} on:close={closeCompanion} />
+  <svelte:component this={Companion} on:close={leaveCompanion} />
 {/if}
 
 <style>

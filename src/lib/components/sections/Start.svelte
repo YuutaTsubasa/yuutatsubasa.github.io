@@ -4,6 +4,7 @@
   import { currentLive, nextUpcoming, dayName, formatTime } from '$lib/utils/schedule.js';
   import { now } from '$lib/stores/now.js';
   import Dot from '$lib/components/atoms/Dot.svelte';
+  import IdentityCard from '$lib/components/atoms/IdentityCard.svelte';
   import { gotoSection } from '$lib/stores/active.js';
 
   /** 陪伴模式載入失敗時顯示提示 */
@@ -37,6 +38,11 @@
       {/if}
     </span>
   </button>
+
+  <!-- 原本 Hero 的身分卡，放在角色左側（不蓋住人）；窄螢幕不顯示，往下捲的 PROFILE 有同樣資料 -->
+  <aside class="id-card" aria-label="身分卡">
+    <IdentityCard />
+  </aside>
 
   {#if liveStream}
     <a class="live-pill live" href={liveStream.url} target="_blank" rel="noopener">
@@ -133,6 +139,18 @@
   }
   .blink { animation: blink 1.2s steps(2, start) infinite; color: #60a5fa; }
   @keyframes blink { to { visibility: hidden; } }
+
+  .id-card {
+    position: absolute;
+    left: clamp(16px, 4vw, 72px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300px;
+    z-index: 2;
+  }
+  @media (max-width: 1100px), (max-height: 640px) {
+    .id-card { display: none; }
+  }
 
   .live-pill {
     position: absolute;

@@ -81,6 +81,10 @@ export async function createCompanion(canvas, opts = {}) {
   room.scene.traverse((o) => {
     if (o.isMesh) { o.castShadow = !mobile; o.receiveShadow = !mobile; }
   });
+  for (const name of SEAT.hideNodes ?? []) {
+    const node = room.scene.getObjectByName(name);
+    if (node) node.visible = false;
+  }
   scene.add(room.scene);
   const mixer = new THREE.AnimationMixer(room.scene);
   const clip = room.animations.find((a) => a.name === AMBIENT_CLIP);
