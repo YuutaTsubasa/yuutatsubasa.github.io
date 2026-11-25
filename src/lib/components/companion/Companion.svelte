@@ -264,6 +264,25 @@
     engine?.setRunning(!document.hidden);
   }
 
+  // 對話框：掛到 <body> 底下，開著時背景網站設成 inert（Tab 與螢幕閱讀器都進不去），焦點移進來
+  function modal(node) {
+    document.body.appendChild(node);
+    const made = [];
+    for (const el of document.body.children) {
+      if (el !== node && !el.inert) {
+        el.inert = true;
+        made.push(el);
+      }
+    }
+    node.focus();
+    return {
+      destroy() {
+        for (const el of made) el.inert = false;
+        node.remove();
+      }
+    };
+  }
+
   let clockTimer;
   let destroyed = false; // 載入途中就離開時，不要再建立或使用 3D 場景
   onMount(async () => {
@@ -308,7 +327,7 @@
     } catch (e) {
       if (destroyed) return;
       console.error(e);
-      error = '陪伴模式載入失敗。可能是瀏覽器不支援 WebGL，或網路中斷了。';
+      error = '陪伴模式載入失敗。請重新整理頁面再試一次；如果還是不行，可能是瀏覽器不支援 WebGL。';
       loading = false;
     }
   });
@@ -332,7 +351,8 @@
 
 <svelte:window on:keydown={onKey} />
 
-<div class="companion" class:ui-hidden={uiHidden} role="dialog" aria-modal="true" aria-label="悠太翼 陪伴模式">
+<div class="companion" class:ui-hidden={uiHidden} role="dialog" aria-modal="true" aria-label="悠太翼 陪伴模式"
+  tabindex="-1" use:modal>
   <canvas bind:this={canvas} class="stage" aria-label="悠太翼坐在房間裡，點他會說話"></canvas>
 
   {#if line}
@@ -492,7 +512,10 @@
     <div class="loader" class:solid={!engine}>
       {#if error}
         <p class="err">{error}</p>
-        <button class="chip" on:click={close}>回網站</button>
+        <div class="row">
+          <button class="chip" on:click={() => location.reload()}>重新整理</button>
+          <button class="chip ghost dark" on:click={close}>回網站</button>
+        </div>
       {:else}
         <span class="tech">LOADING {loadLabel}</span>
         <div class="bar-wrap"><div class="bar-fill" style:width={`${Math.round(loadRatio * 100)}%`}></div></div>
@@ -512,6 +535,7 @@
     font-family: var(--font-body);
     overflow: hidden;
     cursor: auto;
+    outline: none;
   }
   .companion :global(*) { cursor: auto; }
   /* 首頁的自訂游標畫在最上層，陪伴模式裡用系統游標 */
@@ -559,6 +583,7 @@
     letter-spacing: 0.06em;
   }
   .chip.ghost { background: transparent; }
+  .chip.ghost.dark { color: var(--blue-deep); border-color: var(--blue-deep); }
   .mono { font-family: var(--font-mono); }
   .tech { font-family: var(--font-tech); letter-spacing: 0.18em; }
 
