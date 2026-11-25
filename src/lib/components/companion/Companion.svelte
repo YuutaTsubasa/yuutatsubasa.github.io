@@ -549,6 +549,7 @@
   /* 首頁的自訂游標畫在最上層，陪伴模式裡用系統游標 */
   :global(html.companion-hover .cursor-dot),
   :global(html.companion-hover .cursor-ring) { display: none; }
+  .companion .stage:active { cursor: grabbing; }
   .companion button, .companion label, .companion input[type='range'] { cursor: pointer; }
   .stage {
     position: absolute;
@@ -556,8 +557,10 @@
     width: 100%;
     height: 100%;
     display: block;
-    /* 手機上手指在畫面上滑動要能捲動整頁 */
+    /* 手機上手指上下滑動要能捲動整頁（左右滑是轉視角） */
     touch-action: pan-y;
+    /* 可以拖曳轉視角 */
+    cursor: grab;
   }
 
   .card {

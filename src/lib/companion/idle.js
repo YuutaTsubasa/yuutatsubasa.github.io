@@ -21,18 +21,53 @@
 import * as THREE from 'three';
 
 const FINGERS = ['Index', 'Middle', 'Ring', 'Little'];
-const SPREAD = { Index: -1, Middle: -0.3, Ring: 0.4, Little: 1 };
+const SPREAD = { Index: 1, Middle: 0.3, Ring: -0.4, Little: -1 };
+// 基準坐姿的手指彎曲（食指→小指），跟 data/companion.js 的 relaxedFingers 一致；手指「伸直」時用來抵銷
+const RELAXED = [0.22, 0.3, 0.38, 0.46];
 
-/** 四指的彎曲（curl：0 伸直、1 握拳）與張開（spread） */
+/**
+ * 四指的彎曲與張開（絕對姿勢，寫在關鍵格的 pose 裡）。
+ * curl：0 伸直、1 握拳；給陣列 [食指, 中指, 無名指, 小指] 可以每根不同。spread：張開。
+ */
 function fingers(side, curl, spread = 0) {
   const s = side === 'left' ? -1 : 1;
   const pose = {};
-  for (const f of FINGERS) {
-    pose[`${side}${f}Proximal`] = [0, s * SPREAD[f] * spread, s * curl];
-    pose[`${side}${f}Intermediate`] = [0, 0, s * curl * 1.2];
-    pose[`${side}${f}Distal`] = [0, 0, s * curl];
-  }
+  FINGERS.forEach((f, i) => {
+    const c = Array.isArray(curl) ? curl[i] : curl;
+    pose[`${side}${f}Proximal`] = [0, s * SPREAD[f] * spread, s * c];
+    pose[`${side}${f}Intermediate`] = [0, 0, s * c * 1.2];
+    pose[`${side}${f}Distal`] = [0, 0, s * c];
+  });
   return pose;
+}
+
+/** 拇指（絕對姿勢）。out：正＝往外張開、負＝往食指靠；bend：指尖往掌心彎 */
+function thumb(side, out, bend = 0) {
+  const s = side === 'left' ? -1 : 1;
+  return {
+    [`${side}ThumbMetacarpal`]: [0, s * out * 0.6, 0],
+    [`${side}ThumbProximal`]: [0, s * out, s * -bend * 0.5],
+    [`${side}ThumbDistal`]: [0, s * -bend, 0]
+  };
+}
+
+/**
+ * fx 用：四指各自在目前的姿勢上再彎一點（正＝往掌心、負＝伸直抬起）。
+ * fn(i) 回傳一個數字，或 [近端, 中段, 遠端, 張開]；i：0 食指 … 3 小指。
+ */
+function curlFx(out, side, fn) {
+  const s = side === 'left' ? -1 : 1;
+  FINGERS.forEach((f, i) => {
+    const c = fn(i);
+    const p = Array.isArray(c) ? c[0] : c;
+    const m = Array.isArray(c) ? c[1] ?? p : p;
+    const d = Array.isArray(c) ? c[2] ?? m * 0.8 : p * 0.8;
+    const y = Array.isArray(c) ? c[3] ?? 0 : 0;
+    out[`${side}${f}Proximal`] = [0, s * SPREAD[f] * y, s * p];
+    out[`${side}${f}Intermediate`] = [0, 0, s * m];
+    out[`${side}${f}Distal`] = [0, 0, s * d];
+  });
+  return out;
 }
 
 const swapSide = (name) =>
@@ -57,8 +92,12 @@ function mirror(clip) {
 const smooth = (t) => t * t * (3 - 2 * t);
 const clamp01 = (t) => Math.min(1, Math.max(0, t));
 const window01 = (t, a, b, fade) => smooth(clamp01((t - a) / fade)) * smooth(clamp01((b - t) / fade));
+// 從 t=a 開始、長度 len 的一個小鼓包（0→1→0）
+const bump = (t, a, len) => window01(t, a, a + len, len / 2);
 
 // ── 動作 ──
+// 原則：手臂要移到別處的動作（揮手、托腮、撥頭髮、伸懶腰）才在 pose 寫手臂的絕對旋轉；
+// 其他只在原地動的（敲手指、手指小動作、調整坐姿）一律用 fx 疊在基準坐姿上，基準坐姿改了也不會怪。
 
 // 看旁邊（窗外）：頭與上半身轉過去，停一下再回來
 const lookAside = {
@@ -81,7 +120,12 @@ const lookDesk = {
     { t: 3.2, add: { head: [0.32, -0.12, -0.03], neck: [0.1, -0.03, 0], spine: [0.03, 0, 0], gaze: [-0.7, -2.4] } },
     { t: 4.6, same: true },
     { t: 5.6 }
-  ]
+  ],
+  fx(t) {
+    // 看的時候右手食指、中指無意識地點兩下
+    const out = {};
+    return curlFx(out, 'right', (i) => (i < 2 ? -0.16 * (bump(t, 1.5 + i * 0.09, 0.3) + bump(t, 1.95 + i * 0.09, 0.3)) : 0));
+  }
 };
 
 // 轉轉脖子：左右各歪一下
@@ -98,7 +142,7 @@ const neckRoll = {
   ]
 };
 
-// 調整坐姿：挺一下背、聳肩、重心左右換一下
+// 調整坐姿：挺一下背、聳肩、重心左右換一下；手跟著撐一下（手指伸直壓住，再放鬆）
 const shiftSeat = {
   duration: 4.6,
   weight: 3,
@@ -106,10 +150,7 @@ const shiftSeat = {
     {
       t: 1.0,
       add: { spine: [-0.1, 0, 0.05], chest: [-0.05, 0, -0.03], head: [0.06, 0, -0.03] },
-      pose: {
-        leftShoulder: [0, 0, 0.16], rightShoulder: [0, 0, -0.16],
-        leftLowerArm: [0, -0.86, 0], rightLowerArm: [0, 0.86, 0]
-      }
+      pose: { leftShoulder: [0, 0, 0.16], rightShoulder: [0, 0, -0.16] }
     },
     {
       t: 2.1,
@@ -118,44 +159,126 @@ const shiftSeat = {
     },
     { t: 3.2, add: { spine: [0.03, 0, 0.01] }, pose: { leftShoulder: [0, 0, -0.04], rightShoulder: [0, 0, 0.04] } },
     { t: 4.2 }
-  ]
-};
-
-// 手指輕敲桌緣：右手手腕微抬，小指到食指輪流敲
-const fingerTap = {
-  duration: 4.4,
-  weight: 3,
-  keys: [
-    { t: 0.6, pose: { rightHand: [0.02, 0, 0.2], ...fingers('right', 0.22, 0.05) }, add: { head: [0.04, -0.05, 0] } },
-    { t: 3.6, same: true },
-    { t: 4.2 }
   ],
   fx(t) {
-    const w = window01(t, 0.6, 3.7, 0.35);
-    const out = {};
-    FINGERS.forEach((f, i) => {
-      // 小指先、食指後，每輪 0.42 秒；抬起慢、敲下快
-      const phase = (t / 0.42 + i * 0.2) % 1;
-      const lift = phase < 0.6 ? smooth(phase / 0.6) : 1 - smooth((phase - 0.6) / 0.4);
-      out[`right${f}Proximal`] = [0, 0, -0.3 * lift * w];
-    });
+    const press = window01(t, 0.2, 2.2, 0.7);
+    const regrip = bump(t, 2.5, 1.2);
+    const out = {
+      leftLowerArm: [0, -0.16 * press, 0],
+      rightLowerArm: [0, 0.16 * press, 0]
+    };
+    // 撐的時候手指伸直、微張；坐回去之後手指依序收回來重新放好
+    const f = (i) => [-RELAXED[i] * 0.7 * press + 0.12 * bump(t, 2.5 + i * 0.1, 0.9), -0.2 * press + 0.1 * regrip, -0.1 * press, 0.08 * press];
+    curlFx(out, 'left', f);
+    curlFx(out, 'right', f);
     return out;
   }
 };
 
-// 伸懶腰：雙手握拳舉到頭兩側往上撐，背往後挺、閉眼
+// 手指輕敲：手留在原地（大腿上），四指微微拱起，小指到食指一根一根抬起、落下；敲兩串、中間停一拍
+const fingerTap = {
+  duration: 4.8,
+  weight: 3,
+  keys: [
+    { t: 0.6, pose: { ...fingers('right', [0.2, 0.24, 0.28, 0.34], 0.07), ...thumb('right', 0.1, 0.1) }, add: { head: [0.05, -0.05, 0], gaze: [-0.4, -1.2] } },
+    { t: 4.0, same: true },
+    { t: 4.6 }
+  ],
+  fx(t) {
+    // 兩串：0.7–2.2 秒、2.6–3.9 秒
+    const group = window01(t, 0.7, 2.25, 0.2) + window01(t, 2.6, 3.95, 0.2);
+    // 手腕稍微抬起來，手指才有空間敲
+    const out = { rightHand: [0, 0, -0.1 * window01(t, 0.3, 4.1, 0.4)] };
+    return curlFx(out, 'right', (i) => {
+      // 每輪 0.46 秒，小指先、食指後（各差 0.08 秒）；抬起慢、敲下快，敲到之後停一下
+      const phase = (((t - 0.7 - (3 - i) * 0.08) / 0.46) % 1 + 1) % 1;
+      const lift = phase < 0.5 ? smooth(phase / 0.5) : phase < 0.64 ? 1 - smooth((phase - 0.5) / 0.14) : 0;
+      const hit = phase >= 0.64 && phase < 0.8 ? Math.sin(((phase - 0.64) / 0.16) * Math.PI) : 0;
+      const k = group * (i === 3 ? 0.8 : 1);
+      // 抬起：指根往上、指節略伸直；敲到：指尖多壓一點
+      return [(-0.4 * lift + 0.05 * hit) * k, (-0.1 * lift + 0.08 * hit) * k, 0.06 * hit * k];
+    });
+  }
+};
+
+// 手指小動作：小指到食指像波浪一樣輕輕收一下、放開，拇指搓一搓食指側邊（平常手不會完全不動）
+const fidget = {
+  duration: 3.6,
+  weight: 2.5,
+  keys: [],
+  fx(t) {
+    const rub = window01(t, 0.5, 3.0, 0.5);
+    const out = {
+      rightHand: [0, 0, 0.04 * bump(t, 0.4, 1.4) + 0.04 * bump(t, 1.7, 1.4)],
+      rightThumbProximal: [0, (-0.12 - 0.1 * Math.sin(t * 7.5)) * rub, 0.06 * rub],
+      rightThumbDistal: [0, -0.12 * (0.5 + 0.5 * Math.sin(t * 7.5 - 0.6)) * rub, 0]
+    };
+    return curlFx(out, 'right', (i) => {
+      const c = bump(t, 0.4 + (3 - i) * 0.13, 0.9) + bump(t, 1.7 + (3 - i) * 0.13, 0.9);
+      return [0.22 * c, 0.3 * c, 0.2 * c];
+    });
+  }
+};
+
+// 活動手指：右手抬到胸前、掌心朝自己，低頭看著手；五指張開伸直，再從小指到食指一根一根收起來，最後放鬆
+const FLEX_CURL = [0.25, 0.32, 0.4, 0.48];
+const flexPose = {
+  rightUpperArm: [-0.235, 0.434, 1.232],
+  rightLowerArm: [-1.5, 1.906, 0, 'YXZ'],
+  rightHand: [0, 0, 0.05],
+  ...fingers('right', FLEX_CURL, 0.03),
+  ...thumb('right', 0.05, 0.1)
+};
+const handFlex = {
+  duration: 5.4,
+  weight: 2,
+  cooldown: 30,
+  keys: [
+    { t: 0.9, pose: flexPose, add: { head: [0.16, -0.1, 0.03], neck: [0.05, 0, 0], gaze: [-0.5, -1.7] } },
+    { t: 4.4, same: true },
+    { t: 5.2 }
+  ],
+  fx(t) {
+    const open = window01(t, 1.0, 2.4, 0.45);
+    const out = {
+      // 張開時手腕轉一下，看看手背
+      rightLowerArm: [0.35 * open, 0, 0],
+      rightHand: [0, 0, -0.12 * open + 0.1 * window01(t, 2.6, 4.3, 0.5)],
+      rightThumbMetacarpal: [0, 0.15 * open, 0],
+      rightThumbProximal: [0, 0.3 * open - 0.3 * window01(t, 3.3, 4.3, 0.35), 0]
+    };
+    return curlFx(out, 'right', (i) => {
+      // 張開：食指先、小指後；收：小指先，每根差 0.2 秒
+      const o = window01(t, 1.0 + i * 0.07, 2.4 + i * 0.04, 0.45);
+      const c = window01(t, 2.5 + (3 - i) * 0.2, 4.3, 0.35);
+      const k = FLEX_CURL[i];
+      return [-k * o + 0.6 * c, -k * 1.2 * o + 0.7 * c, -k * o + 0.5 * c, 0.2 * o];
+    });
+  }
+};
+
+// 伸懶腰：雙手握拳舉到頭兩側往上撐，撐到頂時手指張開，背往後挺、閉眼
 const stretchUp = {
   leftShoulder: [0, 0, 0.15], rightShoulder: [0, 0, -0.15],
   leftUpperArm: [-1.4, -0.2, 0.05, 'ZYX'], rightUpperArm: [-1.4, 0.2, -0.05, 'ZYX'],
   leftLowerArm: [0, -1.55, 0], rightLowerArm: [0, 1.55, 0],
   leftHand: [0, 0, 0.2], rightHand: [0, 0, -0.2],
-  ...fingers('left', 0.9), ...fingers('right', 0.9)
+  ...fingers('left', 0.9), ...fingers('right', 0.9),
+  ...thumb('left', -0.2, 0.4), ...thumb('right', -0.2, 0.4)
 };
 const stretchTop = {
   ...stretchUp,
   leftShoulder: [0, 0, 0.26], rightShoulder: [0, 0, -0.26],
   leftUpperArm: [-1.4, -0.12, 0.42, 'ZYX'], rightUpperArm: [-1.4, 0.12, -0.42, 'ZYX'],
-  leftLowerArm: [0, -1.2, 0], rightLowerArm: [0, 1.2, 0]
+  leftLowerArm: [0, -1.2, 0], rightLowerArm: [0, 1.2, 0],
+  leftHand: [0, 0, 0.3], rightHand: [0, 0, -0.3],
+  ...fingers('left', [0.05, 0.03, 0.06, 0.1], 0.24), ...fingers('right', [0.05, 0.03, 0.06, 0.1], 0.24),
+  ...thumb('left', 0.35), ...thumb('right', 0.35)
+};
+const stretchDown = {
+  ...stretchUp,
+  ...fingers('left', [0.45, 0.55, 0.62, 0.7], 0.04), ...fingers('right', [0.45, 0.55, 0.62, 0.7], 0.04),
+  ...thumb('left', 0, 0.15), ...thumb('right', 0, 0.15)
 };
 const stretch = {
   duration: 7.4,
@@ -176,18 +299,27 @@ const stretch = {
       expr: { blink: 1 },
       ease: 'linear'
     },
-    { t: 5.3, pose: stretchUp, add: { spine: [-0.04, 0, 0], head: [0.04, 0, 0] }, expr: { blink: 0.3 } },
+    { t: 5.3, pose: stretchDown, add: { spine: [-0.04, 0, 0], head: [0.04, 0, 0] }, expr: { blink: 0.3 } },
     { t: 7.0 }
-  ]
+  ],
+  fx(t) {
+    // 撐到頂時手指用力張開、微微顫一下
+    const w = window01(t, 2.6, 4.4, 0.4);
+    const out = {};
+    const f = (i) => [0, 0, 0, 0.05 * Math.sin(t * 5 + i) * w];
+    curlFx(out, 'left', f);
+    curlFx(out, 'right', f);
+    return out;
+  }
 };
 
-// 想事情：右手握拳抵著下巴，視線飄到旁邊
+// 想事情：右手鬆鬆地握著抵住下巴（食指握得最鬆、小指最緊），視線飄到旁邊，食指偶爾點一下
 const thinkPose = {
   rightUpperArm: [-0.727, 0.747, 1.618],
   rightLowerArm: [0, 1.975, 0],
   rightHand: [0, 0, 0.25],
-  ...fingers('right', 1.0),
-  rightThumbProximal: [0, 0.1, 0]
+  ...fingers('right', [0.72, 0.86, 0.95, 1.0], 0.02),
+  ...thumb('right', -0.1, 0.25)
 };
 const think = {
   duration: 8.4,
@@ -201,66 +333,93 @@ const think = {
     { t: 8.0 }
   ],
   fx(t) {
-    // 想的時候頭輕輕點
+    // 想的時候頭輕輕點；食指鬆開點兩下，其他手指跟著鬆一點
     const w = window01(t, 2.6, 5.6, 0.5);
-    return { head: [Math.sin(t * 2.6) * 0.025 * w, 0, 0] };
+    const tap = bump(t, 3.0, 0.5) + bump(t, 3.55, 0.5) + bump(t, 4.9, 0.6);
+    const out = { head: [Math.sin(t * 2.6) * 0.025 * w, 0, 0] };
+    return curlFx(out, 'right', (i) => (i === 0 ? [-0.24 * tap, -0.3 * tap, -0.18 * tap] : -0.05 * tap * (1 - i * 0.25)));
   }
 };
 
-// 撥頭髮：左手舉到耳邊順兩下
+// 撥頭髮：左手舉到太陽穴旁，手指插進頭髮往後梳兩下（食指先、小指後依序收），最後順一下放下
 const hairPose = {
-  leftUpperArm: [-1.276, -0.193, -1.195],
-  leftLowerArm: [0, -2.425, 0],
-  leftHand: [0, 0, 0],
-  ...fingers('left', 0.35, 0.05)
+  leftUpperArm: [-1.249, -0.12, -0.985],
+  leftLowerArm: [-0.8, -2.295, 0, 'YXZ'],
+  leftHand: [0, 0, -0.1],
+  ...fingers('left', [0.3, 0.36, 0.42, 0.5], 0.12),
+  ...thumb('left', 0.2, 0.1)
 };
 const hairTouch = {
-  duration: 5.6,
+  duration: 5.8,
   weight: 2,
   cooldown: 40,
   keys: [
     { t: 1.3, pose: hairPose, add: { head: [0.06, -0.1, 0.1], neck: [0.02, 0, 0.03] } },
-    { t: 3.7, same: true },
-    { t: 5.2 }
+    { t: 3.9, same: true },
+    { t: 5.4 }
   ],
   fx(t) {
-    const w = window01(t, 1.3, 3.7, 0.4);
-    const s = Math.sin((t - 1.3) * 5.2);
-    return {
-      leftLowerArm: [0, s * 0.07 * w, 0],
-      leftHand: [0, 0, -s * 0.18 * w],
-      leftIndexProximal: [0, 0, -0.12 * (s + 1) * w],
-      leftMiddleProximal: [0, 0, -0.12 * (s + 1) * w]
+    const w = window01(t, 1.2, 3.9, 0.35);
+    // 一下 1.15 秒：前 60% 往後梳（手指依序收進去），後 40% 手指鬆開回到前面
+    const comb = (x) => {
+      const p = (((x - 1.4) / 1.15) % 1 + 1) % 1;
+      return p < 0.6 ? smooth(p / 0.6) : 1 - smooth((p - 0.6) / 0.4);
     };
+    const s = comb(t) * w;
+    const out = {
+      leftUpperArm: [0.1 * s, 0, 0],
+      leftLowerArm: [0, -0.1 * s, 0],
+      leftHand: [0, 0, -0.22 * s],
+      leftThumbProximal: [0, 0.1 * s, 0]
+    };
+    return curlFx(out, 'left', (i) => {
+      const c = comb(t - i * 0.07) * w;
+      return [0.28 * c, 0.34 * c, 0.2 * c, -0.06 * c];
+    });
   }
 };
 
-// 打招呼（點角色時）：手肘靠著身體、前臂朝上、掌心向前，小幅左右揮
-const wavePose = {
-  // 手肘往外打開一點，手掌才不會擋到臉
-  rightUpperArm: [-0.7, 0.25, 0.6],
-  rightLowerArm: [-1.25, 2.0, 0, 'YXZ'],
-  rightHand: [0, 0, 0.1],
-  ...fingers('right', 0.06, 0.12),
-  rightThumbProximal: [0, 0.15, 0],
-  rightThumbDistal: [0, 0, 0]
+// 打招呼（點角色時）：手肘在身側、前臂直立、掌心朝鏡頭，五指張開；
+// 擺動幾乎都在手腕（手掌左右輕擺），前臂只跟著動一點點，手指慢半拍跟著甩
+const waveArm = {
+  rightUpperArm: [-0.751, -0.604, 0.997],
+  rightLowerArm: [0, 2.404, 0],
+  rightHand: [0, 0, -0.08]
+};
+const waveOpen = {
+  ...waveArm,
+  ...fingers('right', [0.04, 0.02, 0.05, 0.1], 0.2),
+  ...thumb('right', 0.3)
 };
 const wave = {
-  duration: 2.8,
+  duration: 3.3,
   weight: 0, // 不會被隨機抽到，只由 play('wave') 觸發
   keys: [
-    { t: 0.5, pose: wavePose, add: { head: [0, 0, -0.07], spine: [-0.02, 0, 0] }, ease: 'out' },
-    { t: 2.1, same: true },
-    { t: 2.8 }
+    // 手抬起來的路上手指還半彎著，到位之後才張開
+    { t: 0.42, pose: { ...waveArm, ...fingers('right', [0.24, 0.3, 0.36, 0.42], 0.04), ...thumb('right', 0.05, 0.1) }, add: { head: [0, 0.03, -0.05], spine: [-0.02, 0, 0] }, ease: 'out' },
+    { t: 0.66, pose: waveOpen, add: { head: [-0.02, 0.04, -0.1], neck: [0, 0, -0.03], spine: [-0.02, 0, 0] } },
+    { t: 2.35, same: true },
+    // 放下之前手指先鬆開
+    { t: 2.6, pose: { ...waveArm, ...fingers('right', [0.16, 0.22, 0.28, 0.34], 0.08), ...thumb('right', 0.1, 0.05) }, add: { head: [0, 0.02, -0.05] } },
+    { t: 3.3 }
   ],
   fx(t) {
-    const w = window01(t, 0.3, 2.25, 0.3);
-    const s = Math.sin((t - 0.3) * 9.5);
-    // 上臂繞自己的軸轉＝前臂像雨刷左右擺；手腕慢半拍跟著甩
-    return {
-      rightUpperArm: [s * 0.2 * w, 0, 0],
-      rightHand: [0, 0, Math.sin((t - 0.3) * 9.5 - 0.9) * 0.16 * w]
+    const w = window01(t, 0.5, 2.5, 0.3);
+    const ph = (t - 0.5) * 11.5;
+    const s = Math.sin(ph);
+    const out = {
+      rightUpperArm: [s * 0.035 * w, 0, 0],
+      // 手腕：繞手背的法線轉＝手掌在自己的平面上左右擺
+      rightHand: [0, s * 0.34 * w, 0],
+      rightThumbProximal: [0, Math.sin(ph - 0.8) * 0.06 * w, 0],
+      head: [0, 0, Math.sin(ph * 0.5) * 0.012 * w]
     };
+    return curlFx(out, 'right', (i) => {
+      // 手指比手掌慢一點，越外側的手指越慢；甩過去時指尖多彎一點
+      const lag = Math.sin(ph - 0.9 - i * 0.22);
+      const c = 0.05 + 0.05 * lag;
+      return [c * w, c * 1.4 * w, c * w, 0.05 * Math.sin(ph - 0.6) * w];
+    });
   }
 };
 
@@ -272,6 +431,10 @@ export const CLIPS = {
   shiftSeat,
   fingerTapRight: fingerTap,
   fingerTapLeft: mirror(fingerTap),
+  fidgetRight: fidget,
+  fidgetLeft: mirror(fidget),
+  handFlexRight: handFlex,
+  handFlexLeft: mirror(handFlex),
   stretch,
   think,
   hairTouch,

@@ -4,8 +4,8 @@
 // 新造型的輕量版做好後加在這裡即可。
 // scale：坐在椅子上的縮放（預設 SEAT.scale）；H05 是成人體型，軀幹比 H04 長約 1.3 倍，縮小一點才不會比椅子還大
 export const COMPANION_MODELS = [
-  { id: 'H04-B01', label: 'H04-B01', url: '/companion/models/H04-B01.vrm' },
-  { id: 'H05-B01', label: 'H05-B01', url: '/companion/models/H05-B01.vrm', scale: 2.1 }
+  { id: 'H04-B01', label: '正太盔甲版', url: '/companion/models/H04-B01.vrm' },
+  { id: 'H05-B01', label: '青年盔甲版', url: '/companion/models/H05-B01.vrm', scale: 2.1 }
 ];
 
 // 預設播放清單。玩家也可以自己加本機的音樂檔（只在這次瀏覽有效，不會上傳）。
@@ -58,18 +58,19 @@ export const SEAT = {
   scale: 2.5,
   pose: {
     hips: [0, 0, 0],
-    // 上半身稍微前傾，手才搆得到桌緣
-    spine: [0.18, 0, 0],
-    chest: [0.1, 0, 0],
+    // 背挺直（前傾會讓頭往下，看鏡頭時變成翻白眼往上看）
+    spine: [0.04, 0, 0],
+    chest: [0.02, 0, 0],
     leftUpperLeg: [-1.45, 0.1, 0],
     rightUpperLeg: [-1.45, -0.1, 0],
     leftLowerLeg: [1.5, 0, 0],
     rightLowerLeg: [1.5, 0, 0],
-    // 雙手往前放在桌緣（在瀏覽器裡用數值搜尋對到桌子位置）
-    leftUpperArm: [-0.707, -0.799, -1.345],
-    rightUpperArm: [-0.627, 0.969, 1.212],
-    leftLowerArm: [0, -0.7, 0],
-    rightLowerArm: [0, 0.7, 0],
+    // 雙手放在大腿上（使用者 2026-11-25：閒置時雙手抬著往前很怪；在瀏覽器裡用數值搜尋對到大腿位置）
+    // 左右手各放在自己的大腿上（不要垂進兩腿中間，會被膝甲擋住、看不到手指動作）
+    leftUpperArm: [0.101, -1.351, -0.998],
+    rightUpperArm: [0.064, 1.335, 1.04],
+    leftLowerArm: [0, -0.618, 0],
+    rightLowerArm: [0, 0.619, 0],
     // 手腕稍微往下垂、往內收
     leftHand: [0.15, 0, -0.2],
     rightHand: [0.15, 0, 0.2],
@@ -81,6 +82,8 @@ export const SEAT = {
     target: [1.1, 2.4, 1.2],
     fov: 30,
     // 直式螢幕時沿視線往後拉的距離
-    portraitPull: 2.5
+    portraitPull: 2.5,
+    // 拖曳畫面可以轉動視角的上限（弧度）：左右約 ±12°、上下約 ±6°（使用者 2026-11-25 要的）
+    look: { yaw: 0.22, pitch: 0.1 }
   }
 };
