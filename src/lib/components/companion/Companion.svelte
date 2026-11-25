@@ -347,6 +347,12 @@
       document.documentElement.classList.remove('companion-open');
     }
     engine?.dispose();
+    // 從畫面移除的 <audio> 仍可能繼續播放：離開時一定要停掉
+    if (audio) {
+      audio.pause();
+      audio.removeAttribute('src');
+      audio.load();
+    }
     for (const t of playlist) if (t.local) URL.revokeObjectURL(t.url);
     audioCtx?.close().catch(() => {});
   });
