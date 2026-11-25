@@ -177,6 +177,8 @@ export async function createCompanion(canvas, opts = {}) {
   // ── 互動 ──
   const raycaster = new THREE.Raycaster();
   function onPointerMove(e) {
+    // 按住時記下最大位移：拖出去再拖回原處放開不算點擊
+    if (press) press.moved = Math.max(press.moved, Math.hypot(e.clientX - press.x, e.clientY - press.y));
     const r = canvas.getBoundingClientRect();
     pointer.set(((e.clientX - r.left) / r.width) * 2 - 1, -(((e.clientY - r.top) / r.height) * 2 - 1));
   }
@@ -184,13 +186,14 @@ export async function createCompanion(canvas, opts = {}) {
   let press = null;
   function onPointerDown(e) {
     onPointerMove(e);
-    press = { x: e.clientX, y: e.clientY, t: performance.now() };
+    press = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0 };
   }
   function onPointerUp(e) {
     const p = press;
     press = null;
     if (!p || !vrm) return;
-    if (Math.hypot(e.clientX - p.x, e.clientY - p.y) > 10 || performance.now() - p.t > 600) return;
+    const moved = Math.max(p.moved, Math.hypot(e.clientX - p.x, e.clientY - p.y));
+    if (moved > 10 || performance.now() - p.t > 600) return;
     onPointerMove(e);
     raycaster.setFromCamera(pointer, camera);
     if (raycaster.intersectObject(vrm.scene, true).length) {
