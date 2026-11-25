@@ -21,13 +21,16 @@
   let viaHash = false; // 這次是從 #play 開的：網址離開 #play 時才跟著結束
 
   async function start(fromHash = false) {
+    if (fromHash) viaHash = true; // 下載途中又按了 Start 也保留這個標記
     if (playing) return;
     error = false;
     try {
       Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
       // 從 #play 開的：下載途中已經用上一頁離開，就不要開
-      if (fromHash && location.hash !== '#play') return;
-      viaHash = fromHash;
+      if (viaHash && location.hash !== '#play') {
+        viaHash = false;
+        return;
+      }
       playing = true;
       // 鍵盤使用者：焦點移到剛出現的陪伴畫面
       await tick();

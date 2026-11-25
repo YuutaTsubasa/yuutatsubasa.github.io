@@ -186,6 +186,7 @@ export async function createCompanion(canvas, opts = {}) {
   let press = null;
   function onPointerDown(e) {
     onPointerMove(e);
+    if (e.button !== 0) return; // 右鍵（選單）、中鍵不算點角色
     press = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0 };
     // 滑鼠拖出畫面外也要記得位移（觸控不擷取，才不會妨礙捲動）
     if (e.pointerType === 'mouse') canvas.setPointerCapture?.(e.pointerId);
