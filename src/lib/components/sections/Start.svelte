@@ -131,9 +131,6 @@
         {/if}
       </span>
       <span class="shade" aria-hidden="true"></span>
-      <span class="center">
-        <img class="logo" src="/images/logo-knight-white.png" alt="悠太翼 Yuuta Tsubasa" width="2028" height="777" />
-      </span>
       <span class="press">
         <span class="prompt tech">
           <span class="blink">▶</span> CLICK TO START
@@ -213,12 +210,8 @@
       radial-gradient(ellipse at 50% 55%, rgba(8, 20, 50, 0) 30%, rgba(8, 20, 50, 0.35) 100%),
       linear-gradient(180deg, rgba(244, 246, 251, 0.35) 0%, rgba(244, 246, 251, 0) 35%);
   }
-  /* 角色在畫面正中間：Logo 放左上的空白處，「點一下開始」像遊戲標題畫面一樣放在下方中央 */
-  .center {
-    position: absolute;
-    left: 84px;
-    top: clamp(16px, 7vh, 72px);
-  }
+  /* 角色在畫面正中間，「點一下開始」像遊戲標題畫面一樣放在下方中央。
+     不放大 Logo（使用者 2026-11-26：壓在桌布上有點突兀），左邊只留身分卡 */
   .press {
     position: absolute;
     left: 50%;
@@ -227,13 +220,6 @@
     display: grid;
     justify-items: center;
     gap: 10px;
-  }
-  /* 頻道 logo（騎士盾牌那款；藍色的 logo.webp 已經不用）的白色版，加深藍描邊，壓在場景上才看得清楚 */
-  .logo {
-    width: min(30vw, 420px);
-    height: auto;
-    filter: drop-shadow(3px 0 0 #0f2d78) drop-shadow(-3px 0 0 #0f2d78) drop-shadow(0 3px 0 #0f2d78) drop-shadow(0 -3px 0 #0f2d78)
-      drop-shadow(0 10px 24px rgba(15, 45, 120, 0.45));
   }
   .prompt {
     display: grid;
@@ -270,21 +256,7 @@
   @media (max-width: 1100px), (max-height: 800px) {
     .id-card { display: none; }
   }
-  /* 沒有左側欄（≤900px）時往左靠 */
-  @media (max-width: 900px) {
-    .center { left: 20px; }
-    .logo { width: min(42vw, 360px); }
-  }
-  /* 直式手機：Logo 置中在上方，角色在中間 */
   @media (max-aspect-ratio: 1/1) {
-    .center {
-      left: 0;
-      right: 0;
-      top: 16px;
-      display: flex;
-      justify-content: center;
-    }
-    .logo { width: min(52vw, 260px); }
     .prompt { letter-spacing: 0.18em; }
   }
 
@@ -332,9 +304,5 @@
   @media (prefers-reduced-motion: reduce) {
     .blink, .scroll { animation: none; }
     .bg img { transition: none; }
-  }
-  /* 直式：頂部是 Logo，直播提示移到「點一下開始」上方（放最後，才蓋得過上面的 top） */
-  @media (max-aspect-ratio: 1/1) {
-    .live-pill { top: auto; bottom: 180px; }
   }
 </style>
