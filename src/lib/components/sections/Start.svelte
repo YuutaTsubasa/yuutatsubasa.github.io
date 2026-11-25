@@ -27,7 +27,7 @@
     </picture>
     <span class="shade" aria-hidden="true"></span>
     <span class="center">
-      <img class="logo" src="/images/logo-knight.png" alt="悠太翼 Yuuta Tsubasa" width="2028" height="777" />
+      <img class="logo" src="/images/logo-knight-white.png" alt="悠太翼 Yuuta Tsubasa" width="2028" height="777" />
       <span class="prompt tech">
         <span class="blink">▶</span> CLICK TO START
         <span class="zh">點一下，進入陪伴模式</span>
@@ -104,12 +104,12 @@
     gap: clamp(14px, 3vh, 28px);
     padding: 0 16px;
   }
-  /* 頻道 logo 是黑色騎士盾牌那款（藍色的 logo.webp 已經不用）；跟直播封面一樣加白色描邊，壓在場景上才看得清楚 */
+  /* 頻道 logo（騎士盾牌那款；藍色的 logo.webp 已經不用）的白色版，加深藍描邊，壓在場景上才看得清楚 */
   .logo {
     width: min(78vw, 760px);
     height: auto;
-    filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
-      drop-shadow(0 10px 24px rgba(15, 45, 120, 0.35));
+    filter: drop-shadow(3px 0 0 #0f2d78) drop-shadow(-3px 0 0 #0f2d78) drop-shadow(0 3px 0 #0f2d78) drop-shadow(0 -3px 0 #0f2d78)
+      drop-shadow(0 10px 24px rgba(15, 45, 120, 0.45));
   }
   .prompt {
     display: grid;
