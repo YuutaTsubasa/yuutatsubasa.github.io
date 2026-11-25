@@ -266,6 +266,7 @@
 
   // 對話框：掛到 <body> 底下，開著時背景網站設成 inert（Tab 與螢幕閱讀器都進不去），焦點移進來
   function modal(node) {
+    const returnFocus = document.activeElement;
     document.body.appendChild(node);
     const made = [];
     for (const el of document.body.children) {
@@ -279,6 +280,8 @@
       destroy() {
         for (const el of made) el.inert = false;
         node.remove();
+        // 焦點還給打開陪伴模式的按鈕（鍵盤使用者不用重新找位置）
+        if (returnFocus instanceof HTMLElement && returnFocus.isConnected) returnFocus.focus({ preventScroll: true });
       }
     };
   }
@@ -362,7 +365,7 @@
   {/if}
 
   <!-- 番茄鐘 -->
-  <section class="card pomo" aria-label="番茄鐘">
+  <section class="card pomo" inert={uiHidden || undefined} aria-label="番茄鐘">
     <div class="ring">
       <svg viewBox="0 0 120 120" aria-hidden="true">
         <circle cx="60" cy="60" r="52" class="track" />
@@ -398,13 +401,13 @@
   </section>
 
   <!-- 日期時鐘 -->
-  <section class="card clock" aria-label="時鐘">
+  <section class="card clock" inert={uiHidden || undefined} aria-label="時鐘">
     <div class="mono date">{dateLabel}</div>
     <div class="mono time">{timeLabel}</div>
   </section>
 
   <!-- 音樂 -->
-  <section class="card music" aria-label="音樂播放器">
+  <section class="card music" inert={uiHidden || undefined} aria-label="音樂播放器">
     <div class="now">
       <div class="disc" class:spin={playing} aria-hidden="true"></div>
       <div class="meta">
@@ -446,7 +449,7 @@
 
   <!-- 面板 -->
   {#if panel === 'todo'}
-    <section class="card sheet" aria-label="待辦清單">
+    <section class="card sheet" inert={uiHidden || undefined} aria-label="待辦清單">
       <header><span class="tech">TO-DO</span><span class="mono">{todoLeft} LEFT</span></header>
       <form class="todo-add" on:submit|preventDefault={todoAdd}>
         <input bind:value={todoInput} maxlength="120" placeholder="今天要做什麼？" aria-label="新增待辦" />
@@ -468,7 +471,7 @@
       <p class="note">待辦只存在這台裝置的瀏覽器裡。</p>
     </section>
   {:else if panel === 'model'}
-    <section class="card sheet" aria-label="換造型">
+    <section class="card sheet" inert={uiHidden || undefined} aria-label="換造型">
       <header><span class="tech">AVATAR</span><span class="mono">{COMPANION_MODELS.length} RIGS</span></header>
       <ul class="models">
         {#each COMPANION_MODELS as m}
