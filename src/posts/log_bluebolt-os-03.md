@@ -210,7 +210,7 @@ kprintln!("We came back from the breakpoint!");
 
 ### double fault
 
-如果中斷發生了，IDT 裡卻沒有對應的函式，CPU 會觸發 **double fault**（8 號）。如果 double fault 也沒有處理函式，就會 **triple fault**：CPU 直接重開機。寫作業系統時「QEMU 一直重開機」，多半就是 triple fault。
+如果中斷發生了，IDT 裡卻沒有對應的函式，CPU 會先觸發另一個例外，報告「這一格是空的」。那個例外通常也還沒登記，等於處理例外時又出錯，這時 CPU 就觸發 **double fault**（8 號）。所以不管哪一格漏了，最後多半都會走到 double fault。如果 double fault 也沒有處理函式，就會 **triple fault**：CPU 直接重開機。寫作業系統時「QEMU 一直重開機」，多半就是 triple fault。
 
 > 我們的 double fault 處理函式還用不到獨立的堆疊。有一種情況（堆疊本身爆掉）需要另外準備一塊堆疊才救得回來，叫 IST，有興趣可以查 TSS 和 IST。
 
@@ -408,6 +408,10 @@ pub fn init_controller() {
         let wait_write = |status: &mut Port<u8>| while status.read() & 0x02 != 0 {};
         let wait_read = |status: &mut Port<u8>| while status.read() & 0x01 == 0 {};
 
+        while status.read() & 0x01 != 0 {
+            data.read(); // 先清掉 UEFI 留下的資料，免得等一下被當成設定
+        }
+
         wait_write(&mut status);
         status.write(0x20); // 讀設定
         wait_read(&mut status);
@@ -439,7 +443,7 @@ pub fn init_controller() {
   - 狀態的 bit 0 = 1：`0x60` 有資料可以讀了（`wait_read` 等它變 1）。bit 1 = 1：控制器還在忙，先不要寫（`wait_write` 等它變 0）。跟硬體說話都是這樣：**先看它準備好了沒，再讀寫**。
   - 指令 `0x20` 是「把設定 byte 給我」，回覆從 `0x60` 讀；指令 `0x60` 是「我要寫新的設定 byte」，接著把設定寫到 `0x60`。（指令 `0x60` 和 port `0x60` 剛好同一個數字，是巧合。）
   - 設定 byte 改三個 bit：bit 0 = 1 開鍵盤中斷（IRQ1）、bit 6 = 1 把鍵盤送的 scancode 翻成舊式的 set 1（`pc-keyboard` 用 `ScancodeSet1` 解）、bit 4 = 0 讓鍵盤可以送資料。（PS/2 是一次送一個 bit 的序列傳輸，旁邊有一條「時脈線」當節拍器，鍵盤跟著節拍一個 bit 一個 bit 送。控制器把時脈線壓住，鍵盤就送不出來，等於把鍵盤關掉；bit 4 = 1 就是「壓住」，所以要清成 0。）
-  - 最後把 `0x60` 裡之前留下的資料讀掉，不然第一個中斷可能讀到舊的東西。
+  - 開頭和最後都把 `0x60` 裡留下的資料讀掉：開頭不清的話，UEFI 留下的按鍵會被 `wait_read` 當成設定 byte 讀進來，再寫回控制器就把設定改壞了；最後不清，第一個中斷可能讀到舊的東西。
   - `let mut status: Port<u8>`：`Port` 的 `read`、`write` 都要 `&mut self`，所以要 `mut`。`<u8>` 是一次讀寫 1 個 byte。
 
 ### 接上中斷
@@ -622,7 +626,7 @@ Windows PowerShell 5.1 預設不讓 `.ps1` 腳本執行。三種解法，從影�
 
 ## 九、延伸
 
-- **除以 0**：在 IDT 加 `divide_error` 的處理函式，再故意除以 0 試試。（Rust 會在編譯時抓到「除以常數 0」，要用變數才騙得過它。）
+- **除以 0**：在 IDT 加 `divide_error` 的處理函式，再讓 CPU 真的除以 0 一次。注意 Rust 的 `/` 會在除之前自己檢查，除數是 0 就直接 panic，根本不會讓 CPU 去除（除以常數 0 甚至編譯時就擋下來），所以這樣只會看到 panic handler。要用 `asm!` 直接寫 `div` 指令，才測得到 `divide_error`。
 - **計時器頻率**：改成 1000 Hz，`uptime` 的算法要跟著改。
 - **鍵盤配置**：`layouts` 裡還有日文 `Jis109Key` 等配置。
 
