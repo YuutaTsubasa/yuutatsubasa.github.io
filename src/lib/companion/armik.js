@@ -70,10 +70,13 @@ export function createArmIK(vrm, cfg) {
     h.update();
     vrm.scene.updateMatrixWorld(true);
     const meshes = [];
+    const bounds = [];
     vrm.scene.traverse((o) => {
       if (!o.isMesh || !o.visible) return;
       if (o.isSkinnedMesh) {
-        // 射線要用目前姿勢的蒙皮位置：骨架矩陣平常在 render 時才更新
+        // 射線要用目前姿勢的蒙皮位置：骨架矩陣平常在 render 時才更新。
+        // 包圍盒是為了這次量測算的（T 字手臂），量完要還原，不然之後點角色的射線會用到過時的包圍盒
+        bounds.push([o, o.boundingSphere, o.boundingBox]);
         o.skeleton.update();
         o.computeBoundingSphere();
         o.computeBoundingBox();
@@ -117,6 +120,7 @@ export function createArmIK(vrm, cfg) {
       };
     }
     for (const [n, q] of saved) n.quaternion.copy(q);
+    for (const [o, sphere, box] of bounds) { o.boundingSphere = sphere; o.boundingBox = box; }
     vrm.scene.updateMatrixWorld(true);
     // 用 IK 算一次「手放在大腿上」的姿勢，當這個模型手臂的坐姿基準：
     // 待機動作都從這個姿勢出發、回到這個姿勢，抬手、放手時才不會先繞去別的位置
