@@ -76,7 +76,7 @@ export function createArmIK(vrm, cfg) {
       if (o.isSkinnedMesh) {
         // 射線要用目前姿勢的蒙皮位置：骨架矩陣平常在 render 時才更新。
         // 包圍盒是為了這次量測算的（T 字手臂），量完要還原，不然之後點角色的射線會用到過時的包圍盒
-        bounds.push([o, o.boundingSphere, o.boundingBox]);
+        bounds.push([o, o.boundingSphere?.clone() ?? null, o.boundingBox?.clone() ?? null]);
         o.skeleton.update();
         o.computeBoundingSphere();
         o.computeBoundingBox();
