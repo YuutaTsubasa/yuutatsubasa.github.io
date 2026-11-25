@@ -20,12 +20,29 @@ export const COMPANION_LINES = [
   '寫程式卡住的話，先休息一下再回來看，常常就想通了。',
   '番茄鐘開起來，我陪你專心 25 分鐘！',
   '欸，你也喜歡索尼克嗎？',
-  '這首歌是我做的喔，喜歡的話可以一直放著。',
   '待辦清單寫好了嗎？一件一件來就好。',
   '休息時間到了就要真的休息喔。',
   '今天有哪件事做得不錯？說來聽聽。',
   '有空的話，來直播找我玩吧！'
 ];
+
+// 手指自然微彎（不然手掌是直直張開的，看起來很呆）。
+// VRM 正規化骨架靜止時手掌朝下：左手繞 Z 軸負方向、右手正方向就是往掌心彎；越往小指彎越多。
+function relaxedFingers() {
+  const pose = {};
+  const fingers = [['Index', 0.22], ['Middle', 0.3], ['Ring', 0.38], ['Little', 0.46]];
+  for (const [side, sign] of [['left', -1], ['right', 1]]) {
+    for (const [name, base] of fingers) {
+      pose[`${side}${name}Proximal`] = [0, 0, sign * base];
+      pose[`${side}${name}Intermediate`] = [0, 0, sign * (base + 0.25)];
+      pose[`${side}${name}Distal`] = [0, 0, sign * (base + 0.1)];
+    }
+    // 拇指往掌心收一點
+    pose[`${side}ThumbProximal`] = [0, sign * -0.25, sign * 0.1];
+    pose[`${side}ThumbDistal`] = [0, sign * -0.2, 0];
+  }
+  return pose;
+}
 
 // 角色在 Talkroom 椅子上的位置、坐姿與鏡頭。
 // 座標是 Talkroom GLB 的場景座標；pose 是 VRM 正規化骨架的旋轉（弧度，XYZ）。
@@ -52,12 +69,16 @@ export const SEAT = {
     leftUpperArm: [-0.707, -0.799, -1.345],
     rightUpperArm: [-0.627, 0.969, 1.212],
     leftLowerArm: [0, -0.7, 0],
-    rightLowerArm: [0, 0.7, 0]
+    rightLowerArm: [0, 0.7, 0],
+    // 手腕稍微往下垂、往內收
+    leftHand: [0.15, 0, -0.2],
+    rightHand: [0.15, 0, 0.2],
+    ...relaxedFingers()
   },
   camera: {
-    // 從書桌前方、稍微偏右看過去，鍵盤在前景
-    position: [2.2, 3.2, 7.2],
-    target: [1.1, 2.35, 1.3],
+    // 正對角色、置中（使用者 2026-11-25：像桌布一樣，角色待在中間、不要斜），書桌在前景
+    position: [1.1, 3.15, 7.4],
+    target: [1.1, 2.4, 1.2],
     fov: 30,
     // 直式螢幕時沿視線往後拉的距離
     portraitPull: 2.5

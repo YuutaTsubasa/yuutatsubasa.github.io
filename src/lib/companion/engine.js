@@ -7,6 +7,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { SEAT } from '$lib/data/companion.js';
+import { createIdle, eulerToQuat, POSE_BONES } from './idle.js';
 
 const SCENE_URL = '/companion/talkroom.glb';
 const AMBIENT_CLIP = 'Talkroom_Ambient_48s';
@@ -16,10 +17,10 @@ const REACTIONS = ['happy', 'surprised', 'relaxed', 'happy'];
 
 /**
  * @param {HTMLCanvasElement} canvas
- * @param {{ onProgress?: (ratio: number, label: string) => void, onCharacterClick?: () => void, mobile?: boolean }} opts
+ * @param {{ onProgress?: (ratio: number, label: string) => void, onCharacterClick?: () => void, mobile?: boolean, idleMotions?: boolean }} opts
  */
 export async function createCompanion(canvas, opts = {}) {
-  const { onProgress = () => {}, onCharacterClick = () => {}, mobile = false } = opts;
+  const { onProgress = () => {}, onCharacterClick = () => {}, mobile = false, idleMotions = true } = opts;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: !mobile, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.25 : 1.5));
@@ -102,6 +103,9 @@ export async function createCompanion(canvas, opts = {}) {
   let blinkTimer = 2;
   let blinkPhase = -1;
   let reaction = null; // { name, t }
+  const idle = createIdle();
+  idle.setEnabled(idleMotions);
+  const _base = new THREE.Quaternion();
   let reactionIndex = 0;
 
   function frameCamera() {
@@ -161,6 +165,7 @@ export async function createCompanion(canvas, opts = {}) {
     }
     vrm = next;
     reaction = null;
+    idle.reset();
     blinkPhase = -1;
     modelScale = scale;
     seat(vrm);
@@ -172,28 +177,49 @@ export async function createCompanion(canvas, opts = {}) {
   // ── 互動 ──
   const raycaster = new THREE.Raycaster();
   function onPointerMove(e) {
+    // 按住時記下最大位移：拖出去再拖回原處放開不算點擊
+    if (press) press.moved = Math.max(press.moved, Math.hypot(e.clientX - press.x, e.clientY - press.y));
     const r = canvas.getBoundingClientRect();
     pointer.set(((e.clientX - r.left) / r.width) * 2 - 1, -(((e.clientY - r.top) / r.height) * 2 - 1));
   }
+  // 點角色：按下又放開、幾乎沒移動才算（手機上從角色身上開始滑動捲頁時不會觸發）
+  let press = null;
   function onPointerDown(e) {
     onPointerMove(e);
-    if (!vrm) return;
+    if (e.button !== 0) return; // 右鍵（選單）、中鍵不算點角色
+    press = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0 };
+    // 滑鼠拖出畫面外也要記得位移（觸控不擷取，才不會妨礙捲動）
+    if (e.pointerType === 'mouse') canvas.setPointerCapture?.(e.pointerId);
+  }
+  function onPointerUp(e) {
+    const p = press;
+    press = null;
+    if (!p || !vrm) return;
+    const moved = Math.max(p.moved, Math.hypot(e.clientX - p.x, e.clientY - p.y));
+    if (moved > 10 || performance.now() - p.t > 600) return;
+    onPointerMove(e);
     raycaster.setFromCamera(pointer, camera);
     if (raycaster.intersectObject(vrm.scene, true).length) {
       react();
       onCharacterClick();
     }
   }
+  const onPointerCancel = () => (press = null);
   function react() {
-    if (!vrm?.expressionManager) return;
+    if (!vrm) return;
+    idle.play('wave'); // 點角色：打招呼（正在播的待機動作會平順接過去）；不管模型有沒有對應的表情都會揮
+    const em = vrm.expressionManager;
     const name = REACTIONS[reactionIndex++ % REACTIONS.length];
-    if (!vrm.expressionManager.getExpression(name)) return;
+    if (!em?.getExpression(name)) return;
     // 上一個表情還沒播完就換下一個：先歸零，不然會殘留在臉上
-    if (reaction) vrm.expressionManager.setValue(reaction.name, 0);
+    if (reaction) em.setValue(reaction.name, 0);
     reaction = { name, t: 0 };
   }
+
   canvas.addEventListener('pointermove', onPointerMove);
   canvas.addEventListener('pointerdown', onPointerDown);
+  canvas.addEventListener('pointerup', onPointerUp);
+  canvas.addEventListener('pointercancel', onPointerCancel);
 
   function resize() {
     const w = canvas.clientWidth;
@@ -228,22 +254,55 @@ export async function createCompanion(canvas, opts = {}) {
     mixer.update(dt);
 
     if (vrm) {
-      // 視線跟著滑鼠（看向鏡頭附近，幅度不大）
+      // 待機動作（Fable 設計，src/lib/companion/idle.js）：每格先更新，下面各骨頭再疊上去
+      idle.update(dt);
+      const add = idle.add;
+
+      // 視線跟著滑鼠（看向鏡頭附近，幅度不大）；待機動作可以把視線帶到別處（gaze）
       pointerSmoothed.lerp(pointer, 1 - Math.exp(-dt * 4));
       const t = new THREE.Vector3().fromArray(SEAT.camera.position);
-      lookTarget.position.set(t.x + pointerSmoothed.x * 1.6, t.y + pointerSmoothed.y * 1.0, t.z);
+      lookTarget.position.set(
+        t.x + pointerSmoothed.x * 1.6 + add.gaze[0],
+        t.y + pointerSmoothed.y * 1.0 + add.gaze[1],
+        t.z
+      );
 
-      // 呼吸與輕微晃動
+      // 呼吸與輕微晃動，加上待機動作對軀幹、頭的疊加
       const breath = Math.sin(elapsed * 1.6);
-      const spine = vrm.humanoid.getNormalizedBoneNode('spine');
-      const chest = vrm.humanoid.getNormalizedBoneNode('chest');
-      const head = vrm.humanoid.getNormalizedBoneNode('head');
-      if (spine) spine.rotation.x = SEAT.pose.spine[0] + breath * 0.012;
-      if (chest) chest.rotation.x = (SEAT.pose.chest?.[0] ?? 0) + breath * 0.01;
-      if (head) {
-        head.rotation.y = pointerSmoothed.x * 0.18 + Math.sin(elapsed * 0.35) * 0.03;
-        head.rotation.x = -pointerSmoothed.y * 0.08;
-        head.rotation.z = Math.sin(elapsed * 0.27) * 0.02 + (reaction ? Math.sin(Math.min(reaction.t, 1) * Math.PI) * 0.08 : 0);
+      const bone = (name) => vrm.humanoid.getNormalizedBoneNode(name);
+      const base = (name) => SEAT.pose[name] ?? [0, 0, 0];
+      const torso = {
+        spine: [base('spine')[0] + breath * 0.012, base('spine')[1], base('spine')[2]],
+        chest: [base('chest')[0] + breath * 0.01, base('chest')[1], base('chest')[2]],
+        upperChest: base('upperChest'),
+        neck: base('neck'),
+        head: [
+          -pointerSmoothed.y * 0.08,
+          pointerSmoothed.x * 0.18 + Math.sin(elapsed * 0.35) * 0.03,
+          Math.sin(elapsed * 0.27) * 0.02 + (reaction ? Math.sin(Math.min(reaction.t, 1) * Math.PI) * 0.08 : 0)
+        ]
+      };
+      for (const [name, r] of Object.entries(torso)) {
+        const b = bone(name);
+        const d = add[name];
+        if (b) b.rotation.set(r[0] + d[0], r[1] + d[1], r[2] + d[2]);
+      }
+
+      // 手臂與手指：基準坐姿＋前臂、手腕的細微晃動（左右不同步，不會像機器人），再交給待機動作
+      const sway = {
+        leftLowerArm: [0, Math.sin(elapsed * 0.8) * 0.05, Math.sin(elapsed * 0.6 + 1) * 0.03],
+        rightLowerArm: [0, Math.sin(elapsed * 0.7 + 2) * 0.05, Math.sin(elapsed * 0.55 + 0.5) * 0.03],
+        leftHand: [Math.sin(elapsed * 1.1 + 0.3) * 0.06, 0, Math.sin(elapsed * 0.9) * 0.05],
+        rightHand: [Math.sin(elapsed * 1.0 + 1.7) * 0.06, 0, Math.sin(elapsed * 0.85 + 2.2) * 0.05]
+      };
+      for (const name of POSE_BONES) {
+        const b = bone(name);
+        if (!b) continue;
+        const r0 = base(name);
+        const s0 = sway[name];
+        const r = s0 ? [r0[0] + s0[0], r0[1] + s0[1], r0[2] + s0[2]] : r0;
+        eulerToQuat(r, _base);
+        idle.apply(name, _base, b.quaternion);
       }
 
       // 眨眼
@@ -251,11 +310,14 @@ export async function createCompanion(canvas, opts = {}) {
       if (em) {
         blinkTimer -= dt;
         if (blinkTimer <= 0 && blinkPhase < 0) blinkPhase = 0;
+        let blink = 0;
         if (blinkPhase >= 0) {
           blinkPhase += dt / 0.16;
-          em.setValue('blink', Math.sin(Math.min(blinkPhase, 1) * Math.PI));
-          if (blinkPhase >= 1) { blinkPhase = -1; blinkTimer = 2.5 + Math.random() * 4; em.setValue('blink', 0); }
+          blink = Math.sin(Math.min(blinkPhase, 1) * Math.PI);
+          if (blinkPhase >= 1) { blinkPhase = -1; blinkTimer = 2.5 + Math.random() * 4; blink = 0; }
         }
+        // 待機動作裡的閉眼（伸懶腰、轉脖子）
+        em.setValue('blink', Math.max(blink, idle.expr.blink ?? 0));
         if (reaction) {
           reaction.t += dt / 2.2;
           const w = reaction.t < 0.15 ? reaction.t / 0.15 : reaction.t > 0.8 ? Math.max(0, (1 - reaction.t) / 0.2) : 1;
@@ -283,7 +345,7 @@ export async function createCompanion(canvas, opts = {}) {
     },
     setRunning(v) { running = v; if (v) clock.getDelta(); },
     /** 給除錯用：調整座位與鏡頭 */
-    debug: { scene, camera, get vrm() { return vrm; }, reseat: () => vrm && seat(vrm), frameCamera, renderer },
+    debug: { scene, camera, idle, get vrm() { return vrm; }, reseat: () => vrm && seat(vrm), frameCamera, renderer },
     dispose() {
       disposed = true;
       loadToken++;
@@ -291,6 +353,8 @@ export async function createCompanion(canvas, opts = {}) {
       ro.disconnect();
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerdown', onPointerDown);
+      canvas.removeEventListener('pointerup', onPointerUp);
+      canvas.removeEventListener('pointercancel', onPointerCancel);
       if (vrm) VRMUtils.deepDispose(vrm.scene);
       room.scene.traverse((o) => {
         if (o.isMesh) {
