@@ -208,10 +208,10 @@
   }
   function autoplayOnGesture(e) {
     // 點的是播放器本身：交給播放器（不然按「播放」會變成先播再停）；調音量、拖進度不會開始播放，所以繼續等下一次點擊。
-    // 播放器真的開始播放時（on:play）就不再等
     if (e.target?.closest?.('.music')) return;
-    stopAutoplayWait();
-    if (musicAuto && audio?.paused) audio.play().catch(() => {});
+    // 不是每種按鍵都算允許出聲的手勢（例如 Tab）：播放失敗就繼續等，真的開始播放時（on:play）才不再等
+    if (!musicAuto) return stopAutoplayWait();
+    if (audio?.paused) audio.play().catch(() => {});
   }
   function onEnded() {
     if (repeatOne) {
