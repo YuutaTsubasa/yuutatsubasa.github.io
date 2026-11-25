@@ -188,7 +188,8 @@ export async function createCompanion(canvas, opts = {}) {
   // ── 互動 ──
   const raycaster = new THREE.Raycaster();
   function onPointerMove(e) {
-    if (press) {
+    // 只跟著開始拖曳的那根手指（多指觸控時其他手指不算）
+    if (press && e.pointerId === press.id) {
       // 按住時記下最大位移：拖出去再拖回原處放開不算點擊
       press.moved = Math.max(press.moved, Math.hypot(e.clientX - press.x, e.clientY - press.y));
       // 拖曳轉視角（觸控只有左右：上下滑是捲動網頁）
@@ -209,13 +210,19 @@ export async function createCompanion(canvas, opts = {}) {
   // 點角色：按下又放開、幾乎沒移動才算（手機上從角色身上開始滑動捲頁時不會觸發）
   let press = null;
   function onPointerDown(e) {
+    if (press) {
+      // 第二根手指放上來（捏放等手勢）：這次不算點擊也不轉視角
+      press = null;
+      return;
+    }
     onPointerMove(e);
     if (e.button !== 0) return; // 右鍵（選單）、中鍵不算點角色
-    press = { x: e.clientX, y: e.clientY, lastX: e.clientX, lastY: e.clientY, t: performance.now(), moved: 0 };
+    press = { id: e.pointerId, x: e.clientX, y: e.clientY, lastX: e.clientX, lastY: e.clientY, t: performance.now(), moved: 0 };
     // 滑鼠拖出畫面外也要記得位移（觸控不擷取，才不會妨礙捲動）
     if (e.pointerType === 'mouse') canvas.setPointerCapture?.(e.pointerId);
   }
   function onPointerUp(e) {
+    if (press && e.pointerId !== press.id) return;
     const p = press;
     press = null;
     if (!p || !vrm) return;
