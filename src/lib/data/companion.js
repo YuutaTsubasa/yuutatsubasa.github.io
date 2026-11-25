@@ -5,7 +5,11 @@
 // scale：坐在椅子上的縮放（預設 SEAT.scale）；H05 是成人體型，軀幹比 H04 長約 1.3 倍，縮小一點才不會比椅子還大
 export const COMPANION_MODELS = [
   { id: 'H04-B01', label: '正太盔甲版', url: '/companion/models/H04-B01.vrm' },
-  { id: 'H05-B01', label: '青年盔甲版', url: '/companion/models/H05-B01.vrm', scale: 2.1 }
+  { id: 'H04-B02', label: '正太便服版', url: '/companion/models/H04-B02.vrm' },
+  { id: 'H04-B06', label: '正太白盔版', url: '/companion/models/H04-B06.vrm' },
+  { id: 'H05-B01', label: '青年盔甲版', url: '/companion/models/H05-B01.vrm', scale: 2.1 },
+  { id: 'H05-B02', label: '青年便服版', url: '/companion/models/H05-B02.vrm', scale: 2.1 },
+  { id: 'H05-B06', label: '青年白盔版', url: '/companion/models/H05-B06.vrm', scale: 2.1 }
 ];
 
 // 預設播放清單。玩家也可以自己加本機的音樂檔（只在這次瀏覽有效，不會上傳）。
