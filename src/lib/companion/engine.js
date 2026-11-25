@@ -209,9 +209,17 @@ export async function createCompanion(canvas, opts = {}) {
   }
   // 點角色：按下又放開、幾乎沒移動才算（手機上從角色身上開始滑動捲頁時不會觸發）
   let press = null;
+  // 目前按著的指標；只要同時有兩根以上，整段手勢（直到全部放開）都不轉視角也不算點擊
+  const down = new Set();
+  let multi = false;
+  function release(e) {
+    down.delete(e.pointerId);
+    if (!down.size) multi = false;
+  }
   function onPointerDown(e) {
-    if (press) {
-      // 第二根手指放上來（捏放等手勢）：這次不算點擊也不轉視角
+    down.add(e.pointerId);
+    if (down.size > 1) multi = true;
+    if (multi) {
       press = null;
       return;
     }
@@ -222,6 +230,7 @@ export async function createCompanion(canvas, opts = {}) {
     if (e.pointerType === 'mouse') canvas.setPointerCapture?.(e.pointerId);
   }
   function onPointerUp(e) {
+    release(e);
     if (press && e.pointerId !== press.id) return;
     const p = press;
     press = null;
@@ -235,7 +244,10 @@ export async function createCompanion(canvas, opts = {}) {
       onCharacterClick();
     }
   }
-  const onPointerCancel = () => (press = null);
+  const onPointerCancel = (e) => {
+    release(e);
+    press = null;
+  };
   function react() {
     if (!vrm) return;
     idle.play('wave'); // 點角色：打招呼（正在播的待機動作會平順接過去）；不管模型有沒有對應的表情都會揮
