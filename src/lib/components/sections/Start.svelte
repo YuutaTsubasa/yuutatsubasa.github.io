@@ -332,4 +332,8 @@
     .blink, .scroll { animation: none; }
     .bg img { transition: none; }
   }
+  /* 直式：頂部是 Logo，直播提示移到「點一下開始」上方（放最後，才蓋得過上面的 top） */
+  @media (max-aspect-ratio: 1/1) {
+    .live-pill { top: auto; bottom: 180px; }
+  }
 </style>
