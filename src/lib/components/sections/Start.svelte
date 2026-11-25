@@ -245,15 +245,19 @@
   .blink { animation: blink 1.2s steps(2, start) infinite; color: #60a5fa; }
   @keyframes blink { to { visibility: hidden; } }
 
-  /* 原本 Hero 的身分卡：左下角，夠高的螢幕才放得下 */
+  /* 原本 Hero 的身分卡：放在角色左邊、上下置中（大 Logo 拿掉後左上空了，使用者 2026-11-26 要放中間一點）；
+     太窄或太矮的螢幕放不下就不顯示（往下捲的 PROFILE 有同樣資料） */
   .id-card {
     position: absolute;
-    left: 84px;
-    bottom: 24px;
+    /* 大螢幕稍微往中間靠，不要貼在左側欄旁邊、跟角色之間空一大塊 */
+    left: clamp(84px, 8vw, 180px);
+    top: 50%;
+    transform: translateY(-50%);
     width: 300px;
     z-index: 2;
   }
-  @media (max-width: 1100px), (max-height: 800px) {
+  /* 寬度不到約 1240px 時卡片會蓋到角色的手臂 */
+  @media (max-width: 1240px), (max-height: 720px) {
     .id-card { display: none; }
   }
   @media (max-aspect-ratio: 1/1) {
