@@ -20,10 +20,12 @@
   let enterButton;
   let viaHash = false; // 這次是從 #play 開的：網址離開 #play 時才跟著結束
 
-  let starting = false; // 同一時間只跑一個開啟流程；之後的呼叫只更新 viaHash
+  let starting = false; // 同一時間只跑一個開啟流程；之後的呼叫只更新 viaHash／manual
+  let manual = false; // 有人手動按了 Start：下載完照常打開
 
   async function start(fromHash = false) {
     if (fromHash) viaHash = true;
+    else manual = true;
     if (playing || starting) return;
     starting = true;
     error = false;
@@ -35,12 +37,11 @@
       error = true;
     }
     starting = false;
-    if (error) {
-      viaHash = false;
-      return;
-    }
-    // 從 #play 開的：下載途中已經用上一頁離開，就不要開
-    if (viaHash && location.hash !== '#play') {
+    const wantManual = manual;
+    manual = false;
+    // 網址已經不是 #play 就不算「從 #play 開的」（下載途中用上一頁離開了）
+    if (location.hash !== '#play') viaHash = false;
+    if (error || !(wantManual || viaHash)) {
       viaHash = false;
       return;
     }
