@@ -209,20 +209,28 @@ export async function createCompanion(canvas, opts = {}) {
   }
   // 點角色：按下又放開、幾乎沒移動才算（手機上從角色身上開始滑動捲頁時不會觸發）
   let press = null;
-  // 目前按著的指標；只要同時有兩根以上，整段手勢（直到全部放開）都不轉視角也不算點擊
+  // 目前按著的觸控／筆指標（整個視窗都算，第二根手指按在介面上也算）；
+  // 只要同時有兩根以上，整段手勢（直到全部放開）都不轉視角也不算點擊。滑鼠只有一個指標，不算進來
   const down = new Set();
   let multi = false;
-  function release(e) {
+  function onAnyDown(e) {
+    if (e.pointerType === 'mouse') return;
+    down.add(e.pointerId);
+    if (down.size > 1) {
+      multi = true;
+      press = null;
+    }
+  }
+  function onAnyUp(e) {
     down.delete(e.pointerId);
     if (!down.size) multi = false;
   }
+  window.addEventListener('pointerdown', onAnyDown, true);
+  window.addEventListener('pointerup', onAnyUp, true);
+  window.addEventListener('pointercancel', onAnyUp, true);
+
   function onPointerDown(e) {
-    down.add(e.pointerId);
-    if (down.size > 1) multi = true;
-    if (multi) {
-      press = null;
-      return;
-    }
+    if (multi) return;
     onPointerMove(e);
     if (e.button !== 0) return; // 右鍵（選單）、中鍵不算點角色
     press = { id: e.pointerId, x: e.clientX, y: e.clientY, lastX: e.clientX, lastY: e.clientY, t: performance.now(), moved: 0 };
@@ -230,7 +238,6 @@ export async function createCompanion(canvas, opts = {}) {
     if (e.pointerType === 'mouse') canvas.setPointerCapture?.(e.pointerId);
   }
   function onPointerUp(e) {
-    release(e);
     if (press && e.pointerId !== press.id) return;
     const p = press;
     press = null;
@@ -244,10 +251,7 @@ export async function createCompanion(canvas, opts = {}) {
       onCharacterClick();
     }
   }
-  const onPointerCancel = (e) => {
-    release(e);
-    press = null;
-  };
+  const onPointerCancel = () => (press = null);
   function react() {
     if (!vrm) return;
     idle.play('wave'); // 點角色：打招呼（正在播的待機動作會平順接過去）；不管模型有沒有對應的表情都會揮
@@ -399,6 +403,9 @@ export async function createCompanion(canvas, opts = {}) {
       canvas.removeEventListener('pointerdown', onPointerDown);
       canvas.removeEventListener('pointerup', onPointerUp);
       canvas.removeEventListener('pointercancel', onPointerCancel);
+      window.removeEventListener('pointerdown', onAnyDown, true);
+      window.removeEventListener('pointerup', onAnyUp, true);
+      window.removeEventListener('pointercancel', onAnyUp, true);
       if (vrm) VRMUtils.deepDispose(vrm.scene);
       room.scene.traverse((o) => {
         if (o.isMesh) {
