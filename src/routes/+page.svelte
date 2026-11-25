@@ -64,6 +64,7 @@
   let companionOpen = false;
   let leaving = false; // 「回網站」呼叫的 history.back() 還沒完成
   let companionError = false; // 陪伴模式的程式載不到
+  let pageDestroyed = false; // 下載途中已經換到別的頁面
 
   async function openCompanion(push = true) {
     if (companionOpen || leaving) return;
@@ -83,8 +84,8 @@
       }
       return;
     }
-    // 第一次載入元件的途中按了上一頁，就不要打開
-    if (location.hash !== PLAY_HASH) return;
+    // 第一次載入元件的途中按了上一頁或換了頁面，就不要打開
+    if (pageDestroyed || location.hash !== PLAY_HASH) return;
     companionOpen = true;
     document.documentElement.style.overflow = 'hidden';
   }
@@ -117,6 +118,7 @@
   });
 
   onDestroy(() => {
+    pageDestroyed = true;
     if (typeof window !== 'undefined') {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('popstate', onPopState);
