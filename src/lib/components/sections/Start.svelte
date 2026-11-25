@@ -106,7 +106,7 @@
   }
   /* 頻道 logo（騎士盾牌那款；藍色的 logo.webp 已經不用）的白色版，加深藍描邊，壓在場景上才看得清楚 */
   .logo {
-    width: min(78vw, 760px);
+    width: min(64vw, 460px);
     height: auto;
     filter: drop-shadow(3px 0 0 #0f2d78) drop-shadow(-3px 0 0 #0f2d78) drop-shadow(0 3px 0 #0f2d78) drop-shadow(0 -3px 0 #0f2d78)
       drop-shadow(0 10px 24px rgba(15, 45, 120, 0.45));

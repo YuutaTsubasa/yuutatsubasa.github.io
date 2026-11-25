@@ -81,10 +81,6 @@ export async function createCompanion(canvas, opts = {}) {
   room.scene.traverse((o) => {
     if (o.isMesh) { o.castShadow = !mobile; o.receiveShadow = !mobile; }
   });
-  for (const name of SEAT.hideNodes ?? []) {
-    const node = room.scene.getObjectByName(name);
-    if (node) node.visible = false;
-  }
   scene.add(room.scene);
   const mixer = new THREE.AnimationMixer(room.scene);
   const clip = room.animations.find((a) => a.name === AMBIENT_CLIP);
@@ -129,11 +125,12 @@ export async function createCompanion(canvas, opts = {}) {
     v.scene.position.set(0, 0, 0);
     v.scene.rotation.y = SEAT.rotationY;
     v.scene.scale.setScalar(modelScale);
-    // 不同模型的腿長不同：先擺好姿勢，再把整個模型移到骨盆落在座位上
+    // 不同模型的腿長不同：先擺好姿勢，再把整個模型移到大腿根部落在椅面上
     v.humanoid.update();
     v.scene.updateMatrixWorld(true);
     const hips = h.getRawBoneNode('hips').getWorldPosition(new THREE.Vector3());
-    v.scene.position.fromArray(SEAT.hips).sub(hips);
+    const thigh = h.getRawBoneNode('leftUpperLeg').getWorldPosition(new THREE.Vector3());
+    v.scene.position.fromArray(SEAT.seat).sub(new THREE.Vector3(hips.x, thigh.y, hips.z));
   }
 
   async function loadModel(url, scale = SEAT.scale) {
@@ -276,7 +273,7 @@ export async function createCompanion(canvas, opts = {}) {
       const head = vrm?.humanoid.getRawBoneNode('head');
       if (!head) return null;
       const p = head.getWorldPosition(new THREE.Vector3());
-      p.y += 0.55; // 頭骨在下巴附近，往上到頭髮頂
+      p.y += 0.28 * modelScale; // 頭骨在下巴附近，往上到頭髮頂
       p.project(camera);
       return { x: (p.x + 1) / 2, y: (1 - p.y) / 2 };
     },
