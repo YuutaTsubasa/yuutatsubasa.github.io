@@ -20,26 +20,34 @@
   let enterButton;
   let viaHash = false; // 這次是從 #play 開的：網址離開 #play 時才跟著結束
 
+  let starting = false; // 同一時間只跑一個開啟流程；之後的呼叫只更新 viaHash
+
   async function start(fromHash = false) {
-    if (fromHash) viaHash = true; // 下載途中又按了 Start 也保留這個標記
-    if (playing) return;
+    if (fromHash) viaHash = true;
+    if (playing || starting) return;
+    starting = true;
     error = false;
     try {
       Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
-      // 從 #play 開的：下載途中已經用上一頁離開，就不要開
-      if (viaHash && location.hash !== '#play') {
-        viaHash = false;
-        return;
-      }
-      playing = true;
-      // 鍵盤使用者：焦點移到剛出現的陪伴畫面
-      await tick();
-      section?.querySelector('.companion')?.focus({ preventScroll: true });
     } catch (e) {
       // 網路中斷，或網站更新後舊頁面要的檔案已經不在
       console.error(e);
       error = true;
     }
+    starting = false;
+    if (error) {
+      viaHash = false;
+      return;
+    }
+    // 從 #play 開的：下載途中已經用上一頁離開，就不要開
+    if (viaHash && location.hash !== '#play') {
+      viaHash = false;
+      return;
+    }
+    playing = true;
+    // 鍵盤使用者：焦點移到剛出現的陪伴畫面
+    await tick();
+    section?.querySelector('.companion')?.focus({ preventScroll: true });
   }
 
   async function stop() {
