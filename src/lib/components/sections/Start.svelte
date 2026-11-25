@@ -65,16 +65,18 @@
   const POSTER = '/companion/start/wallpaper-poster.webp';
   let videoSrc = '';
   let video;
+  let inView = true; // 00 區塊在畫面內才播放
   onMount(() => {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const saveData = navigator.connection?.saveData;
     if (reduce || saveData) return;
-    const px = Math.max(innerWidth, innerHeight) * Math.min(devicePixelRatio || 1, 2);
-    videoSrc = px > 1500 ? '/companion/start/wallpaper-1080.mp4' : '/companion/start/wallpaper-720.mp4';
+    // 手機（窄螢幕）一律 720p，省流量
+    videoSrc = matchMedia('(max-width: 768px)').matches ? '/companion/start/wallpaper-720.mp4' : '/companion/start/wallpaper-1080.mp4';
     // 捲離 00 區塊時暫停，省電
     const io = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
       if (!video) return;
-      if (entry.isIntersecting) video.play().catch(() => {});
+      if (inView) video.play().catch(() => {});
       else video.pause();
     });
     io.observe(section);
@@ -111,7 +113,8 @@
       <span class="bg" aria-hidden="true">
         <img src={POSTER} alt="" fetchpriority="high" />
         {#if videoSrc}
-          <video bind:this={video} src={videoSrc} poster={POSTER} autoplay muted loop playsinline preload="auto"></video>
+          <video bind:this={video} src={videoSrc} poster={POSTER} autoplay muted loop playsinline preload="auto"
+            on:play={() => !inView && video.pause()}></video>
         {/if}
       </span>
       <span class="shade" aria-hidden="true"></span>
