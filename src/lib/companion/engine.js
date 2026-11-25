@@ -190,14 +190,16 @@ export async function createCompanion(canvas, opts = {}) {
     }
   }
   function react() {
-    if (!vrm?.expressionManager) return;
+    if (!vrm) return;
+    idle.play('wave'); // 點角色：打招呼（正在播的待機動作會平順接過去）；不管模型有沒有對應的表情都會揮
+    const em = vrm.expressionManager;
     const name = REACTIONS[reactionIndex++ % REACTIONS.length];
-    if (!vrm.expressionManager.getExpression(name)) return;
+    if (!em?.getExpression(name)) return;
     // 上一個表情還沒播完就換下一個：先歸零，不然會殘留在臉上
-    if (reaction) vrm.expressionManager.setValue(reaction.name, 0);
+    if (reaction) em.setValue(reaction.name, 0);
     reaction = { name, t: 0 };
-    idle.play('wave'); // 點角色：打招呼（正在播的待機動作會平順接過去）
   }
+
   canvas.addEventListener('pointermove', onPointerMove);
   canvas.addEventListener('pointerdown', onPointerDown);
 
