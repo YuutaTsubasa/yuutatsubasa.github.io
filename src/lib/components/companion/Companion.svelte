@@ -240,7 +240,8 @@
         await document.exitFullscreen();
         ownFullscreen = false;
       } else {
-        await document.documentElement.requestFullscreen();
+        // 只讓 00 區塊（陪伴畫面）全螢幕
+        await root.requestFullscreen();
         ownFullscreen = true;
         // 全螢幕請求完成前就已經離開陪伴模式
         if (destroyed) document.exitFullscreen().catch(() => {});
@@ -255,35 +256,25 @@
     dispatch('close');
   }
   function onKey(e) {
-    if (e.key === 'Escape') {
-      if (panel) panel = null;
-      else close();
-    }
-  }
-  function onVisibility() {
-    engine?.setRunning(!document.hidden);
+    if (e.key === 'Escape' && panel) panel = null;
   }
 
-  // 對話框：掛到 <body> 底下，開著時背景網站設成 inert（Tab 與螢幕閱讀器都進不去），焦點移進來
-  function modal(node) {
-    const returnFocus = document.activeElement;
-    document.body.appendChild(node);
-    const made = [];
-    for (const el of document.body.children) {
-      if (el !== node && !el.inert) {
-        el.inert = true;
-        made.push(el);
-      }
-    }
-    node.focus();
-    return {
-      destroy() {
-        for (const el of made) el.inert = false;
-        node.remove();
-        // 焦點還給打開陪伴模式的按鈕（鍵盤使用者不用重新找位置）
-        if (returnFocus instanceof HTMLElement && returnFocus.isConnected) returnFocus.focus({ preventScroll: true });
-      }
-    };
+  // 捲離 00 區塊或分頁在背景時暫停 3D 畫面（音樂照常播，可以邊聽邊看網站）
+  let root;
+  let inView = true;
+  let observer;
+  function updateRunning() {
+    engine?.setRunning(inView && !document.hidden);
+  }
+  function onVisibility() {
+    updateRunning();
+  }
+  // 首頁的自訂游標畫在最上層：滑鼠在陪伴畫面上時改用系統游標
+  function pointerIn() {
+    document.documentElement.classList.add('companion-hover');
+  }
+  function pointerOut() {
+    document.documentElement.classList.remove('companion-hover');
   }
 
   let clockTimer;
@@ -292,7 +283,11 @@
     mobile = matchMedia('(max-width: 768px), (pointer: coarse)').matches;
     still = new URLSearchParams(location.search).has('still');
     canFullscreen = !!document.fullscreenEnabled;
-    document.documentElement.classList.add('companion-open');
+    observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      updateRunning();
+    });
+    observer.observe(root);
     if (still) uiHidden = true;
     clockTimer = setInterval(() => {
       now = new Date();
@@ -305,11 +300,13 @@
       if (destroyed) return;
       const created = await createCompanion(canvas, {
         mobile,
+        idleMotions: !still, // 產生開站背景圖時固定基準坐姿
         onProgress: (r, label) => { loadRatio = r; loadLabel = label; },
         onCharacterClick: sayRandom
       });
       if (destroyed) return created.dispose();
       engine = created;
+      updateRunning();
       const m = COMPANION_MODELS.find((m) => m.id === modelId);
       try {
         await engine.loadModel(m.url, m.scale);
@@ -340,12 +337,13 @@
     clearInterval(clockTimer);
     clearTimeout(lineTimer);
     if (typeof document !== 'undefined') {
-      // 不管是按「回網站」還是瀏覽器的上一頁離開，都要退出全螢幕
+      // 不管是按「結束」還是換到別的頁面，都要退出陪伴畫面開的全螢幕
       document.removeEventListener('fullscreenchange', onFullscreenChange);
-      if (ownFullscreen && document.fullscreenElement === document.documentElement) document.exitFullscreen().catch(() => {});
+      if (ownFullscreen && document.fullscreenElement === root) document.exitFullscreen().catch(() => {});
       document.removeEventListener('visibilitychange', onVisibility);
-      document.documentElement.classList.remove('companion-open');
+      document.documentElement.classList.remove('companion-hover');
     }
+    observer?.disconnect();
     engine?.dispose();
     // 從畫面移除的 <audio> 仍可能繼續播放：離開時一定要停掉
     if (audio) {
@@ -358,10 +356,9 @@
   });
 </script>
 
-<svelte:window on:keydown={onKey} />
-
-<div class="companion" class:ui-hidden={uiHidden} role="dialog" aria-modal="true" aria-label="悠太翼 陪伴模式"
-  tabindex="-1" use:modal>
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<div class="companion" class:ui-hidden={uiHidden} class:still bind:this={root} role="region" aria-label="悠太翼 陪伴模式"
+  on:keydown={onKey} on:pointerenter={pointerIn} on:pointerleave={pointerOut}>
   <canvas bind:this={canvas} class="stage" aria-label="悠太翼坐在房間裡，點他會說話"></canvas>
 
   {#if line}
@@ -510,9 +507,9 @@
       </button>
     {/if}
     <span class="sep" aria-hidden="true"></span>
-    <button class="exit" on:click={close} aria-label="離開陪伴模式">
+    <button class="exit" on:click={close} aria-label="結束陪伴模式">
       <svg viewBox="0 0 24 24"><path d="M10 17l1.4-1.4-2.6-2.6H20v-2H8.8l2.6-2.6L10 7l-5 5zM4 3h8v2H4v14h8v2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
-      <span>回網站</span>
+      <span>結束</span>
     </button>
   </nav>
   {/if}
@@ -523,7 +520,7 @@
         <p class="err">{error}</p>
         <div class="row">
           <button class="chip" on:click={() => location.reload()}>重新整理</button>
-          <button class="chip ghost dark" on:click={close}>回網站</button>
+          <button class="chip ghost dark" on:click={close}>結束</button>
         </div>
       {:else}
         <span class="tech">LOADING {loadLabel}</span>
@@ -536,20 +533,21 @@
 
 <style>
   .companion {
-    position: fixed;
+    position: absolute;
     inset: 0;
-    z-index: 200;
+    z-index: 1;
     background: #cbd9e8;
     color: #fff;
     font-family: var(--font-body);
     overflow: hidden;
     cursor: auto;
-    outline: none;
   }
+  /* 產生開站背景圖時整個視窗只畫場景（不含導覽列） */
+  .companion.still { position: fixed; z-index: 300; }
   .companion :global(*) { cursor: auto; }
   /* 首頁的自訂游標畫在最上層，陪伴模式裡用系統游標 */
-  :global(html.companion-open .cursor-dot),
-  :global(html.companion-open .cursor-ring) { display: none; }
+  :global(html.companion-hover .cursor-dot),
+  :global(html.companion-hover .cursor-ring) { display: none; }
   .companion button, .companion label, .companion input[type='range'] { cursor: pointer; }
   .stage {
     position: absolute;
@@ -557,7 +555,8 @@
     width: 100%;
     height: 100%;
     display: block;
-    touch-action: manipulation;
+    /* 手機上手指在畫面上滑動要能捲動整頁 */
+    touch-action: pan-y;
   }
 
   .card {
@@ -728,6 +727,14 @@
   .bar-wrap { width: min(70vw, 320px); height: 6px; background: rgba(15, 45, 120, 0.15); }
   .bar-fill { height: 100%; background: var(--blue-electric); transition: width 0.2s; }
   .err { max-width: 80vw; text-align: center; }
+
+  /* 寬螢幕時網站左右有固定的側欄（章節編號、社群按鈕），介面往內縮讓開 */
+  @media (min-width: 901px) {
+    .pomo { left: 84px; }
+    .music { left: 84px; }
+    .clock { right: 66px; }
+    .sheet { right: 66px; }
+  }
 
   /* 手機 */
   @media (max-width: 768px) {

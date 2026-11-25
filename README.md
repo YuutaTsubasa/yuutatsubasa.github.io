@@ -49,7 +49,7 @@ npm run preview      # 本地預覽 production build
 
 ## 陪伴模式（00 START）
 
-首頁第一屏是開站畫面：陪伴場景當背景、Logo 壓在上面。點一下進入陪伴模式（網址變成 `/#play`，按上一頁或「回網站」離開）；不點就往下捲看網站資訊。
+首頁第一屏是開站畫面：陪伴場景當背景、Logo 壓在上面。點一下，陪伴模式就直接在 00 區塊裡開起來（不蓋住整頁，往下捲照常看網站；捲離 00 時 3D 畫面暫停，音樂照常播；按「結束」回到開站畫面）。直接連到 `/#play` 會一進站就開起來。
 
 - 場景：直播用的 Talkroom（ProjectVtuber `stream-scenes/output/talkroom-3d-v04/Talkroom_Runtime.glb`），用 gltf-transform 壓成 `static/companion/talkroom.glb`（meshopt＋WebP 貼圖）。
 - 角色：網頁用輕量版 VRM，放在 `static/companion/models/`，清單在 `src/lib/data/companion.js` 的 `COMPANION_MODELS`。輕量版由 Codex 在 ProjectVtuber `vrm-model/output/web-light/` 產生；原檔太大，不放網站。
