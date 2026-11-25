@@ -55,14 +55,13 @@ npm run preview      # 本地預覽 production build
 - 角色：網頁用輕量版 VRM，放在 `static/companion/models/`，清單在 `src/lib/data/companion.js` 的 `COMPANION_MODELS`。輕量版由 Codex 在 ProjectVtuber `vrm-model/output/web-light/` 產生；原檔太大，不放網站。
 - 功能：番茄鐘、日期時鐘、音樂（預設曲＋玩家自己加的本機檔案，只在這次瀏覽有效）、待辦清單（存在瀏覽器）、點角色會換表情並說一句話（台詞在 `COMPANION_LINES`）、換造型、全螢幕。
 - 程式：`src/lib/companion/engine.js`（three.js＋three-vrm，只在進入陪伴模式時才載入）、`src/lib/components/companion/Companion.svelte`（介面）、`src/lib/components/sections/Start.svelte`（開站畫面）。
-- 坐姿與鏡頭：`companion.js` 的 `SEAT`（骨盆位置、各骨頭角度、鏡頭）。改完或換了預設化身，重新產生開站背景圖：
+- 坐姿與鏡頭：`companion.js` 的 `SEAT`（骨盆位置、各骨頭角度、鏡頭與可拖曳的範圍）；待機動作在 `src/lib/companion/idle.js`（Fable 設計）。
+- 開始畫面背景：H04-B01 置中的動態桌布（跟使用者桌面同一套 HUD 呼吸循環），由 ProjectVtuber 渲染，原檔在 `Data\20_Assets\Art\Wallpapers\*_projectvtuber-H04-B01_hud-breath-center_*`。網站用的是壓縮版 `static/companion/start/`（`wallpaper-1080.mp4`、`wallpaper-720.mp4`、`wallpaper-poster.webp`）；減少動態效果或省流量模式時只顯示封面圖。換新影片時重壓：
 
 ```bash
-npm run dev
-npm run companion:start -- http://127.0.0.1:5173
+ffmpeg -i <原檔 2560x1440.mp4> -vf scale=1920:1080:flags=lanczos -c:v libx264 -pix_fmt yuv420p -crf 26 -preset slow -movflags +faststart -an static/companion/start/wallpaper-1080.mp4
+ffmpeg -i <原檔 2560x1440.mp4> -vf scale=1280:720:flags=lanczos -c:v libx264 -pix_fmt yuv420p -crf 27 -preset slow -movflags +faststart -an static/companion/start/wallpaper-720.mp4
 ```
-
-會輸出 `static/companion/start.webp`（橫式）與 `start-portrait.webp`（直式，手機用）。需要 Chrome 或 Edge。
 
 ## 加內容
 
