@@ -45,7 +45,11 @@
   }
 
   // ── 番茄鐘 ──
-  let pomo = load('pomodoro', { work: 25, rest: 5 });
+  const pomoClean = (v) => ({
+    work: Math.min(180, Math.max(1, Math.round(+v?.work || 25))),
+    rest: Math.min(60, Math.max(1, Math.round(+v?.rest || 5)))
+  });
+  let pomo = pomoClean(load('pomodoro', null));
   let pomoMode = 'work'; // 'work' | 'rest'
   let pomoRunning = false;
   let pomoEndAt = 0;
@@ -72,23 +76,29 @@
   }
   function pomoTick() {
     if (!pomoRunning) return;
-    pomoLeft = Math.max(0, Math.round((pomoEndAt - Date.now()) / 1000));
-    if (pomoLeft > 0) return;
+    const remaining = pomoEndAt - Date.now();
+    if (remaining > 0) {
+      pomoLeft = Math.ceil(remaining / 1000);
+      return;
+    }
     // 手機鎖屏或分頁在背景時計時器會暫停：回來後照實際經過的時間推進，可能一次跨好幾段
     while (pomoEndAt <= Date.now()) {
       if (pomoMode === 'work') pomoCycles += 1;
       pomoMode = pomoMode === 'work' ? 'rest' : 'work';
-      pomoEndAt += (pomoMode === 'work' ? pomo.work : pomo.rest) * 60 * 1000;
+      pomoEndAt += Math.max(1, pomoMode === 'work' ? pomo.work : pomo.rest) * 60 * 1000;
     }
-    pomoLeft = Math.max(0, Math.round((pomoEndAt - Date.now()) / 1000));
+    pomoLeft = Math.ceil((pomoEndAt - Date.now()) / 1000);
     chime();
     say(pomoMode === 'rest' ? '辛苦了！休息一下吧。' : '休息結束，繼續加油！');
   }
+  // 編輯時改的是草稿；儲存時驗證完才套用到計時中的設定
+  let pomoDraft = { ...pomo };
+  function pomoEdit() {
+    pomoDraft = { ...pomo };
+    pomoEditing = true;
+  }
   function pomoSave() {
-    pomo = {
-      work: Math.min(180, Math.max(1, Math.round(+pomo.work || 25))),
-      rest: Math.min(60, Math.max(1, Math.round(+pomo.rest || 5)))
-    };
+    pomo = pomoClean(pomoDraft);
     save('pomodoro', pomo);
     pomoEditing = false;
     pomoReset();
@@ -333,8 +343,8 @@
     </div>
     {#if pomoEditing}
       <form class="pomo-edit" on:submit|preventDefault={pomoSave}>
-        <label>專心 <input type="number" min="1" max="180" bind:value={pomo.work} /> 分</label>
-        <label>休息 <input type="number" min="1" max="60" bind:value={pomo.rest} /> 分</label>
+        <label>專心 <input type="number" min="1" max="180" bind:value={pomoDraft.work} /> 分</label>
+        <label>休息 <input type="number" min="1" max="60" bind:value={pomoDraft.rest} /> 分</label>
         <button class="chip" type="submit">儲存</button>
       </form>
     {:else}
@@ -346,7 +356,7 @@
         <button class="icon" on:click={pomoReset} aria-label="重設">
           <svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
         </button>
-        <button class="icon" on:click={() => (pomoEditing = true)} aria-label="設定時間">
+        <button class="icon" on:click={pomoEdit} aria-label="設定時間">
           <svg viewBox="0 0 24 24"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-1.7-1L15 3.5h-4L10.6 6a7 7 0 0 0-1.7 1l-2.4-1-2 3.4L6.6 11a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7 7 0 0 0 1.7-1l2.4 1 2-3.4zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>
         </button>
       </div>
