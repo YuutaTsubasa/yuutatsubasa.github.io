@@ -62,6 +62,9 @@
 
   function pomoToggle() {
     if (pomoRunning) {
+      // 背景暫停回來後馬上按暫停：先追上實際時間（可能已經換到下一段）再停
+      pomoTick();
+      pomoLeft = Math.max(1, Math.ceil((pomoEndAt - Date.now()) / 1000));
       pomoRunning = false;
     } else {
       pomoEndAt = Date.now() + pomoLeft * 1000;
