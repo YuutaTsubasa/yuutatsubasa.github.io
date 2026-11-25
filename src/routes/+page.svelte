@@ -3,7 +3,7 @@
   import { NAV } from '$lib/data/nav.js';
   import { activeSection, setActiveFromScroll } from '$lib/stores/active.js';
 
-  import Hero from '$lib/components/sections/Hero.svelte';
+  import Start from '$lib/components/sections/Start.svelte';
   import About from '$lib/components/sections/About.svelte';
   import Schedule from '$lib/components/sections/Schedule.svelte';
   import Videos from '$lib/components/sections/Videos.svelte';
@@ -58,14 +58,44 @@
     setActiveFromScroll(cur);
   }
 
+  // 陪伴模式：00 START 點一下進入；網址加上 #play，瀏覽器的「上一頁」就能離開
+  const PLAY_HASH = '#play';
+  let Companion = null;
+  let companionOpen = false;
+
+  async function openCompanion(push = true) {
+    if (companionOpen) return;
+    if (push && location.hash !== PLAY_HASH) history.pushState({ companion: true }, '', PLAY_HASH);
+    Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
+    companionOpen = true;
+    document.documentElement.style.overflow = 'hidden';
+  }
+  function closeCompanion() {
+    if (!companionOpen) return;
+    companionOpen = false;
+    document.documentElement.style.overflow = '';
+    if (location.hash === PLAY_HASH) history.back();
+  }
+  function onPopState() {
+    if (location.hash === PLAY_HASH) openCompanion(false);
+    else if (companionOpen) {
+      companionOpen = false;
+      document.documentElement.style.overflow = '';
+    }
+  }
+
   onMount(() => {
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('popstate', onPopState);
     onScroll();
+    if (location.hash === PLAY_HASH) openCompanion(false);
   });
 
   onDestroy(() => {
     if (typeof window !== 'undefined') {
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('popstate', onPopState);
+      document.documentElement.style.overflow = '';
     }
   });
 </script>
@@ -73,7 +103,7 @@
 <Seo {title} {description} {jsonLd} />
 
 <main id="main">
-  <Hero />
+  <Start on:enter={() => openCompanion()} />
   <About />
   <Schedule />
   <Videos />
@@ -82,6 +112,10 @@
   <Log />
   <Connect />
 </main>
+
+{#if companionOpen && Companion}
+  <svelte:component this={Companion} on:close={closeCompanion} />
+{/if}
 
 <style>
   main {

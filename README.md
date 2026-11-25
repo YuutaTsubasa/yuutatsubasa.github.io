@@ -33,7 +33,7 @@ npm run preview      # 本地預覽 production build
 
 | # | Section | 資料來源 |
 |---|---|---|
-| 00 | Hero | `src/lib/data/profile.js` |
+| 00 | Start（開站畫面＋陪伴模式入口） | `src/lib/data/companion.js` |
 | 01 | About | `src/lib/data/profile.js` |
 | 02 | Schedule | `src/lib/data/schedule.js` |
 | 03 | Archive | `src/posts/streaming_*.md` |
@@ -46,6 +46,23 @@ npm run preview      # 本地預覽 production build
 - `/archive` · `/archive/[id]` — 直播存檔列表 / 內頁
 - `/gallery` · `/gallery/[slug]` — 粉絲繪圖列表 / 內頁
 - `/log` · `/log/[slug]` — 心得 / 作品 / LeetCode 筆記
+
+## 陪伴模式（00 START）
+
+首頁第一屏是開站畫面：陪伴場景當背景、Logo 壓在上面。點一下進入陪伴模式（網址變成 `/#play`，按上一頁或「回網站」離開）；不點就往下捲看網站資訊。
+
+- 場景：直播用的 Talkroom（ProjectVtuber `stream-scenes/output/talkroom-3d-v04/Talkroom_Runtime.glb`），用 gltf-transform 壓成 `static/companion/talkroom.glb`（meshopt＋WebP 貼圖）。
+- 角色：網頁用輕量版 VRM，放在 `static/companion/models/`，清單在 `src/lib/data/companion.js` 的 `COMPANION_MODELS`。輕量版由 Codex 在 ProjectVtuber `vrm-model/output/web-light/` 產生；原檔太大，不放網站。
+- 功能：番茄鐘、日期時鐘、音樂（預設曲＋玩家自己加的本機檔案，只在這次瀏覽有效）、待辦清單（存在瀏覽器）、點角色會換表情並說一句話（台詞在 `COMPANION_LINES`）、換造型、全螢幕。
+- 程式：`src/lib/companion/engine.js`（three.js＋three-vrm，只在進入陪伴模式時才載入）、`src/lib/components/companion/Companion.svelte`（介面）、`src/lib/components/sections/Start.svelte`（開站畫面）。
+- 坐姿與鏡頭：`companion.js` 的 `SEAT`（骨盆位置、各骨頭角度、鏡頭）。改完或換了預設化身，重新產生開站背景圖：
+
+```bash
+npm run dev
+npm run companion:start -- http://127.0.0.1:5173
+```
+
+會輸出 `static/companion/start.webp`（橫式）與 `start-portrait.webp`（直式，手機用）。需要 Chrome 或 Edge。
 
 ## 加內容
 
