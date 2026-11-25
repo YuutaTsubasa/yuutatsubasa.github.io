@@ -44,8 +44,14 @@
   }
 
   // 直接開 /#play 的連結：進站就開起來
+  // 已經在首頁時連到 /#play（或用上一頁回到 #play）不會重新掛載，所以也聽 hashchange
   onMount(() => {
-    if (location.hash === '#play') start();
+    const onHash = () => {
+      if (location.hash === '#play') start();
+    };
+    onHash();
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
   });
 </script>
 
