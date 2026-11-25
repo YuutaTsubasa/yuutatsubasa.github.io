@@ -18,6 +18,7 @@
   let error = false;
   let section;
   let enterButton;
+  let viaHash = false; // 這次是從 #play 開的：網址離開 #play 時才跟著結束
 
   async function start(fromHash = false) {
     if (playing) return;
@@ -26,6 +27,7 @@
       Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
       // 從 #play 開的：下載途中已經用上一頁離開，就不要開
       if (fromHash && location.hash !== '#play') return;
+      viaHash = fromHash;
       playing = true;
       // 鍵盤使用者：焦點移到剛出現的陪伴畫面
       await tick();
@@ -39,6 +41,7 @@
 
   async function stop() {
     playing = false;
+    viaHash = false;
     // 從 /#play 進站的：結束後拿掉 #play，重新整理或分享網址才不會又自動開起來
     if (location.hash === '#play') replaceState(location.pathname + location.search, {});
     await tick();
@@ -51,7 +54,7 @@
     const onHash = () => {
       if (location.hash !== '#play') {
         // 用上一頁離開 #play：畫面跟著結束（網址已經不是 #play，不用再改）
-        if (playing) stop();
+        if (playing && viaHash) stop();
         return;
       }
       // 沒有 id="play" 的錨點，瀏覽器不會自己捲：在頁面下方點到 #play 連結時捲回 00
