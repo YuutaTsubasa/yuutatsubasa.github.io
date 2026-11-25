@@ -62,9 +62,10 @@
   const PLAY_HASH = '#play';
   let Companion = null;
   let companionOpen = false;
+  let leaving = false; // 「回網站」呼叫的 history.back() 還沒完成
 
   async function openCompanion(push = true) {
-    if (companionOpen) return;
+    if (companionOpen || leaving) return;
     if (push && location.hash !== PLAY_HASH) history.pushState({ companion: true }, '', PLAY_HASH);
     Companion ??= (await import('$lib/components/companion/Companion.svelte')).default;
     // 第一次載入元件的途中按了上一頁，就不要打開
@@ -79,10 +80,13 @@
     if (location.hash !== PLAY_HASH) return;
     // 我們推進去的 #play 紀錄帶有 companion 標記（上一頁再下一頁回來也還在），用上一頁離開；
     // 直接開 /#play 的訪客沒有這個標記，用 history.back() 會離開網站，改成只拿掉 #play
-    if (history.state?.companion) history.back();
-    else history.replaceState(history.state, '', location.pathname + location.search);
+    if (history.state?.companion) {
+      leaving = true;
+      history.back();
+    } else history.replaceState(history.state, '', location.pathname + location.search);
   }
   function onPopState() {
+    leaving = false;
     if (location.hash === PLAY_HASH) openCompanion(false);
     else if (companionOpen) {
       companionOpen = false;

@@ -223,6 +223,10 @@
       }
     } catch {}
   }
+  // 使用者用瀏覽器自己退出全螢幕，就不再算是陪伴模式開的
+  function onFullscreenChange() {
+    if (!document.fullscreenElement) ownFullscreen = false;
+  }
   function close() {
     dispatch('close');
   }
@@ -248,6 +252,7 @@
       pomoTick();
     }, 500);
     document.addEventListener('visibilitychange', onVisibility);
+    document.addEventListener('fullscreenchange', onFullscreenChange);
     try {
       const { createCompanion } = await import('$lib/companion/engine.js');
       if (destroyed) return;
@@ -279,7 +284,8 @@
     clearTimeout(lineTimer);
     if (typeof document !== 'undefined') {
       // 不管是按「回網站」還是瀏覽器的上一頁離開，都要退出全螢幕
-      if (ownFullscreen && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
+      if (ownFullscreen && document.fullscreenElement === document.documentElement) document.exitFullscreen().catch(() => {});
       document.removeEventListener('visibilitychange', onVisibility);
       document.documentElement.classList.remove('companion-open');
     }
