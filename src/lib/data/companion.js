@@ -66,10 +66,11 @@ export const SEAT = {
     leftLowerLeg: [1.5, 0, 0],
     rightLowerLeg: [1.5, 0, 0],
     // 雙手放在大腿上（使用者 2026-11-25：閒置時雙手抬著往前很怪；在瀏覽器裡用數值搜尋對到大腿位置）
-    leftUpperArm: [-0.004, -1.418, -1.028],
-    rightUpperArm: [-0.105, 1.381, 1.139],
-    leftLowerArm: [0, -0.558, 0],
-    rightLowerArm: [0, 0.56, 0],
+    // 左右手各放在自己的大腿上（不要垂進兩腿中間，會被膝甲擋住、看不到手指動作）
+    leftUpperArm: [0.101, -1.351, -0.998],
+    rightUpperArm: [0.064, 1.335, 1.04],
+    leftLowerArm: [0, -0.618, 0],
+    rightLowerArm: [0, 0.619, 0],
     // 手腕稍微往下垂、往內收
     leftHand: [0.15, 0, -0.2],
     rightHand: [0.15, 0, 0.2],
