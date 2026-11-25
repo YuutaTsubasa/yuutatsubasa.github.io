@@ -14,8 +14,6 @@
   let uiHidden = false;
   let panel = null; // 'todo' | 'model' | null
   let mobile = false;
-  // ?still：只畫場景與角色（產生開站畫面背景圖用）
-  let still = false;
 
   // ── 時鐘 ──
   let now = new Date();
@@ -281,14 +279,12 @@
   let destroyed = false; // 載入途中就離開時，不要再建立或使用 3D 場景
   onMount(async () => {
     mobile = matchMedia('(max-width: 768px), (pointer: coarse)').matches;
-    still = new URLSearchParams(location.search).has('still');
     canFullscreen = !!document.fullscreenEnabled;
     observer = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
       updateRunning();
     });
     observer.observe(root);
-    if (still) uiHidden = true;
     clockTimer = setInterval(() => {
       now = new Date();
       pomoTick();
@@ -300,7 +296,6 @@
       if (destroyed) return;
       const created = await createCompanion(canvas, {
         mobile,
-        idleMotions: !still, // 產生開站背景圖時固定基準坐姿
         onProgress: (r, label) => { loadRatio = r; loadLabel = label; },
         onCharacterClick: sayRandom
       });
@@ -322,8 +317,7 @@
       if (destroyed) return;
       if (import.meta.env.DEV) window.__companion = engine;
       loading = false;
-      if (still) document.documentElement.dataset.companionReady = '1';
-      else say('歡迎回來！今天想做什麼呢？');
+      say('歡迎回來！今天想做什麼呢？');
     } catch (e) {
       if (destroyed) return;
       console.error(e);
@@ -357,7 +351,7 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<div class="companion" class:ui-hidden={uiHidden} class:still bind:this={root} role="region" aria-label="悠太翼 陪伴模式" tabindex="-1"
+<div class="companion" class:ui-hidden={uiHidden} bind:this={root} role="region" aria-label="悠太翼 陪伴模式" tabindex="-1"
   on:keydown={onKey} on:pointerenter={pointerIn} on:pointerleave={pointerOut}>
   <canvas bind:this={canvas} class="stage" aria-label="悠太翼坐在房間裡，點他會說話"></canvas>
 
@@ -485,7 +479,6 @@
   {/if}
 
   <!-- 底部按鈕 -->
-  {#if !still}
   <nav class="dock" aria-label="陪伴模式功能">
     <button class:on={panel === 'todo'} on:click={() => (panel = panel === 'todo' ? null : 'todo')} aria-label="待辦清單">
       <svg viewBox="0 0 24 24"><path d="M4 5h2v2H4zm4 0h12v2H8zM4 11h2v2H4zm4 0h12v2H8zm-4 6h2v2H4zm4 0h12v2H8z"/></svg>
@@ -512,7 +505,6 @@
       <span>結束</span>
     </button>
   </nav>
-  {/if}
 
   {#if loading || error}
     <div class="loader" class:solid={!engine}>
@@ -543,8 +535,6 @@
     cursor: auto;
     outline: none;
   }
-  /* 產生開站背景圖時整個視窗只畫場景（不含導覽列） */
-  .companion.still { position: fixed; z-index: 300; }
   .companion :global(*) { cursor: auto; }
   /* 首頁的自訂游標畫在最上層，陪伴模式裡用系統游標 */
   :global(html.companion-hover .cursor-dot),

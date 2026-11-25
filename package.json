@@ -7,8 +7,7 @@
 		"build": "vite build",
 		"predeploy": "npm run build",
 		"deploy": "gh-pages -d dist -t true",
-		"thumbs": "node tools/build-thumbnails.mjs",
-		"companion:start": "node tools/companion/render-start.mjs"
+		"thumbs": "node tools/build-thumbnails.mjs"
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^5.0.0",

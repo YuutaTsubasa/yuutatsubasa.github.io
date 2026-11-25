@@ -60,6 +60,42 @@
     enterButton?.focus({ preventScroll: true });
   }
 
+  // 開始畫面的背景：H04-B01 的動態桌布（跟使用者電腦桌面同一套，ProjectVtuber 渲染的 20 秒循環）。
+  // 先顯示封面圖；不想要動態（減少動態效果、省流量）時就只顯示封面圖。手機用 720p。
+  const POSTER = '/companion/start/wallpaper-poster.webp';
+  let videoSrc = '';
+  let video;
+  let inView = true; // 00 區塊在畫面內才播放
+  onMount(() => {
+    const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
+    const narrowQuery = matchMedia('(max-width: 768px)');
+    const connection = navigator.connection;
+    // 開著頁面時切換「減少動態效果」、省流量或視窗寬度也跟著換
+    const decide = () => {
+      const off = reduceQuery.matches || connection?.saveData;
+      // 手機（窄螢幕）一律 720p，省流量
+      videoSrc = off ? '' : narrowQuery.matches ? '/companion/start/wallpaper-720.mp4' : '/companion/start/wallpaper-1080.mp4';
+    };
+    decide();
+    reduceQuery.addEventListener('change', decide);
+    narrowQuery.addEventListener('change', decide);
+    connection?.addEventListener?.('change', decide);
+    // 捲離 00 區塊時暫停，省電
+    const io = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      if (!video) return;
+      if (inView) video.play().catch(() => {});
+      else video.pause();
+    });
+    io.observe(section);
+    return () => {
+      io.disconnect();
+      reduceQuery.removeEventListener('change', decide);
+      narrowQuery.removeEventListener('change', decide);
+      connection?.removeEventListener?.('change', decide);
+    };
+  });
+
   // 直接開 /#play 的連結：進站就開起來
   // 已經在首頁時連到 /#play（或用上一頁回到 #play）不會重新掛載，所以也聽 hashchange
   onMount(() => {
@@ -87,13 +123,18 @@
   {:else}
     <!-- 整塊畫面就是「點一下進入陪伴模式」的按鈕 -->
     <button class="enter" bind:this={enterButton} on:click={() => start()} aria-label="進入陪伴模式：悠太翼在房間裡陪你">
-      <picture class="bg" aria-hidden="true">
-        <source media="(max-aspect-ratio: 1/1)" srcset="/companion/start-portrait.webp" />
-        <img src="/companion/start.webp" alt="" fetchpriority="high" />
-      </picture>
+      <span class="bg" aria-hidden="true">
+        <img src={POSTER} alt="" fetchpriority="high" />
+        {#if videoSrc}
+          <video bind:this={video} src={videoSrc} poster={POSTER} autoplay muted loop playsinline preload="auto"
+            on:play={() => !inView && video.pause()}></video>
+        {/if}
+      </span>
       <span class="shade" aria-hidden="true"></span>
       <span class="center">
         <img class="logo" src="/images/logo-knight-white.png" alt="悠太翼 Yuuta Tsubasa" width="2028" height="777" />
+      </span>
+      <span class="press">
         <span class="prompt tech">
           <span class="blink">▶</span> CLICK TO START
           <span class="zh">點一下，進入陪伴模式</span>
@@ -110,13 +151,14 @@
     </aside>
   {/if}
 
-  {#if liveStream}
+  <!-- 直播提示只在開始畫面顯示（陪伴模式開著時會蓋到介面） -->
+  {#if !playing && liveStream}
     <a class="live-pill live" href={liveStream.url} target="_blank" rel="noopener">
       <Dot color="#EF4444" />
       <span class="tech">LIVE NOW</span>
       <span class="live-title">{liveStream.title}</span>
     </a>
-  {:else if nextStream}
+  {:else if !playing && nextStream}
     <a class="live-pill next" href={nextStream.url} target="_blank" rel="noopener">
       <Dot color="#22D3EE" />
       <span class="tech">NEXT STREAM</span>
@@ -152,15 +194,18 @@
     display: block;
     cursor: pointer;
   }
-  .bg img {
+  .bg img,
+  .bg video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* 區塊比 16:9 扁時從下面裁，頭頂不要被切掉 */
+    object-position: 50% 15%;
     transition: transform 1.2s ease, filter 0.6s ease;
   }
-  .enter:hover .bg img, .enter:focus-visible .bg img { transform: scale(1.02); filter: saturate(1.08); }
+  .enter:hover .bg > *, .enter:focus-visible .bg > * { transform: scale(1.02); filter: saturate(1.08); }
   .shade {
     position: absolute;
     inset: 0;
@@ -168,19 +213,24 @@
       radial-gradient(ellipse at 50% 55%, rgba(8, 20, 50, 0) 30%, rgba(8, 20, 50, 0.35) 100%),
       linear-gradient(180deg, rgba(244, 246, 251, 0.35) 0%, rgba(244, 246, 251, 0) 35%);
   }
+  /* 角色在畫面正中間：Logo 放左上的空白處，「點一下開始」像遊戲標題畫面一樣放在下方中央 */
   .center {
     position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(14px, 3vh, 28px);
-    padding: 0 16px;
+    left: 84px;
+    top: clamp(16px, 7vh, 72px);
+  }
+  .press {
+    position: absolute;
+    left: 50%;
+    bottom: 92px;
+    transform: translateX(-50%);
+    display: grid;
+    justify-items: center;
+    gap: 10px;
   }
   /* 頻道 logo（騎士盾牌那款；藍色的 logo.webp 已經不用）的白色版，加深藍描邊，壓在場景上才看得清楚 */
   .logo {
-    width: min(64vw, 460px);
+    width: min(30vw, 420px);
     height: auto;
     filter: drop-shadow(3px 0 0 #0f2d78) drop-shadow(-3px 0 0 #0f2d78) drop-shadow(0 3px 0 #0f2d78) drop-shadow(0 -3px 0 #0f2d78)
       drop-shadow(0 10px 24px rgba(15, 45, 120, 0.45));
@@ -198,6 +248,7 @@
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
+  .prompt { white-space: nowrap; }
   .prompt .zh { font-family: var(--font-body); font-size: 0.85em; letter-spacing: 0.12em; color: #bfdbfe; }
   .err {
     padding: 6px 14px;
@@ -208,16 +259,33 @@
   .blink { animation: blink 1.2s steps(2, start) infinite; color: #60a5fa; }
   @keyframes blink { to { visibility: hidden; } }
 
+  /* 原本 Hero 的身分卡：左下角，夠高的螢幕才放得下 */
   .id-card {
     position: absolute;
-    left: clamp(16px, 4vw, 72px);
-    top: 50%;
-    transform: translateY(-50%);
+    left: 84px;
+    bottom: 24px;
     width: 300px;
     z-index: 2;
   }
-  @media (max-width: 1100px), (max-height: 640px) {
+  @media (max-width: 1100px), (max-height: 800px) {
     .id-card { display: none; }
+  }
+  /* 沒有左側欄（≤900px）時往左靠 */
+  @media (max-width: 900px) {
+    .center { left: 20px; }
+    .logo { width: min(42vw, 360px); }
+  }
+  /* 直式手機：Logo 置中在上方，角色在中間 */
+  @media (max-aspect-ratio: 1/1) {
+    .center {
+      left: 0;
+      right: 0;
+      top: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .logo { width: min(52vw, 260px); }
+    .prompt { letter-spacing: 0.18em; }
   }
 
   .live-pill {
@@ -264,5 +332,9 @@
   @media (prefers-reduced-motion: reduce) {
     .blink, .scroll { animation: none; }
     .bg img { transition: none; }
+  }
+  /* 直式：頂部是 Logo，直播提示移到「點一下開始」上方（放最後，才蓋得過上面的 top） */
+  @media (max-aspect-ratio: 1/1) {
+    .live-pill { top: auto; bottom: 180px; }
   }
 </style>
