@@ -31,6 +31,7 @@ const _qd = new THREE.Quaternion();
 const _qh = new THREE.Quaternion();
 const _qfk = new THREE.Quaternion();
 const _m = new THREE.Matrix4();
+const _qs = new THREE.Quaternion();
 
 const smoothstep = (a, b, x) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -44,6 +45,24 @@ function rotateWorld(bone, qWorld) {
   // local' = parent⁻¹ · q · parent · local
   bone.quaternion.premultiply(_qp).premultiply(qWorld).premultiply(_qpInv);
   bone.updateMatrixWorld(true);
+}
+
+const _ta = new THREE.Vector3();
+const _tb = new THREE.Vector3();
+const _tq = new THREE.Quaternion();
+/**
+ * 繞骨頭自己的方向（axis，世界座標）扭轉，讓骨頭區域 +Y 那面盡量朝 want（世界座標）。
+ * 手臂骨頭沿區域 ±X 延伸，+Y 是 T 字姿勢時朝上的那面。
+ */
+function twist(bone, axis, want) {
+  bone.getWorldQuaternion(_tq);
+  _ta.set(0, 1, 0).applyQuaternion(_tq).addScaledVector(axis, -axis.dot(_ta.set(0, 1, 0).applyQuaternion(_tq)));
+  _tb.copy(want).addScaledVector(axis, -axis.dot(want));
+  if (_ta.lengthSq() < 1e-8 || _tb.lengthSq() < 1e-8) return;
+  _ta.normalize();
+  _tb.normalize();
+  const angle = Math.atan2(_tb.clone().cross(_ta).dot(axis) * -1, _ta.dot(_tb));
+  rotateWorld(bone, _tq.setFromAxisAngle(axis, angle));
 }
 
 /**
@@ -96,7 +115,7 @@ export function createArmIK(vrm, cfg) {
       const len = hip.distanceTo(kn);
       const p = hip.clone().lerp(kn, cfg.along);
       // 往身體外側挪一點（左手在 +X）
-      p.x += (side === 'left' ? 1 : -1) * cfg.outward * len;
+      p.add(new THREE.Vector3((side === 'left' ? 1 : -1) * cfg.outward * len, 0, 0).applyQuaternion(vrm.scene.getWorldQuaternion(_qs)));
       // 打幾條射線取中位數：衣服上細細的帶子、垂下來的繩子只會擋到其中一兩條，不會讓手浮在帶子上
       const ys = [];
       const step = len * 0.09;
@@ -159,6 +178,11 @@ export function createArmIK(vrm, cfg) {
     _m.makeBasis(_x, _y, _z);
     _qh.setFromRotationMatrix(_m);
     a.hand.parent.getWorldQuaternion(_qp);
+    // 前臂跟著手掌轉（手腕不會扭成麻花）
+    a.lower.getWorldPosition(_v1);
+    a.hand.getWorldPosition(_v2);
+    twist(a.lower, _v2.sub(_v1).normalize(), _v1.copy(_y));
+    a.hand.parent.getWorldQuaternion(_qp);
     a.hand.quaternion.copy(_qp.invert().multiply(_qh)).multiply(handDelta);
     a.upper.updateMatrixWorld(true);
   }
@@ -173,7 +197,8 @@ export function createArmIK(vrm, cfg) {
     const d = Math.min(Math.max(_s.distanceTo(target), Math.abs(la - lb) + 1e-4), (la + lb) * 0.999);
     _dir.subVectors(target, _s).normalize();
     // 手肘往哪彎：設定的方向（往後、稍微往外，不會向兩側張開），取跟「肩→目標」垂直的分量
-    _pole.set(a.sign * cfg.elbow[0], cfg.elbow[1], cfg.elbow[2]);
+    // （方向是角色自己的座標：+X 左手外側、+Z 前方，換算成世界座標，角色轉了也對）
+    _pole.set(a.sign * cfg.elbow[0], cfg.elbow[1], cfg.elbow[2]).applyQuaternion(vrm.scene.getWorldQuaternion(_qs));
     _pole.addScaledVector(_dir, -_pole.dot(_dir));
     if (_pole.lengthSq() < 1e-8) _pole.subVectors(_e, _s).addScaledVector(_dir, -_dir.dot(_pole));
     _pole.normalize();
@@ -184,6 +209,9 @@ export function createArmIK(vrm, cfg) {
     _v1.subVectors(_e, _s).normalize();
     _q.setFromUnitVectors(_v1, _v2.clone().sub(_s).normalize());
     rotateWorld(a.upper, _q);
+    // 上臂的扭轉：只轉方向的話上臂會往內扭（肩甲朝前、肩膀看起來內凹）。
+    // 讓上臂外側（T 字時朝上的那面）朝身體外側、稍微往前
+    twist(a.upper, _v2.subVectors(_v2, _s).normalize(), _v1.set(a.sign, 0, cfg.shoulderForward).applyQuaternion(_qs));
     // 前臂：從現在的手腕方向轉到目標
     a.lower.getWorldPosition(_e);
     a.hand.getWorldPosition(_w);
