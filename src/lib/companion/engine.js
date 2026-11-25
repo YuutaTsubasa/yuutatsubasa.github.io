@@ -106,16 +106,27 @@ export async function createCompanion(canvas, opts = {}) {
   const idle = createIdle();
   idle.setEnabled(idleMotions);
   const _base = new THREE.Quaternion();
+  const _eye = new THREE.Vector3();
   let reactionIndex = 0;
+
+  // 視角：拖曳畫面可以小幅轉動（左右、上下各有上限），繞著角色轉
+  const view = { yaw: 0, pitch: 0 };
+  const VIEW_LIMIT = SEAT.camera.look ?? { yaw: 0.22, pitch: 0.1 };
 
   function frameCamera() {
     const c = SEAT.camera;
     const aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
     // 直式（手機）時把鏡頭拉遠一點，讓角色整個上半身都在畫面裡
     const pull = aspect < 1 ? c.portraitPull : 0;
-    const dir = new THREE.Vector3().fromArray(c.position).sub(new THREE.Vector3().fromArray(c.target)).normalize();
-    camera.position.fromArray(c.position).addScaledVector(dir, pull);
-    camera.lookAt(new THREE.Vector3().fromArray(c.target));
+    const target = new THREE.Vector3().fromArray(c.target);
+    const offset = new THREE.Vector3().fromArray(c.position).sub(target);
+    offset.addScaledVector(offset.clone().normalize(), pull);
+    // 先繞垂直軸（左右），再往上下抬
+    offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), view.yaw);
+    const side = new THREE.Vector3().crossVectors(offset, new THREE.Vector3(0, 1, 0)).normalize();
+    offset.applyAxisAngle(side, view.pitch);
+    camera.position.copy(target).add(offset);
+    camera.lookAt(target);
     faceLight.position.copy(camera.position).add(new THREE.Vector3(0.6, 1.2, 0));
     faceLight.target.position.fromArray(c.target);
   }
@@ -177,8 +188,21 @@ export async function createCompanion(canvas, opts = {}) {
   // ── 互動 ──
   const raycaster = new THREE.Raycaster();
   function onPointerMove(e) {
-    // 按住時記下最大位移：拖出去再拖回原處放開不算點擊
-    if (press) press.moved = Math.max(press.moved, Math.hypot(e.clientX - press.x, e.clientY - press.y));
+    if (press) {
+      // 按住時記下最大位移：拖出去再拖回原處放開不算點擊
+      press.moved = Math.max(press.moved, Math.hypot(e.clientX - press.x, e.clientY - press.y));
+      // 拖曳轉視角（觸控只有左右：上下滑是捲動網頁）
+      const r = canvas.getBoundingClientRect();
+      const dx = (e.clientX - press.lastX) / r.width;
+      const dy = e.pointerType === 'mouse' ? (e.clientY - press.lastY) / r.height : 0;
+      press.lastX = e.clientX;
+      press.lastY = e.clientY;
+      if (dx || dy) {
+        view.yaw = THREE.MathUtils.clamp(view.yaw - dx * 1.2, -VIEW_LIMIT.yaw, VIEW_LIMIT.yaw);
+        view.pitch = THREE.MathUtils.clamp(view.pitch + dy * 0.8, -VIEW_LIMIT.pitch, VIEW_LIMIT.pitch);
+        frameCamera();
+      }
+    }
     const r = canvas.getBoundingClientRect();
     pointer.set(((e.clientX - r.left) / r.width) * 2 - 1, -(((e.clientY - r.top) / r.height) * 2 - 1));
   }
@@ -187,7 +211,7 @@ export async function createCompanion(canvas, opts = {}) {
   function onPointerDown(e) {
     onPointerMove(e);
     if (e.button !== 0) return; // 右鍵（選單）、中鍵不算點角色
-    press = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0 };
+    press = { x: e.clientX, y: e.clientY, lastX: e.clientX, lastY: e.clientY, t: performance.now(), moved: 0 };
     // 滑鼠拖出畫面外也要記得位移（觸控不擷取，才不會妨礙捲動）
     if (e.pointerType === 'mouse') canvas.setPointerCapture?.(e.pointerId);
   }
@@ -261,9 +285,11 @@ export async function createCompanion(canvas, opts = {}) {
       // 視線跟著滑鼠（看向鏡頭附近，幅度不大）；待機動作可以把視線帶到別處（gaze）
       pointerSmoothed.lerp(pointer, 1 - Math.exp(-dt * 4));
       const t = new THREE.Vector3().fromArray(SEAT.camera.position);
+      // 視線高度用眼睛的高度（正前方的訪客＝平視），不然鏡頭稍高時會變成往上看
+      const eyeY = (vrm.humanoid.getRawBoneNode('leftEye') ?? vrm.humanoid.getRawBoneNode('head')).getWorldPosition(_eye).y;
       lookTarget.position.set(
-        t.x + pointerSmoothed.x * 1.6 + add.gaze[0],
-        t.y + pointerSmoothed.y * 1.0 + add.gaze[1],
+        camera.position.x + pointerSmoothed.x * 1.6 + add.gaze[0],
+        eyeY + pointerSmoothed.y * 1.0 + add.gaze[1],
         t.z
       );
 
